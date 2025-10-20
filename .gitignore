@@ -10,6 +10,10 @@ backend/node_modules/
 backend/.env
 frontend/.env
 
+# Secrets locaux (ne jamais pousser)
+RAILWAY_SECRETS.txt
+*_SECRETS.txt
+
 # Build files
 frontend/dist/
 frontend/build/
