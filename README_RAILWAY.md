@@ -35,13 +35,13 @@ git push -u origin main
 **Variables d'environnement:**
 ```
 NODE_ENV=production
-MONGODB_URI=mongodb+srv://admin_ecommerce:TxT7q8u16Fc9U9NX@cluster0.efgauoh.mongodb.net/ecommerce?retryWrites=true&w=majority&appName=Cluster0
-JWT_SECRET=supersecretkey_change_in_production_2024
-ADMIN_EMAIL=admin@example.com
-ADMIN_PASSWORD=admin123
-CLOUDINARY_CLOUD_NAME=duzmzztqt
-CLOUDINARY_API_KEY=381188665714857
-CLOUDINARY_API_SECRET=AtHHZZxMLGF9e5Dg9MMwvyh-S60
+MONGODB_URI=mongodb+srv://VOTRE_USER:VOTRE_PASSWORD@cluster0.xxxxx.mongodb.net/ecommerce
+JWT_SECRET=votre_secret_jwt_securise
+ADMIN_EMAIL=admin@votredomaine.com
+ADMIN_PASSWORD=votre_mot_de_passe
+CLOUDINARY_CLOUD_NAME=votre_cloud_name
+CLOUDINARY_API_KEY=votre_api_key
+CLOUDINARY_API_SECRET=votre_api_secret
 FRONTEND_URL=https://votre-frontend.railway.app
 ```
 

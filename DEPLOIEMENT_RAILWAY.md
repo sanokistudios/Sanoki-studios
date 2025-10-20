@@ -80,19 +80,19 @@ NODE_ENV=production
 PORT=5000
 
 # MongoDB Atlas
-MONGODB_URI=mongodb+srv://admin_ecommerce:TxT7q8u16Fc9U9NX@cluster0.efgauoh.mongodb.net/ecommerce?retryWrites=true&w=majority&appName=Cluster0
+MONGODB_URI=mongodb+srv://VOTRE_USER:VOTRE_PASSWORD@cluster0.xxxxx.mongodb.net/ecommerce?retryWrites=true&w=majority
 
-# JWT
-JWT_SECRET=supersecretkey_change_in_production_2024_ecommerce_tunisie
+# JWT (Générer une clé aléatoire sécurisée)
+JWT_SECRET=votre_secret_jwt_ultra_securise_a_generer
 
 # Admin
-ADMIN_EMAIL=admin@example.com
-ADMIN_PASSWORD=admin123
+ADMIN_EMAIL=admin@votredomaine.com
+ADMIN_PASSWORD=votre_mot_de_passe_securise
 
 # Cloudinary
-CLOUDINARY_CLOUD_NAME=duzmzztqt
-CLOUDINARY_API_KEY=381188665714857
-CLOUDINARY_API_SECRET=AtHHZZxMLGF9e5Dg9MMwvyh-S60
+CLOUDINARY_CLOUD_NAME=votre_cloud_name
+CLOUDINARY_API_KEY=votre_api_key
+CLOUDINARY_API_SECRET=votre_api_secret
 
 # Frontend URL (à modifier après déploiement du frontend)
 FRONTEND_URL=https://votre-frontend.railway.app
