@@ -13,14 +13,14 @@
 Les credentials suivantes ont été accidentellement commitées dans les fichiers de documentation :
 
 1. **MongoDB Atlas**
-   - User : `admin_ecommerce`
-   - Password : `TxT7q8u16Fc9U9NX` ❌ EXPOSÉ
-   - Cluster : `cluster0.efgauoh.mongodb.net`
+   - User : `[REDACTED]`
+   - Password : `[REDACTED]` ❌ EXPOSÉ
+   - Cluster : `[REDACTED]`
 
 2. **Cloudinary**
-   - Cloud Name : `duzmzztqt` ❌ EXPOSÉ
-   - API Key : `381188665714857` ❌ EXPOSÉ
-   - API Secret : `AtHHZZxMLGF9e5Dg9MMwvyh-S60` ❌ EXPOSÉ
+   - Cloud Name : `[REDACTED]` ❌ EXPOSÉ
+   - API Key : `[REDACTED]` ❌ EXPOSÉ
+   - API Secret : `[REDACTED]` ❌ EXPOSÉ
 
 ---
 
@@ -37,7 +37,7 @@ Les credentials suivantes ont été accidentellement commitées dans les fichier
 #### MongoDB Atlas
 
 1. Aller sur [cloud.mongodb.com](https://cloud.mongodb.com)
-2. **Database Access** → Utilisateur `admin_ecommerce` → **Edit**
+2. **Database Access** → Trouver votre utilisateur → **Edit**
 3. **Edit Password** → Générer un nouveau mot de passe
 4. Copier le nouveau mot de passe
 5. Mettre à jour :
@@ -46,7 +46,7 @@ Les credentials suivantes ont été accidentellement commitées dans les fichier
 
 **Nouveau format :**
 ```
-mongodb+srv://admin_ecommerce:NOUVEAU_MOT_DE_PASSE@cluster0.efgauoh.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+mongodb+srv://VOTRE_USER:NOUVEAU_PASSWORD@VOTRE_CLUSTER.mongodb.net/?retryWrites=true&w=majority
 ```
 
 #### Cloudinary
