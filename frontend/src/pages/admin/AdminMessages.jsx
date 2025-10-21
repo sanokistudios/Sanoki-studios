@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { Send, Trash2, MessageCircle, User } from 'lucide-react';
-import axios from 'axios';
+import { messagesAPI } from '../../utils/api';
 import { getSocket } from '../../utils/socket';
 import toast from 'react-hot-toast';
 
@@ -49,10 +49,7 @@ const AdminMessages = () => {
 
   const loadConversations = async () => {
     try {
-      const token = localStorage.getItem('token');
-      const response = await axios.get('/api/messages/conversations/all', {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const response = await messagesAPI.getConversations();
       setConversations(response.data.conversations);
     } catch (error) {
       console.error('Erreur lors du chargement des conversations:', error);
@@ -65,17 +62,14 @@ const AdminMessages = () => {
 
   const loadMessages = async (conversationId) => {
     try {
-      const response = await axios.get(`/api/messages/${conversationId}`);
+      const response = await messagesAPI.getMessagesByConversation(conversationId);
       setMessages(response.data.messages);
       
       // Rejoindre la conversation
       socket.emit('join-conversation', conversationId);
       
       // Marquer comme lu
-      const token = localStorage.getItem('token');
-      await axios.put(`/api/messages/conversations/${conversationId}/read`, {}, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      await messagesAPI.markConversationAsRead(conversationId);
       
       // Recharger les conversations pour mettre à jour le badge
       loadConversations();
@@ -108,10 +102,7 @@ const AdminMessages = () => {
   const handleDeleteConversation = async (conversationId) => {
     if (window.confirm('Voulez-vous vraiment supprimer cette conversation ?')) {
       try {
-        const token = localStorage.getItem('token');
-        await axios.delete(`/api/messages/conversations/${conversationId}`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
+        await messagesAPI.deleteConversation(conversationId);
         toast.success('Conversation supprimée');
         setConversations(conversations.filter((c) => c.conversationId !== conversationId));
         if (selectedConversation?.conversationId === conversationId) {
