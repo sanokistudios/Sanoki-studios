@@ -1,13 +1,15 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Package, CreditCard } from 'lucide-react';
 import { useCart } from '../context/CartContext';
+import { useAuth } from '../context/AuthContext';
 import { ordersAPI } from '../utils/api';
 import toast from 'react-hot-toast';
 
 const Checkout = () => {
   const navigate = useNavigate();
   const { cart, getCartTotal, clearCart } = useCart();
+  const { user, isAuthenticated } = useAuth();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
@@ -18,6 +20,24 @@ const Checkout = () => {
     postalCode: '',
     notes: ''
   });
+
+  // Pré-remplir les données si l'utilisateur est connecté
+  useEffect(() => {
+    if (isAuthenticated && user) {
+      setFormData(prev => ({
+        ...prev,
+        name: user.name || '',
+        email: user.email || '',
+        phone: user.phone || '',
+        // Pré-remplir avec l'adresse par défaut si elle existe
+        ...(user.addresses?.find(addr => addr.isDefault) && {
+          street: user.addresses.find(addr => addr.isDefault).line1 || '',
+          city: user.addresses.find(addr => addr.isDefault).city || '',
+          postalCode: user.addresses.find(addr => addr.isDefault).postalCode || ''
+        })
+      }));
+    }
+  }, [isAuthenticated, user]);
 
   const handleChange = (e) => {
     setFormData({

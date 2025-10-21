@@ -1,10 +1,13 @@
 import { Outlet } from 'react-router-dom';
 import Header from './Header';
 import Footer from './Footer';
-import ChatWidget from './ChatWidget';
+import UserChatWidget from './UserChatWidget';
 import CartSidebar from './CartSidebar';
+import { useAuth } from '../context/AuthContext';
 
 const Layout = () => {
+  const { isAuthenticated } = useAuth();
+  
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
@@ -12,7 +15,8 @@ const Layout = () => {
         <Outlet />
       </main>
       <Footer />
-      <ChatWidget />
+      {/* Chat uniquement pour utilisateurs connectés */}
+      {isAuthenticated && <UserChatWidget />}
       <CartSidebar />
     </div>
   );

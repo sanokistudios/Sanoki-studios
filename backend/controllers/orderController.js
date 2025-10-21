@@ -12,13 +12,21 @@ exports.createOrder = async (req, res) => {
       return res.status(400).json({ message: 'Données de commande incomplètes' });
     }
 
-    const order = await Order.create({
+    // Ajouter le userId si l'utilisateur est connecté
+    const orderData = {
       customer,
       items,
       totalAmount,
       notes,
       paymentMethod: 'cod'
-    });
+    };
+    
+    // Si le token est présent, associer la commande à l'utilisateur
+    if (req.user) {
+      orderData.userId = req.user.id;
+    }
+
+    const order = await Order.create(orderData);
 
     // Peupler les détails des produits
     await order.populate('items.product');
@@ -26,6 +34,26 @@ exports.createOrder = async (req, res) => {
     res.status(201).json({ success: true, order });
   } catch (error) {
     console.error('Erreur lors de la création de la commande:', error);
+    res.status(500).json({ message: 'Erreur serveur' });
+  }
+};
+
+// @desc    Récupérer les commandes de l'utilisateur connecté
+// @route   GET /api/orders/me
+// @access  Private
+exports.getMyOrders = async (req, res) => {
+  try {
+    const orders = await Order.find({ userId: req.user.id })
+      .sort({ createdAt: -1 })
+      .populate('items.product');
+    
+    res.json({ 
+      success: true, 
+      count: orders.length,
+      orders 
+    });
+  } catch (error) {
+    console.error('Erreur lors de la récupération des commandes:', error);
     res.status(500).json({ message: 'Erreur serveur' });
   }
 };
