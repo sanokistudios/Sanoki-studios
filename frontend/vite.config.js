@@ -16,6 +16,11 @@ export default defineConfig({
         ws: true,
       }
     }
+  },
+  preview: {
+    host: '0.0.0.0',
+    port: process.env.PORT || 4173,
+    allowedHosts: ['ecommerce-vetements-production.up.railway.app']
   }
 })
 
