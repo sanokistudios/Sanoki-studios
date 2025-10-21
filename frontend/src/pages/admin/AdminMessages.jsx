@@ -26,20 +26,16 @@ const AdminMessages = () => {
       
       // Si c'est la conversation actuellement ouverte, ajouter le message
       if (selectedConversation?.conversationId === data.conversationId) {
-        setMessages((prev) => [...prev, data.message]);
-      }
-    });
-
-    // Écouter les nouveaux messages (réponses admin ou messages clients)
-    socket.on('new-message', (message) => {
-      if (selectedConversation?.conversationId === message.conversationId) {
-        setMessages((prev) => [...prev, message]);
+        setMessages((prev) => {
+          // Vérifier si le message n'existe pas déjà (éviter doublons)
+          const exists = prev.some(m => m._id === data.message._id);
+          return exists ? prev : [...prev, data.message];
+        });
       }
     });
 
     return () => {
       socket.off('new-client-message');
-      socket.off('new-message');
     };
   }, [selectedConversation]);
 
@@ -65,8 +61,8 @@ const AdminMessages = () => {
       const response = await messagesAPI.getMessagesByConversation(conversationId);
       setMessages(response.data.messages);
       
-      // Rejoindre la conversation
-      socket.emit('join-conversation', conversationId);
+      // Ne PAS rejoindre la conversation (l'admin reçoit déjà via new-client-message)
+      // L'admin est uniquement dans admin-room
       
       // Marquer comme lu
       await messagesAPI.markConversationAsRead(conversationId);
@@ -90,11 +86,24 @@ const AdminMessages = () => {
   const handleSendMessage = (e) => {
     e.preventDefault();
     if (newMessage.trim() && selectedConversation) {
+      const messageContent = newMessage;
+      
+      // Ajouter le message immédiatement (optimistic update)
+      const tempMessage = {
+        _id: Date.now().toString(), // ID temporaire
+        conversationId: selectedConversation.conversationId,
+        sender: 'admin',
+        content: messageContent,
+        timestamp: new Date()
+      };
+      setMessages((prev) => [...prev, tempMessage]);
+      
       // Émettre le message via Socket.io
       socket.emit('admin-message', {
         conversationId: selectedConversation.conversationId,
-        message: newMessage
+        message: messageContent
       });
+      
       setNewMessage('');
     }
   };
