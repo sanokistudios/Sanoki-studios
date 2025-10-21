@@ -26,8 +26,8 @@ Créez `backend/.env` :
 PORT=5000
 NODE_ENV=development
 
-# MongoDB Atlas
-MONGODB_URI=mongodb+srv://admin_ecommerce:TxT7q8u16Fc9U9NX@cluster0.efgauoh.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+# MongoDB Atlas (Remplacez par vos vraies credentials)
+MONGODB_URI=mongodb+srv://VOTRE_USER:VOTRE_PASSWORD@cluster0.XXXXX.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
 
 # JWT
 JWT_SECRET=super_secret_key_change_in_production_123456789
@@ -45,10 +45,10 @@ MAILTRAP_PASS=VOTRE_MAILTRAP_PASSWORD
 EMAIL_FROM="Boutique T-shirts <noreply@example.com>"
 ADMIN_EMAIL=admin@example.com
 
-# Cloudinary
-CLOUDINARY_CLOUD_NAME=duzmzztqt
-CLOUDINARY_API_KEY=381188665714857
-CLOUDINARY_API_SECRET=AtHHZZxMLGF9e5Dg9MMwvyh-S60
+# Cloudinary (Obtenez vos credentials sur cloudinary.com)
+CLOUDINARY_CLOUD_NAME=VOTRE_CLOUD_NAME
+CLOUDINARY_API_KEY=VOTRE_API_KEY
+CLOUDINARY_API_SECRET=VOTRE_API_SECRET
 ```
 
 ### 3. Créer un compte admin
