@@ -56,6 +56,7 @@ const AdminMessages = () => {
       setConversations(response.data.conversations);
     } catch (error) {
       console.error('Erreur lors du chargement des conversations:', error);
+      console.error('Détails:', error.response?.data);
       toast.error('Erreur lors du chargement des conversations');
     } finally {
       setLoading(false);
