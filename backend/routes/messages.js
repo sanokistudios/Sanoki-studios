@@ -1,20 +1,24 @@
 const express = require('express');
 const router = express.Router();
 const {
-  getMessages,
+  getMessagesByConversation,
+  getConversations,
+  createOrUpdateConversation,
   createMessage,
-  markAsRead,
-  deleteMessage
+  markConversationAsRead,
+  deleteConversation
 } = require('../controllers/messageController');
 const { protect, admin } = require('../middleware/auth');
 
 // Routes publiques
-router.get('/', getMessages);
+router.get('/:conversationId', getMessagesByConversation);
 router.post('/', createMessage);
+router.post('/conversation', createOrUpdateConversation);
 
 // Routes protégées (admin)
-router.put('/:id/read', protect, admin, markAsRead);
-router.delete('/:id', protect, admin, deleteMessage);
+router.get('/admin/conversations', protect, admin, getConversations);
+router.put('/:conversationId/read', protect, admin, markConversationAsRead);
+router.delete('/conversation/:conversationId', protect, admin, deleteConversation);
 
 module.exports = router;
 

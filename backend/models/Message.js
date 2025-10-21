@@ -1,6 +1,11 @@
 const mongoose = require('mongoose');
 
 const messageSchema = new mongoose.Schema({
+  conversationId: {
+    type: String,
+    required: true,
+    index: true
+  },
   sender: {
     type: String,
     required: true,
@@ -26,6 +31,9 @@ const messageSchema = new mongoose.Schema({
     default: Date.now
   }
 });
+
+// Index pour optimiser les requêtes
+messageSchema.index({ conversationId: 1, timestamp: 1 });
 
 module.exports = mongoose.model('Message', messageSchema);
 

@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { MessageCircle, X, Send } from 'lucide-react';
 import { getSocket } from '../utils/socket';
-import { messagesAPI } from '../utils/api';
+import axios from 'axios';
 import toast from 'react-hot-toast';
 
 const ChatWidget = () => {
@@ -10,21 +10,35 @@ const ChatWidget = () => {
   const [newMessage, setNewMessage] = useState('');
   const [clientName, setClientName] = useState('');
   const [hasName, setHasName] = useState(false);
+  const [conversationId, setConversationId] = useState('');
   const messagesEndRef = useRef(null);
   const socket = getSocket();
 
   useEffect(() => {
-    // Charger les messages existants
-    loadMessages();
+    // Récupérer ou créer un ID de conversation unique (persistant dans localStorage)
+    let convId = localStorage.getItem('conversationId');
+    let savedName = localStorage.getItem('clientName');
 
-    // Vérifier si le nom du client est déjà enregistré
-    const savedName = localStorage.getItem('clientName');
+    if (!convId) {
+      // Générer un ID unique pour cette conversation
+      convId = `conv_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      localStorage.setItem('conversationId', convId);
+    }
+
+    setConversationId(convId);
+
     if (savedName) {
       setClientName(savedName);
       setHasName(true);
     }
 
-    // Écouter les nouveaux messages
+    // Rejoindre la conversation
+    socket.emit('join-conversation', convId);
+
+    // Charger les messages de cette conversation
+    loadMessages(convId);
+
+    // Écouter les nouveaux messages de cette conversation
     socket.on('new-message', (message) => {
       setMessages((prev) => [...prev, message]);
     });
@@ -38,9 +52,9 @@ const ChatWidget = () => {
     scrollToBottom();
   }, [messages]);
 
-  const loadMessages = async () => {
+  const loadMessages = async (convId) => {
     try {
-      const response = await messagesAPI.getAll({ limit: 50 });
+      const response = await axios.get(`/api/messages/${convId}`);
       setMessages(response.data.messages);
     } catch (error) {
       console.error('Erreur lors du chargement des messages:', error);
@@ -51,12 +65,22 @@ const ChatWidget = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const handleSetName = (e) => {
+  const handleSetName = async (e) => {
     e.preventDefault();
     if (clientName.trim()) {
       localStorage.setItem('clientName', clientName);
       setHasName(true);
-      toast.success('Bienvenue !');
+      
+      // Créer ou mettre à jour la conversation sur le serveur
+      try {
+        await axios.post('/api/messages/conversation', {
+          conversationId,
+          clientName
+        });
+        toast.success('Bienvenue !');
+      } catch (error) {
+        console.error('Erreur lors de la création de la conversation:', error);
+      }
     }
   };
 
@@ -65,6 +89,7 @@ const ChatWidget = () => {
     if (newMessage.trim() && clientName) {
       // Émettre le message via Socket.io
       socket.emit('client-message', {
+        conversationId,
         clientName,
         message: newMessage
       });
@@ -88,7 +113,9 @@ const ChatWidget = () => {
           {/* Header */}
           <div className="bg-accent text-white p-4 rounded-t-lg">
             <h3 className="font-semibold text-lg">Discuter avec nous</h3>
-            <p className="text-sm text-gray-200">Nous sommes là pour vous aider</p>
+            <p className="text-sm text-gray-200">
+              {hasName ? `Bonjour ${clientName}` : 'Nous sommes là pour vous aider'}
+            </p>
           </div>
 
           {/* Demander le nom si pas encore défini */}
@@ -111,6 +138,9 @@ const ChatWidget = () => {
                 <button type="submit" className="btn-primary w-full">
                   Commencer le chat
                 </button>
+                <p className="text-xs text-gray-500 text-center">
+                  Vos messages précédents seront conservés sur cet appareil
+                </p>
               </form>
             </div>
           ) : (
@@ -124,7 +154,7 @@ const ChatWidget = () => {
                 )}
                 {messages.map((message, index) => (
                   <div
-                    key={index}
+                    key={message._id || index}
                     className={`flex ${
                       message.sender === 'client' ? 'justify-end' : 'justify-start'
                     }`}
@@ -136,18 +166,13 @@ const ChatWidget = () => {
                           : 'bg-white text-gray-800 border'
                       }`}
                     >
-                      {message.sender === 'client' && (
-                        <p className="text-xs opacity-75 mb-1">
-                          {message.clientName}
-                        </p>
-                      )}
                       {message.sender === 'admin' && (
                         <p className="text-xs text-gray-500 mb-1">
                           Admin
                         </p>
                       )}
                       <p className="text-sm">{message.content}</p>
-                      <p className="text-xs opacity-75 mt-1">
+                      <p className={`text-xs mt-1 ${message.sender === 'client' ? 'opacity-75' : 'text-gray-500'}`}>
                         {new Date(message.timestamp).toLocaleTimeString('fr-FR', {
                           hour: '2-digit',
                           minute: '2-digit'
@@ -189,4 +214,3 @@ const ChatWidget = () => {
 };
 
 export default ChatWidget;
-

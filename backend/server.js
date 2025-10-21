@@ -67,29 +67,63 @@ app.get('/api/health', (req, res) => {
 
 // Gestion du chat en temps réel avec Socket.io
 const Message = require('./models/Message');
+const Conversation = require('./models/Conversation');
 
 io.on('connection', (socket) => {
   console.log('Nouveau client connecté:', socket.id);
 
-  // Rejoindre une room spécifique (pour gérer plusieurs conversations)
-  socket.on('join', (userId) => {
-    socket.join(userId);
-    console.log(`User ${userId} joined room`);
+  // Rejoindre une conversation spécifique
+  socket.on('join-conversation', (conversationId) => {
+    socket.join(conversationId);
+    console.log(`Socket ${socket.id} joined conversation ${conversationId}`);
+  });
+
+  // Rejoindre la room admin (pour recevoir tous les messages)
+  socket.on('join-admin', () => {
+    socket.join('admin-room');
+    console.log(`Admin joined room`);
   });
 
   // Recevoir un message du client
   socket.on('client-message', async (data) => {
     try {
-      const message = new Message({
+      const { conversationId, clientName, message } = data;
+
+      // Créer ou mettre à jour la conversation
+      let conversation = await Conversation.findOne({ conversationId });
+      if (!conversation) {
+        conversation = await Conversation.create({
+          conversationId,
+          clientName,
+          lastMessage: message,
+          lastMessageAt: new Date(),
+          unreadCount: 1
+        });
+      } else {
+        conversation.lastMessage = message;
+        conversation.lastMessageAt = new Date();
+        conversation.unreadCount += 1;
+        await conversation.save();
+      }
+
+      // Créer le message
+      const newMessage = await Message.create({
+        conversationId,
         sender: 'client',
-        clientName: data.clientName,
-        content: data.message,
+        clientName,
+        content: message,
         timestamp: new Date()
       });
-      await message.save();
       
-      // Envoyer le message à l'admin
-      io.emit('new-message', message);
+      // Envoyer le message à cette conversation spécifique
+      io.to(conversationId).emit('new-message', newMessage);
+      
+      // Notifier l'admin d'un nouveau message
+      io.to('admin-room').emit('new-client-message', {
+        conversationId,
+        message: newMessage,
+        conversation
+      });
     } catch (error) {
       console.error('Erreur lors de l\'enregistrement du message:', error);
     }
@@ -98,15 +132,27 @@ io.on('connection', (socket) => {
   // Recevoir un message de l'admin
   socket.on('admin-message', async (data) => {
     try {
-      const message = new Message({
+      const { conversationId, message } = data;
+
+      // Créer le message
+      const newMessage = await Message.create({
+        conversationId,
         sender: 'admin',
-        content: data.message,
+        content: message,
         timestamp: new Date()
       });
-      await message.save();
+
+      // Mettre à jour la conversation
+      await Conversation.findOneAndUpdate(
+        { conversationId },
+        {
+          lastMessage: message,
+          lastMessageAt: new Date()
+        }
+      );
       
-      // Envoyer le message à tous les clients
-      io.emit('new-message', message);
+      // Envoyer le message à cette conversation spécifique
+      io.to(conversationId).emit('new-message', newMessage);
     } catch (error) {
       console.error('Erreur lors de l\'enregistrement du message:', error);
     }
