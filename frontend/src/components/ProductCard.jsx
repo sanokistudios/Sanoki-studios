@@ -1,16 +1,7 @@
 import { Link } from 'react-router-dom';
-import { ShoppingCart } from 'lucide-react';
-import { useCart } from '../context/CartContext';
+import { Eye, ShoppingCart } from 'lucide-react';
 
 const ProductCard = ({ product }) => {
-  const { addToCart } = useCart();
-
-  const handleQuickAdd = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    addToCart(product, 1, product.sizes?.[0], product.colors?.[0]);
-  };
-
   return (
     <Link to={`/produit/${product._id}`} className="group">
       <div className="card animate-fade-in">
@@ -31,6 +22,16 @@ const ProductCard = ({ product }) => {
               Rupture
             </span>
           )}
+          
+          {/* Overlay au survol */}
+          <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300 flex items-center justify-center">
+            <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform group-hover:scale-110">
+              <div className="bg-white text-primary px-6 py-3 rounded-lg font-semibold flex items-center gap-2 shadow-lg">
+                <Eye className="w-5 h-5" />
+                Voir le produit
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Contenu */}
@@ -56,18 +57,20 @@ const ProductCard = ({ product }) => {
             </div>
           )}
 
-          {/* Prix et bouton */}
+          {/* Prix et statut */}
           <div className="flex items-center justify-between">
             <span className="text-xl font-bold text-primary">
               {product.price} TND
             </span>
-            {product.stock > 0 && (
-              <button
-                onClick={handleQuickAdd}
-                className="p-2 bg-primary text-white rounded-full hover:bg-accent transition-colors"
-              >
-                <ShoppingCart className="w-5 h-5" />
-              </button>
+            {product.stock > 0 ? (
+              <span className="text-green-600 text-sm font-medium flex items-center gap-1">
+                <ShoppingCart className="w-4 h-4" />
+                En stock
+              </span>
+            ) : (
+              <span className="text-red-600 text-sm font-medium">
+                Rupture
+              </span>
             )}
           </div>
         </div>
