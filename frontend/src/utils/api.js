@@ -51,12 +51,19 @@ export const ordersAPI = {
   delete: (id) => api.delete(`/orders/${id}`)
 };
 
-// Messages
+// Messages et Conversations
 export const messagesAPI = {
-  getAll: (params) => api.get('/messages', { params }),
+  // Conversations (admin)
+  getConversations: () => api.get('/messages/admin/conversations'),
+  getMessagesByConversation: (conversationId) => api.get(`/messages/${conversationId}`),
+  
+  // Messages
   create: (message) => api.post('/messages', message),
-  markAsRead: (id) => api.put(`/messages/${id}/read`),
-  delete: (id) => api.delete(`/messages/${id}`)
+  createConversation: (data) => api.post('/messages/conversation', data),
+  
+  // Admin
+  markConversationAsRead: (conversationId) => api.put(`/messages/${conversationId}/read`),
+  deleteConversation: (conversationId) => api.delete(`/messages/conversation/${conversationId}`)
 };
 
 // Contact
