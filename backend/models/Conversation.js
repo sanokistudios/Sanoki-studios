@@ -1,18 +1,12 @@
 const mongoose = require('mongoose');
 
 const conversationSchema = new mongoose.Schema({
-  conversationId: {
-    type: String,
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
     required: true,
-    unique: true,
+    unique: true, // Une conversation par utilisateur
     index: true
-  },
-  clientName: {
-    type: String,
-    required: true
-  },
-  clientEmail: {
-    type: String
   },
   lastMessage: {
     type: String
@@ -25,16 +19,20 @@ const conversationSchema = new mongoose.Schema({
     type: Number,
     default: 0
   },
-  status: {
-    type: String,
-    enum: ['active', 'closed'],
-    default: 'active'
+  isResolved: {
+    type: Boolean,
+    default: false
   },
   createdAt: {
     type: Date,
     default: Date.now
+  },
+  updatedAt: {
+    type: Date,
+    default: Date.now
   }
+}, {
+  timestamps: true
 });
 
 module.exports = mongoose.model('Conversation', conversationSchema);
-

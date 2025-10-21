@@ -6,15 +6,15 @@ const contactSchema = new mongoose.Schema({
     required: true,
     trim: true
   },
+  surname: {
+    type: String,
+    trim: true
+  },
   email: {
     type: String,
     required: true,
-    trim: true
-  },
-  subject: {
-    type: String,
-    required: true,
-    trim: true
+    trim: true,
+    lowercase: true
   },
   message: {
     type: String,
@@ -22,13 +22,15 @@ const contactSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ['new', 'read', 'replied'],
-    default: 'new'
+    enum: ['NEW', 'REPLIED'],
+    default: 'NEW'
   },
   createdAt: {
     type: Date,
     default: Date.now
   }
+}, {
+  timestamps: true
 });
 
 module.exports = mongoose.model('Contact', contactSchema);

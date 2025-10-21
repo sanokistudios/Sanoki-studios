@@ -2,38 +2,40 @@ const mongoose = require('mongoose');
 
 const messageSchema = new mongoose.Schema({
   conversationId: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Conversation',
     required: true,
     index: true
+  },
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
   },
   sender: {
     type: String,
     required: true,
-    enum: ['client', 'admin']
+    enum: ['user', 'admin']
   },
-  clientName: {
-    type: String,
-    required: function() {
-      return this.sender === 'client';
-    }
-  },
-  content: {
+  text: {
     type: String,
     required: true,
     trim: true
   },
-  read: {
+  readByAdmin: {
     type: Boolean,
     default: false
   },
-  timestamp: {
+  createdAt: {
     type: Date,
     default: Date.now
   }
+}, {
+  timestamps: true
 });
 
 // Index pour optimiser les requêtes
-messageSchema.index({ conversationId: 1, timestamp: 1 });
+messageSchema.index({ conversationId: 1, createdAt: 1 });
+messageSchema.index({ userId: 1, createdAt: -1 });
 
 module.exports = mongoose.model('Message', messageSchema);
-

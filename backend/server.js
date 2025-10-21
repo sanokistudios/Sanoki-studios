@@ -65,96 +65,44 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', message: 'Server is running' });
 });
 
-// Gestion du chat en temps réel avec Socket.io
+// Gestion du chat en temps réel avec Socket.io (pour utilisateurs connectés uniquement)
 const Message = require('./models/Message');
 const Conversation = require('./models/Conversation');
+const jwt = require('jsonwebtoken');
+
+// Rendre io accessible globalement pour les controllers
+app.set('io', io);
 
 io.on('connection', (socket) => {
   console.log('Nouveau client connecté:', socket.id);
 
-  // Rejoindre une conversation spécifique
-  socket.on('join-conversation', (conversationId) => {
-    socket.join(conversationId);
-    console.log(`Socket ${socket.id} joined conversation ${conversationId}`);
-  });
-
-  // Rejoindre la room admin (pour recevoir tous les messages)
-  socket.on('join-admin', () => {
-    socket.join('admin-room');
-    console.log(`Admin joined room`);
-  });
-
-  // Recevoir un message du client
-  socket.on('client-message', async (data) => {
+  // Authentifier le socket avec le token JWT
+  socket.on('authenticate', (token) => {
     try {
-      const { conversationId, clientName, message } = data;
-
-      // Créer ou mettre à jour la conversation
-      let conversation = await Conversation.findOne({ conversationId });
-      if (!conversation) {
-        conversation = await Conversation.create({
-          conversationId,
-          clientName,
-          lastMessage: message,
-          lastMessageAt: new Date(),
-          unreadCount: 1
-        });
-      } else {
-        conversation.lastMessage = message;
-        conversation.lastMessageAt = new Date();
-        conversation.unreadCount += 1;
-        await conversation.save();
-      }
-
-      // Créer le message
-      const newMessage = await Message.create({
-        conversationId,
-        sender: 'client',
-        clientName,
-        content: message,
-        timestamp: new Date()
-      });
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      socket.userId = decoded.id;
       
-      // Envoyer le message à cette conversation spécifique
-      io.to(conversationId).emit('new-message', newMessage);
+      // Rejoindre la room de l'utilisateur
+      socket.join(`user:${decoded.id}`);
+      console.log(`User ${decoded.id} authenticated and joined room`);
       
-      // Notifier l'admin d'un nouveau message
-      io.to('admin-room').emit('new-client-message', {
-        conversationId,
-        message: newMessage,
-        conversation
-      });
+      socket.emit('authenticated', { success: true });
     } catch (error) {
-      console.error('Erreur lors de l\'enregistrement du message:', error);
+      console.error('Erreur authentification socket:', error);
+      socket.emit('authenticated', { success: false, message: 'Token invalide' });
     }
   });
 
-  // Recevoir un message de l'admin
-  socket.on('admin-message', async (data) => {
+  // Admin rejoint la room admin
+  socket.on('join-admin', (token) => {
     try {
-      const { conversationId, message } = data;
-
-      // Créer le message
-      const newMessage = await Message.create({
-        conversationId,
-        sender: 'admin',
-        content: message,
-        timestamp: new Date()
-      });
-
-      // Mettre à jour la conversation
-      await Conversation.findOneAndUpdate(
-        { conversationId },
-        {
-          lastMessage: message,
-          lastMessageAt: new Date()
-        }
-      );
-      
-      // Envoyer le message à cette conversation spécifique
-      io.to(conversationId).emit('new-message', newMessage);
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      if (decoded.id && socket.userId) {
+        socket.join('admin');
+        console.log(`Admin ${decoded.id} joined admin room`);
+      }
     } catch (error) {
-      console.error('Erreur lors de l\'enregistrement du message:', error);
+      console.error('Erreur join admin:', error);
     }
   });
 
@@ -162,6 +110,15 @@ io.on('connection', (socket) => {
     console.log('Client déconnecté:', socket.id);
   });
 });
+
+// Helper pour émettre des événements Socket.io depuis les controllers
+app.emitToUser = (userId, event, data) => {
+  io.to(`user:${userId}`).emit(event, data);
+};
+
+app.emitToAdmin = (event, data) => {
+  io.to('admin').emit(event, data);
+};
 
 // Gestion des erreurs 404
 app.use((req, res) => {

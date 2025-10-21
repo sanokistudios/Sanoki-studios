@@ -1,6 +1,11 @@
 const mongoose = require('mongoose');
 
 const orderSchema = new mongoose.Schema({
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: false // Optionnel : null pour les invités
+  },
   orderNumber: {
     type: String,
     required: true,
@@ -11,6 +16,7 @@ const orderSchema = new mongoose.Schema({
       type: String,
       required: true
     },
+    surname: String,
     email: {
       type: String,
       required: true
@@ -20,8 +26,10 @@ const orderSchema = new mongoose.Schema({
       required: true
     },
     address: {
-      street: String,
+      governorate: String,
       city: String,
+      line1: String,
+      line2: String,
       postalCode: String,
       country: { type: String, default: 'Tunisie' }
     }
