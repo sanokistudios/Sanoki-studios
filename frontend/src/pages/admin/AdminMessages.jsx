@@ -50,7 +50,7 @@ const AdminMessages = () => {
   const loadConversations = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('/api/messages/admin/conversations', {
+      const response = await axios.get('/api/messages/conversations/all', {
         headers: { Authorization: `Bearer ${token}` }
       });
       setConversations(response.data.conversations);
@@ -73,7 +73,7 @@ const AdminMessages = () => {
       
       // Marquer comme lu
       const token = localStorage.getItem('token');
-      await axios.put(`/api/messages/${conversationId}/read`, {}, {
+      await axios.put(`/api/messages/conversations/${conversationId}/read`, {}, {
         headers: { Authorization: `Bearer ${token}` }
       });
       
@@ -109,7 +109,7 @@ const AdminMessages = () => {
     if (window.confirm('Voulez-vous vraiment supprimer cette conversation ?')) {
       try {
         const token = localStorage.getItem('token');
-        await axios.delete(`/api/messages/conversation/${conversationId}`, {
+        await axios.delete(`/api/messages/conversations/${conversationId}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         toast.success('Conversation supprimée');

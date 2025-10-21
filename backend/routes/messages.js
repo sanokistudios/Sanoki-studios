@@ -10,17 +10,15 @@ const {
 } = require('../controllers/messageController');
 const { protect, admin } = require('../middleware/auth');
 
-// Routes protégées (admin) - AVANT les routes avec paramètres
-router.get('/admin/conversations', protect, admin, getConversations);
+// Routes protégées (admin) - TOUJOURS EN PREMIER
+router.get('/conversations/all', protect, admin, getConversations);
+router.put('/conversations/:conversationId/read', protect, admin, markConversationAsRead);
+router.delete('/conversations/:conversationId', protect, admin, deleteConversation);
 
 // Routes publiques
-router.get('/:conversationId', getMessagesByConversation);
 router.post('/', createMessage);
 router.post('/conversation', createOrUpdateConversation);
-
-// Routes protégées (admin) avec paramètres
-router.put('/:conversationId/read', protect, admin, markConversationAsRead);
-router.delete('/conversation/:conversationId', protect, admin, deleteConversation);
+router.get('/:conversationId', getMessagesByConversation);
 
 module.exports = router;
 

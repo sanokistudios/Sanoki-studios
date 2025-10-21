@@ -54,7 +54,7 @@ export const ordersAPI = {
 // Messages et Conversations
 export const messagesAPI = {
   // Conversations (admin)
-  getConversations: () => api.get('/messages/admin/conversations'),
+  getConversations: () => api.get('/messages/conversations/all'),
   getMessagesByConversation: (conversationId) => api.get(`/messages/${conversationId}`),
   
   // Messages
@@ -62,8 +62,8 @@ export const messagesAPI = {
   createConversation: (data) => api.post('/messages/conversation', data),
   
   // Admin
-  markConversationAsRead: (conversationId) => api.put(`/messages/${conversationId}/read`),
-  deleteConversation: (conversationId) => api.delete(`/messages/conversation/${conversationId}`)
+  markConversationAsRead: (conversationId) => api.put(`/messages/conversations/${conversationId}/read`),
+  deleteConversation: (conversationId) => api.delete(`/messages/conversations/${conversationId}`)
 };
 
 // Contact
