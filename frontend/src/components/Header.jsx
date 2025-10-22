@@ -63,16 +63,13 @@ const Header = () => {
               </button>
             </div>
 
-            {/* Centre: Logo + Nom */}
-            <Link to="/" className="absolute left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-1">
+            {/* Centre: Logo seul (agrandi) */}
+            <Link to="/" className="absolute left-1/2 transform -translate-x-1/2">
               <img 
                 src={logo} 
                 alt="Sanoki Studios" 
-                className="h-12 w-auto object-contain"
+                className="h-16 w-auto object-contain"
               />
-              <span className="text-sm font-medium tracking-wider uppercase">
-                Sanoki Studios
-              </span>
             </Link>
 
             {/* Droite: Compte utilisateur + Panier */}
