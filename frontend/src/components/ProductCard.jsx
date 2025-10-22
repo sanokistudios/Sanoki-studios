@@ -1,6 +1,10 @@
 import { Link } from 'react-router-dom';
+import { XCircle } from 'lucide-react';
 
 const ProductCard = ({ product }) => {
+  // Vérifier si le produit est en rupture
+  const isOutOfStock = product.stock !== null && product.stock === 0;
+
   return (
     <Link to={`/produit/${product._id}`} className="group block">
       <div className="animate-fade-in">
@@ -12,11 +16,12 @@ const ProductCard = ({ product }) => {
             className="w-full h-full object-cover group-hover:opacity-90 transition-opacity duration-300"
           />
           
-          {/* Badge rupture si nécessaire */}
-          {product.stock === 0 && (
-            <span className="absolute top-2 right-2 bg-black text-white px-2 py-1 text-xs font-medium uppercase">
-              Rupture
-            </span>
+          {/* Badge rupture de stock */}
+          {isOutOfStock && (
+            <div className="absolute top-2 right-2 bg-black text-white px-3 py-1 text-xs font-bold uppercase flex items-center gap-1">
+              <XCircle className="w-3 h-3" />
+              EN RUPTURE
+            </div>
           )}
         </div>
 
