@@ -281,28 +281,76 @@ const AdminProducts = () => {
 
               <div>
                 <label className="block text-sm font-medium mb-2">
-                  Tailles (séparées par des virgules)
+                  Tailles disponibles
                 </label>
-                <input
-                  type="text"
-                  value={formData.sizes.join(', ')}
-                  onChange={(e) => handleArrayChange('sizes', e.target.value)}
-                  placeholder="Ex: S, M, L, XL"
-                  className="input-field"
-                />
+                <div className="flex flex-wrap gap-2">
+                  {['XS', 'S', 'M', 'L', 'XL', 'XXL'].map((size) => (
+                    <button
+                      key={size}
+                      type="button"
+                      onClick={() => {
+                        const newSizes = formData.sizes.includes(size)
+                          ? formData.sizes.filter(s => s !== size)
+                          : [...formData.sizes, size];
+                        setFormData({ ...formData, sizes: newSizes });
+                      }}
+                      className={`px-4 py-2 rounded-lg border-2 transition-all ${
+                        formData.sizes.includes(size)
+                          ? 'bg-blue-500 text-white border-blue-500'
+                          : 'bg-white text-gray-700 border-gray-300 hover:border-blue-500'
+                      }`}
+                    >
+                      {size}
+                    </button>
+                  ))}
+                </div>
+                <p className="text-xs text-gray-500 mt-2">
+                  Cliquez sur les tailles pour les sélectionner/désélectionner
+                </p>
               </div>
 
               <div>
                 <label className="block text-sm font-medium mb-2">
-                  Couleurs (séparées par des virgules)
+                  Couleurs disponibles
                 </label>
-                <input
-                  type="text"
-                  value={formData.colors.join(', ')}
-                  onChange={(e) => handleArrayChange('colors', e.target.value)}
-                  placeholder="Ex: Noir, Blanc, Bleu"
-                  className="input-field"
-                />
+                <div className="flex flex-wrap gap-2">
+                  {[
+                    { name: 'Noir', color: '#000000' },
+                    { name: 'Blanc', color: '#FFFFFF' },
+                    { name: 'Gris', color: '#808080' },
+                    { name: 'Rouge', color: '#FF0000' },
+                    { name: 'Bleu', color: '#0000FF' },
+                    { name: 'Vert', color: '#00FF00' },
+                    { name: 'Jaune', color: '#FFFF00' },
+                    { name: 'Rose', color: '#FFC0CB' },
+                    { name: 'Beige', color: '#F5F5DC' }
+                  ].map((colorObj) => (
+                    <button
+                      key={colorObj.name}
+                      type="button"
+                      onClick={() => {
+                        const newColors = formData.colors.includes(colorObj.name)
+                          ? formData.colors.filter(c => c !== colorObj.name)
+                          : [...formData.colors, colorObj.name];
+                        setFormData({ ...formData, colors: newColors });
+                      }}
+                      className={`px-4 py-2 rounded-lg border-2 transition-all flex items-center gap-2 ${
+                        formData.colors.includes(colorObj.name)
+                          ? 'bg-blue-500 text-white border-blue-500'
+                          : 'bg-white text-gray-700 border-gray-300 hover:border-blue-500'
+                      }`}
+                    >
+                      <span 
+                        className="w-4 h-4 rounded-full border border-gray-400" 
+                        style={{ backgroundColor: colorObj.color }}
+                      ></span>
+                      {colorObj.name}
+                    </button>
+                  ))}
+                </div>
+                <p className="text-xs text-gray-500 mt-2">
+                  Cliquez sur les couleurs pour les sélectionner/désélectionner
+                </p>
               </div>
 
               <div>
