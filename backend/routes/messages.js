@@ -11,15 +11,15 @@ const {
 } = require('../controllers/messageController');
 const { protect, admin } = require('../middleware/auth');
 
+// Routes admin (placer en premier pour éviter les conflits avec :id)
+router.get('/conversations/all', protect, admin, getAllConversations);
+router.get('/conversations/:id/messages', protect, getMessages);
+router.post('/conversations/:id/messages', protect, sendMessage);
+router.put('/conversations/:id/read', protect, admin, markAsRead);
+router.put('/conversations/:id/resolve', protect, admin, resolveConversation);
+
 // Routes utilisateur authentifié
 router.get('/me', protect, getMyConversation);
 router.post('/', protect, getOrCreateConversation);
-router.get('/:id/messages', protect, getMessages);
-router.post('/:id/messages', protect, sendMessage);
-
-// Routes admin
-router.get('/all', protect, admin, getAllConversations);
-router.put('/:id/read', protect, admin, markAsRead);
-router.put('/:id/resolve', protect, admin, resolveConversation);
 
 module.exports = router;

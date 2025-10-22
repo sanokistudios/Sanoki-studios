@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { ShoppingCart, Menu, X, User, LogIn, UserPlus } from 'lucide-react';
+import { ShoppingCart, Menu, X, User, LogIn, UserPlus, LayoutDashboard } from 'lucide-react';
 import { useState } from 'react';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
@@ -49,13 +49,24 @@ const Header = () => {
             {/* Auth - Desktop */}
             <div className="hidden md:flex items-center space-x-2">
               {isAuthenticated ? (
-                <Link
-                  to="/profil"
-                  className="flex items-center gap-2 px-4 py-2 text-primary hover:bg-gray-100 rounded-lg transition-colors"
-                >
-                  <User className="w-5 h-5" />
-                  <span className="font-medium">{user?.name}</span>
-                </Link>
+                <>
+                  {user?.role === 'admin' && (
+                    <Link
+                      to="/admin"
+                      className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white hover:bg-blue-600 rounded-lg transition-colors"
+                    >
+                      <LayoutDashboard className="w-5 h-5" />
+                      <span className="font-medium">Dashboard</span>
+                    </Link>
+                  )}
+                  <Link
+                    to="/profil"
+                    className="flex items-center gap-2 px-4 py-2 text-primary hover:bg-gray-100 rounded-lg transition-colors"
+                  >
+                    <User className="w-5 h-5" />
+                    <span className="font-medium">{user?.name}</span>
+                  </Link>
+                </>
               ) : (
                 <>
                   <Link
@@ -120,14 +131,26 @@ const Header = () => {
             {/* Auth - Mobile */}
             <div className="mt-4 pt-4 border-t space-y-2">
               {isAuthenticated ? (
-                <Link
-                  to="/profil"
-                  className="flex items-center gap-2 py-3 text-gray-dark hover:text-accent transition-colors"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  <User className="w-5 h-5" />
-                  <span>{user?.name}</span>
-                </Link>
+                <>
+                  {user?.role === 'admin' && (
+                    <Link
+                      to="/admin"
+                      className="flex items-center gap-2 py-3 text-white bg-blue-500 hover:bg-blue-600 rounded-lg px-4 transition-colors"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      <LayoutDashboard className="w-5 h-5" />
+                      <span className="font-medium">Dashboard Admin</span>
+                    </Link>
+                  )}
+                  <Link
+                    to="/profil"
+                    className="flex items-center gap-2 py-3 text-gray-dark hover:text-accent transition-colors"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <User className="w-5 h-5" />
+                    <span>{user?.name}</span>
+                  </Link>
+                </>
               ) : (
                 <>
                   <Link
