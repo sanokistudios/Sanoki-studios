@@ -5,6 +5,15 @@ import axios from 'axios';
 const API_URL = import.meta.env.VITE_API_URL || 
   (import.meta.env.PROD ? 'https://happy-hope-production.up.railway.app/api' : '/api');
 
+// Debug logs (à retirer en production finale)
+console.log('🔧 API Configuration:', {
+  VITE_API_URL: import.meta.env.VITE_API_URL,
+  PROD: import.meta.env.PROD,
+  DEV: import.meta.env.DEV,
+  MODE: import.meta.env.MODE,
+  API_URL: API_URL
+});
+
 // Configuration axios
 const api = axios.create({
   baseURL: API_URL,
