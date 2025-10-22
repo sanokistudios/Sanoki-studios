@@ -1,4 +1,5 @@
 const Order = require('../models/Order');
+const { sendOrderConfirmation } = require('../utils/email');
 
 // @desc    Créer une commande
 // @route   POST /api/orders
@@ -39,6 +40,15 @@ exports.createOrder = async (req, res) => {
       await order.populate('items.product');
     } catch (populateError) {
       console.warn('Avertissement : Impossible de peupler les produits:', populateError.message);
+    }
+
+    // Envoyer l'email de confirmation (ne pas bloquer si échec)
+    try {
+      await sendOrderConfirmation(order);
+      console.log('✅ Email de confirmation envoyé à', order.customer.email);
+    } catch (emailError) {
+      console.error('⚠️ Erreur lors de l\'envoi de l\'email de confirmation:', emailError.message);
+      // On continue même si l'email échoue
     }
 
     res.status(201).json({ success: true, order });

@@ -59,24 +59,24 @@ exports.sendEmail = async (options) => {
 /**
  * Envoyer un email de commande au client
  */
-exports.sendOrderConfirmation = async (order, user) => {
+exports.sendOrderConfirmation = async (order) => {
   const itemsList = order.items
-    .map(item => `- ${item.title} (Taille: ${item.size}) x ${item.qty} = ${item.priceAtOrder * item.qty} TND`)
+    .map(item => `- ${item.name} (Taille: ${item.size || 'N/A'}) x ${item.quantity} = ${item.price * item.quantity} TND`)
     .join('\n');
   
-  const subject = `Confirmation de commande #${order._id.toString().slice(-8)}`;
+  const subject = `Confirmation de commande #${order.orderNumber}`;
   
   const text = `Bonjour ${order.customer.name},
 
 Votre commande a bien été enregistrée !
 
-Numéro de commande : ${order._id}
+Numéro de commande : ${order.orderNumber}
 Date : ${new Date(order.createdAt).toLocaleDateString('fr-FR')}
 
 ARTICLES :
 ${itemsList}
 
-TOTAL : ${order.totals.grandTotal} TND
+TOTAL : ${order.totalAmount} TND
 
 LIVRAISON :
 ${order.customer.address.line1}
@@ -91,62 +91,93 @@ Votre commande sera expédiée sous 2-3 jours ouvrés.
 Merci de votre confiance !`;
 
   const html = `
-    <h2>Confirmation de commande</h2>
-    <p>Bonjour <strong>${order.customer.name}</strong>,</p>
-    <p>Votre commande a bien été enregistrée !</p>
-    
-    <table style="border-collapse: collapse; width: 100%; margin: 20px 0;">
-      <tr style="background: #f3f4f6;">
-        <td style="padding: 10px; border: 1px solid #e5e7eb;"><strong>Numéro de commande</strong></td>
-        <td style="padding: 10px; border: 1px solid #e5e7eb;">#${order._id.toString().slice(-8)}</td>
-      </tr>
-      <tr>
-        <td style="padding: 10px; border: 1px solid #e5e7eb;"><strong>Date</strong></td>
-        <td style="padding: 10px; border: 1px solid #e5e7eb;">${new Date(order.createdAt).toLocaleDateString('fr-FR')}</td>
-      </tr>
-    </table>
-    
-    <h3>Articles commandés</h3>
-    <table style="border-collapse: collapse; width: 100%; margin-bottom: 20px;">
-      <thead>
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+      <div style="text-align: center; margin-bottom: 30px;">
+        <h1 style="color: #000; margin: 0;">Sanoki Studios</h1>
+        <p style="color: #666; margin: 5px 0 0;">Confirmation de commande</p>
+      </div>
+      
+      <p>Bonjour <strong>${order.customer.name}</strong>,</p>
+      <p>Votre commande a bien été enregistrée ! 🎉</p>
+      
+      <table style="border-collapse: collapse; width: 100%; margin: 20px 0;">
         <tr style="background: #f3f4f6;">
-          <th style="padding: 10px; border: 1px solid #e5e7eb; text-align: left;">Produit</th>
-          <th style="padding: 10px; border: 1px solid #e5e7eb;">Taille</th>
-          <th style="padding: 10px; border: 1px solid #e5e7eb;">Qté</th>
-          <th style="padding: 10px; border: 1px solid #e5e7eb;">Prix</th>
+          <td style="padding: 10px; border: 1px solid #e5e7eb;"><strong>Numéro de commande</strong></td>
+          <td style="padding: 10px; border: 1px solid #e5e7eb;">${order.orderNumber}</td>
         </tr>
-      </thead>
-      <tbody>
-        ${order.items.map(item => `
-          <tr>
-            <td style="padding: 10px; border: 1px solid #e5e7eb;">${item.title}</td>
-            <td style="padding: 10px; border: 1px solid #e5e7eb; text-align: center;">${item.size}</td>
-            <td style="padding: 10px; border: 1px solid #e5e7eb; text-align: center;">${item.qty}</td>
-            <td style="padding: 10px; border: 1px solid #e5e7eb; text-align: right;">${item.priceAtOrder * item.qty} TND</td>
+        <tr>
+          <td style="padding: 10px; border: 1px solid #e5e7eb;"><strong>Date</strong></td>
+          <td style="padding: 10px; border: 1px solid #e5e7eb;">${new Date(order.createdAt).toLocaleDateString('fr-FR')}</td>
+        </tr>
+        <tr style="background: #f3f4f6;">
+          <td style="padding: 10px; border: 1px solid #e5e7eb;"><strong>Statut</strong></td>
+          <td style="padding: 10px; border: 1px solid #e5e7eb;">En attente de traitement</td>
+        </tr>
+      </table>
+      
+      <h3 style="color: #000; margin-top: 30px;">Articles commandés</h3>
+      <table style="border-collapse: collapse; width: 100%; margin-bottom: 20px;">
+        <thead>
+          <tr style="background: #f3f4f6;">
+            <th style="padding: 10px; border: 1px solid #e5e7eb; text-align: left;">Produit</th>
+            <th style="padding: 10px; border: 1px solid #e5e7eb;">Taille</th>
+            <th style="padding: 10px; border: 1px solid #e5e7eb;">Qté</th>
+            <th style="padding: 10px; border: 1px solid #e5e7eb; text-align: right;">Prix</th>
           </tr>
-        `).join('')}
-        <tr style="background: #f3f4f6;">
-          <td colspan="3" style="padding: 10px; border: 1px solid #e5e7eb; text-align: right;"><strong>TOTAL</strong></td>
-          <td style="padding: 10px; border: 1px solid #e5e7eb; text-align: right;"><strong>${order.totals.grandTotal} TND</strong></td>
-        </tr>
-      </tbody>
-    </table>
-    
-    <h3>Adresse de livraison</h3>
-    <p>
-      ${order.customer.address.line1}<br>
-      ${order.customer.address.line2 ? order.customer.address.line2 + '<br>' : ''}
-      ${order.customer.address.city}, ${order.customer.address.governorate}<br>
-      ${order.customer.address.postalCode || ''}
-    </p>
-    
-    <div style="background: #dbeafe; border-left: 4px solid #3b82f6; padding: 15px; margin: 20px 0;">
-      <strong>💰 Paiement à la livraison (Cash on Delivery)</strong>
-      <p style="margin: 5px 0 0;">Vous paierez en espèces lors de la réception de votre colis.</p>
+        </thead>
+        <tbody>
+          ${order.items.map(item => `
+            <tr>
+              <td style="padding: 10px; border: 1px solid #e5e7eb;">${item.name}</td>
+              <td style="padding: 10px; border: 1px solid #e5e7eb; text-align: center;">${item.size || 'N/A'}</td>
+              <td style="padding: 10px; border: 1px solid #e5e7eb; text-align: center;">${item.quantity}</td>
+              <td style="padding: 10px; border: 1px solid #e5e7eb; text-align: right;">${(item.price * item.quantity).toFixed(3)} TND</td>
+            </tr>
+          `).join('')}
+          <tr style="background: #f3f4f6;">
+            <td colspan="3" style="padding: 10px; border: 1px solid #e5e7eb; text-align: right;"><strong>TOTAL</strong></td>
+            <td style="padding: 10px; border: 1px solid #e5e7eb; text-align: right;"><strong>${order.totalAmount.toFixed(3)} TND</strong></td>
+          </tr>
+        </tbody>
+      </table>
+      
+      <h3 style="color: #000; margin-top: 30px;">Adresse de livraison</h3>
+      <div style="background: #f9fafb; padding: 15px; border-radius: 5px; border: 1px solid #e5e7eb;">
+        <p style="margin: 5px 0;">
+          <strong>${order.customer.name} ${order.customer.surname || ''}</strong><br>
+          ${order.customer.phone}<br>
+          ${order.customer.address.line1}<br>
+          ${order.customer.address.line2 ? order.customer.address.line2 + '<br>' : ''}
+          ${order.customer.address.city}, ${order.customer.address.governorate}<br>
+          ${order.customer.address.postalCode || ''} ${order.customer.address.country || 'Tunisie'}
+        </p>
+      </div>
+      
+      <div style="background: #dbeafe; border-left: 4px solid #3b82f6; padding: 15px; margin: 20px 0; border-radius: 5px;">
+        <strong style="color: #1e40af;">💰 Paiement à la livraison (Cash on Delivery)</strong>
+        <p style="margin: 5px 0 0; color: #1e40af;">Vous paierez en espèces lors de la réception de votre colis.</p>
+      </div>
+      
+      <div style="background: #f0fdf4; border-left: 4px solid #22c55e; padding: 15px; margin: 20px 0; border-radius: 5px;">
+        <strong style="color: #166534;">🚚 Livraison</strong>
+        <p style="margin: 5px 0 0; color: #166534;">Votre commande sera expédiée sous <strong>2-3 jours ouvrés</strong>.</p>
+      </div>
+      
+      ${order.notes ? `
+        <div style="background: #fef3c7; border-left: 4px solid #f59e0b; padding: 15px; margin: 20px 0; border-radius: 5px;">
+          <strong style="color: #92400e;">📝 Note</strong>
+          <p style="margin: 5px 0 0; color: #92400e;">${order.notes}</p>
+        </div>
+      ` : ''}
+      
+      <div style="text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid #e5e7eb;">
+        <p style="color: #666; font-size: 14px;">Merci de votre confiance ! ❤️</p>
+        <p style="color: #999; font-size: 12px; margin-top: 20px;">
+          Sanoki Studios - Vêtements modernes tunisiens<br>
+          Tunis, Tunisie
+        </p>
+      </div>
     </div>
-    
-    <p>Votre commande sera expédiée sous <strong>2-3 jours ouvrés</strong>.</p>
-    <p>Merci de votre confiance ! 🎉</p>
   `;
   
   return exports.sendEmail({
