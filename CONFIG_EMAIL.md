@@ -61,12 +61,13 @@ L'email envoyé contient :
 
 ```bash
 # Dans /backend/.env
-MAILTRAP_USER=votre_username_mailtrap
-MAILTRAP_PASS=votre_password_mailtrap
+# Remplacez par vos VRAIES valeurs Mailtrap
+MAILTRAP_USER=remplacer_par_votre_username
+MAILTRAP_PASS=remplacer_par_votre_password
 EMAIL_FROM="Sanoki Studios <noreply@sanokistudios.com>"
 ```
 
-**⚠️ IMPORTANT** : Remplacez les valeurs par vos vraies identifiants Mailtrap !
+**⚠️ IMPORTANT** : Ces valeurs sont des EXEMPLES ! Remplacez par vos vraies identifiants Mailtrap !
 
 ### 2. Passer une commande
 
@@ -114,16 +115,18 @@ NODE_ENV=production
 
 # Retirer les variables MAILTRAP
 
-# Ajouter :
+# Ajouter vos VRAIES valeurs SendGrid :
 SMTP_HOST=smtp.sendgrid.net
 SMTP_PORT=587
 SMTP_SECURE=false
 SMTP_USER=apikey
-SMTP_PASS=votre_api_key_sendgrid_ici
+SMTP_PASS=remplacer_par_votre_api_key_sendgrid
 
 EMAIL_FROM="Sanoki Studios <noreply@sanokistudios.com>"
 ADMIN_EMAIL=admin@sanokistudios.com
 ```
+
+**⚠️ ATTENTION** : Remplacez `remplacer_par_votre_api_key_sendgrid` par votre vraie API key !
 
 ## 🎨 Personnalisation Email
 

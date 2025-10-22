@@ -18,13 +18,15 @@ SMTP_PASS=ma_vraie_api_key
 ## ✅ Ce qui DOIT être dans Git
 
 ```bash
-# ✅ AUTORISÉ - Valeurs d'exemple :
-MAILTRAP_USER=votre_username_mailtrap
-MAILTRAP_PASS=votre_password_mailtrap
+# ✅ AUTORISÉ - Valeurs d'exemple génériques :
+MAILTRAP_USER=remplacer_par_votre_username
+MAILTRAP_PASS=remplacer_par_votre_password
 JWT_SECRET=votre_cle_secrete_tres_longue_et_complexe
-CLOUDINARY_API_SECRET=votre_api_secret
-SMTP_PASS=votre_api_key_sendgrid
+CLOUDINARY_API_SECRET=remplacer_par_votre_api_secret
+SMTP_PASS=remplacer_par_votre_api_key_sendgrid
 ```
+
+**Note** : GitGuardian peut encore alerter sur ces exemples. Dans ce cas, marquez comme "False Positive".
 
 ## 🛡️ Protection automatique
 

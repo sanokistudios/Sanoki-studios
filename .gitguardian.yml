@@ -1,0 +1,54 @@
+# GitGuardian Configuration - Sanoki Studios
+# Ce fichier configure GitGuardian pour réduire les faux positifs
+
+# Patterns à ignorer (faux positifs)
+ignore:
+  # Exemples génériques dans la documentation
+  - name: "Generic examples in documentation"
+    pattern: "remplacer_par_votre_"
+    reason: "Generic placeholder text in documentation"
+  
+  - name: "Example values in docs"
+    pattern: "votre_.*_ici"
+    reason: "Example values in documentation files"
+  
+  # Fichiers de documentation uniquement
+  - name: "Documentation files"
+    pattern: ".*\\.md$"
+    reason: "Documentation files contain examples only"
+
+# Patterns spécifiques à ignorer
+ignore:
+  # Variables d'environnement d'exemple
+  - name: "Environment variable examples"
+    pattern: "(MAILTRAP_USER|MAILTRAP_PASS|CLOUDINARY_API_KEY|CLOUDINARY_API_SECRET|SMTP_PASS)=remplacer_par_votre_"
+    reason: "Generic environment variable examples"
+  
+  # Commentaires explicites
+  - name: "Explicit examples"
+    pattern: "# Remplacez par vos VRAIES valeurs"
+    reason: "Explicit comment indicating examples"
+
+# Exclusions de fichiers
+exclude:
+  - "*.md"  # Tous les fichiers markdown
+  - "SECURITE.md"
+  - "CONFIG_EMAIL.md"
+  - "BACKEND_ENV_EXAMPLE.md"
+  - ".env.example"
+  - "README.md"
+
+# Configuration des secrets
+secrets:
+  # Patterns de secrets à détecter
+  patterns:
+    - "api[_-]?key"
+    - "secret[_-]?key"
+    - "password"
+    - "token"
+  
+  # Exclusions pour les exemples
+  exclude_patterns:
+    - "remplacer_par_votre_"
+    - "votre_.*_ici"
+    - "exemple_"
