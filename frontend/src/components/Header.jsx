@@ -45,13 +45,13 @@ const Header = () => {
       <nav className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
         <div className="flex items-center justify-between py-3 sm:py-4">
             {/* Gauche: Nom de la marque + Hamburger & Search */}
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
               {/* Nom de la marque */}
               <Link to="/" className="flex items-center">
                 <img 
                   src={brandName} 
                   alt="Sanoki Studios" 
-                  className="h-6 sm:h-8 w-auto object-contain"
+                  className="h-6 sm:h-7 md:h-8 w-auto object-contain"
                 />
               </Link>
               
