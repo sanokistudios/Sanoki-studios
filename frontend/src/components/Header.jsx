@@ -47,38 +47,37 @@ const Header = () => {
     <header className="bg-white shadow-md sticky top-0 z-50">
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
-          {/* Logo */}
-          <Link to="/" className="flex items-center">
-            <span className="text-2xl font-bold text-primary">
-              MARQUE
-            </span>
-          </Link>
+            {/* Menu Hamburger */}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+            >
+              {mobileMenuOpen ? (
+                <X className="w-6 h-6" />
+              ) : (
+                <Menu className="w-6 h-6" />
+              )}
+            </button>
 
-          {/* Navigation Desktop */}
-          <div className="hidden md:flex items-center space-x-8">
-            {navigation.map((item) => (
-              <Link
-                key={item.name}
-                to={item.path}
-                className="text-gray-dark hover:text-accent transition-colors duration-200 font-medium"
-              >
-                {item.name}
-              </Link>
-            ))}
-          </div>
+            {/* Logo */}
+            <Link to="/" className="flex items-center">
+              <span className="text-2xl font-bold text-primary">
+                MARQUE
+              </span>
+            </Link>
 
-            {/* Panier, Auth et Menu Mobile */}
+            {/* Compte utilisateur + Panier */}
             <div className="flex items-center space-x-2 md:space-x-4">
-              {/* Compte utilisateur - Desktop */}
-              <div className="hidden md:block relative" ref={dropdownRef}>
+              {/* Compte utilisateur */}
+              <div className="relative" ref={dropdownRef}>
                 {isAuthenticated ? (
                   <div className="relative">
                     <button
                       onClick={() => setUserDropdownOpen(!userDropdownOpen)}
-                      className="flex items-center gap-2 px-3 py-2 text-primary hover:bg-gray-100 rounded-lg transition-colors"
+                      className="flex items-center gap-1 md:gap-2 px-2 md:px-3 py-2 text-primary hover:bg-gray-100 rounded-lg transition-colors"
                     >
                       <User className="w-5 h-5" />
-                      <span className="font-medium">{user?.name}</span>
+                      <span className="hidden sm:inline font-medium">{user?.name}</span>
                       <ChevronDown className={`w-4 h-4 transition-transform ${userDropdownOpen ? 'rotate-180' : ''}`} />
                     </button>
                     
@@ -147,29 +146,17 @@ const Header = () => {
                   </span>
                 )}
               </button>
-
-            {/* Menu Mobile Toggle */}
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 hover:bg-gray-100 rounded-full transition-colors"
-            >
-              {mobileMenuOpen ? (
-                <X className="w-6 h-6" />
-              ) : (
-                <Menu className="w-6 h-6" />
-              )}
-            </button>
           </div>
         </div>
 
-          {/* Menu Mobile Overlay */}
+          {/* Menu Overlay */}
           {mobileMenuOpen && (
-            <div className="fixed inset-0 bg-black bg-opacity-50 z-50 md:hidden">
-              <div className="fixed right-0 top-0 h-full w-80 bg-white shadow-xl animate-slide-in-right">
+            <div className="fixed inset-0 bg-black bg-opacity-50 z-50" onClick={() => setMobileMenuOpen(false)}>
+              <div className="fixed left-0 top-0 h-full w-80 bg-white shadow-xl animate-slide-in-left" onClick={(e) => e.stopPropagation()}>
                 <div className="p-6">
-                  {/* Header du menu mobile */}
+                  {/* Header du menu */}
                   <div className="flex items-center justify-between mb-8">
-                    <h2 className="text-xl font-bold text-primary">Menu</h2>
+                    <h2 className="text-xl font-bold text-primary">Navigation</h2>
                     <button
                       onClick={() => setMobileMenuOpen(false)}
                       className="p-2 hover:bg-gray-100 rounded-full transition-colors"
@@ -178,83 +165,19 @@ const Header = () => {
                     </button>
                   </div>
 
-                  {/* Navigation */}
-                  <nav className="space-y-4">
+                  {/* Navigation - Seulement les liens de navigation */}
+                  <nav className="space-y-2">
                     {navigation.map((item) => (
                       <Link
                         key={item.name}
                         to={item.path}
-                        className="block py-3 text-lg text-gray-dark hover:text-accent transition-colors"
+                        className="block py-4 px-4 text-lg text-gray-dark hover:bg-gray-100 hover:text-accent transition-colors rounded-lg"
                         onClick={() => setMobileMenuOpen(false)}
                       >
                         {item.name}
                       </Link>
                     ))}
                   </nav>
-                  
-                  {/* Auth - Mobile */}
-                  <div className="mt-8 pt-6 border-t space-y-3">
-                    {isAuthenticated ? (
-                      <>
-                        <Link
-                          to="/profil"
-                          className="flex items-center gap-3 py-3 text-gray-dark hover:text-accent transition-colors"
-                          onClick={() => setMobileMenuOpen(false)}
-                        >
-                          <User className="w-5 h-5" />
-                          <span>Mon Profil</span>
-                        </Link>
-                        <Link
-                          to="/profil"
-                          className="flex items-center gap-3 py-3 text-gray-dark hover:text-accent transition-colors"
-                          onClick={() => setMobileMenuOpen(false)}
-                        >
-                          <Package className="w-5 h-5" />
-                          <span>Mes Commandes</span>
-                        </Link>
-                        {user?.role === 'admin' && (
-                          <Link
-                            to="/admin"
-                            className="flex items-center gap-3 py-3 text-blue-600 hover:bg-blue-50 rounded-lg px-3 transition-colors"
-                            onClick={() => setMobileMenuOpen(false)}
-                          >
-                            <LayoutDashboard className="w-5 h-5" />
-                            <span>Dashboard Admin</span>
-                          </Link>
-                        )}
-                        <hr className="my-4" />
-                        <button
-                          onClick={() => {
-                            handleLogout();
-                            setMobileMenuOpen(false);
-                          }}
-                          className="flex items-center gap-3 py-3 text-red-600 hover:bg-red-50 rounded-lg px-3 transition-colors w-full text-left"
-                        >
-                          <LogOut className="w-5 h-5" />
-                          <span>Déconnexion</span>
-                        </button>
-                      </>
-                    ) : (
-                      <>
-                        <Link
-                          to="/connexion"
-                          className="flex items-center gap-3 py-3 text-gray-dark hover:text-accent transition-colors"
-                          onClick={() => setMobileMenuOpen(false)}
-                        >
-                          <LogIn className="w-5 h-5" />
-                          <span>Connexion</span>
-                        </Link>
-                        <Link
-                          to="/inscription"
-                          className="flex items-center gap-3 py-3 text-white bg-primary hover:bg-primary-dark rounded-lg px-4 transition-colors"
-                          onClick={() => setMobileMenuOpen(false)}
-                        >
-                          <UserPlus className="w-5 h-5" />
-                          <span>Inscription</span>
-                        </Link>
-                      </>
-                    )}
-                  </div>
                 </div>
               </div>
             </div>
