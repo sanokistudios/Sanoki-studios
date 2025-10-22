@@ -251,16 +251,19 @@ const AdminProducts = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-2">Stock *</label>
+                  <label className="block text-sm font-medium mb-2">Stock (optionnel)</label>
                   <input
                     type="number"
                     name="stock"
                     value={formData.stock}
                     onChange={handleChange}
                     min="0"
+                    placeholder="Laissez vide pour stock illimité"
                     className="input-field"
-                    required
                   />
+                  <p className="text-xs text-gray-500 mt-1">
+                    Laissez vide si vous gérez le stock manuellement
+                  </p>
                 </div>
               </div>
 
