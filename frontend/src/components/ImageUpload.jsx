@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Upload, X, Loader } from 'lucide-react';
-import axios from 'axios';
+import api from '../utils/api';
 import toast from 'react-hot-toast';
 
 const ImageUpload = ({ onUploadSuccess, multiple = false }) => {
@@ -22,14 +22,12 @@ const ImageUpload = ({ onUploadSuccess, multiple = false }) => {
           formData.append('images', file);
         });
 
-        const token = localStorage.getItem('token');
-        const response = await axios.post(
-          '/api/upload/multiple',
+        const response = await api.post(
+          '/upload/multiple',
           formData,
           {
             headers: {
-              'Content-Type': 'multipart/form-data',
-              'Authorization': `Bearer ${token}`
+              'Content-Type': 'multipart/form-data'
             }
           }
         );
@@ -48,14 +46,12 @@ const ImageUpload = ({ onUploadSuccess, multiple = false }) => {
         };
         reader.readAsDataURL(files[0]);
 
-        const token = localStorage.getItem('token');
-        const response = await axios.post(
-          '/api/upload',
+        const response = await api.post(
+          '/upload',
           formData,
           {
             headers: {
-              'Content-Type': 'multipart/form-data',
-              'Authorization': `Bearer ${token}`
+              'Content-Type': 'multipart/form-data'
             }
           }
         );
