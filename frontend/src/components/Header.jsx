@@ -1,8 +1,9 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { ShoppingCart, Menu, X, User, LogIn, UserPlus, LayoutDashboard, ChevronDown, Package, LogOut } from 'lucide-react';
+import { ShoppingCart, Menu, X, User, LogIn, Search, LayoutDashboard, ChevronDown, Package, LogOut } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
+import logo from '../assets/logo.png'; // On va ajouter le logo
 
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -32,41 +33,49 @@ const Header = () => {
     navigate('/');
   };
 
+  // Navigation simplifiée pour le menu hamburger
   const navigation = [
-    { name: 'Accueil', path: '/' },
     { name: 'Boutique', path: '/boutique' },
-    { name: 'À Propos', path: '/a-propos' }
+    { name: 'About Us', path: '/a-propos' }
   ];
-  
-  // Ajouter Contact uniquement pour les invités
-  if (!isAuthenticated) {
-    navigation.push({ name: 'Contact', path: '/contact' });
-  }
 
   return (
     <header className="bg-white shadow-md sticky top-0 z-50">
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-20">
-            {/* Menu Hamburger */}
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-            >
-              {mobileMenuOpen ? (
-                <X className="w-6 h-6" />
-              ) : (
-                <Menu className="w-6 h-6" />
-              )}
-            </button>
+        <div className="flex items-center justify-between h-24">
+            {/* Gauche: Hamburger + Search */}
+            <div className="flex items-center gap-3">
+              {/* Menu Hamburger */}
+              <button
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+              >
+                {mobileMenuOpen ? (
+                  <X className="w-6 h-6" />
+                ) : (
+                  <Menu className="w-6 h-6" />
+                )}
+              </button>
+              
+              {/* Bouton Search */}
+              <button className="p-2 hover:bg-gray-100 rounded-full transition-colors">
+                <Search className="w-6 h-6" />
+              </button>
+            </div>
 
-            {/* Logo */}
-            <Link to="/" className="flex items-center">
-              <span className="text-2xl font-bold text-primary">
-                MARQUE
+            {/* Centre: Logo + Nom */}
+            <Link to="/" className="absolute left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-1">
+              <img 
+                src={logo} 
+                alt="Sanoki Studios" 
+                className="h-12 w-auto object-contain"
+              />
+              <span className="text-sm font-medium tracking-wider uppercase">
+                Sanoki Studios
               </span>
             </Link>
 
-            {/* Compte utilisateur + Panier */}
+            {/* Droite: Compte utilisateur + Panier */}
             <div className="flex items-center space-x-2 md:space-x-4">
               {/* Compte utilisateur */}
               <div className="relative" ref={dropdownRef}>
