@@ -23,8 +23,8 @@ MAILTRAP_USER=votre_user_mailtrap
 MAILTRAP_PASS=votre_password_mailtrap
 
 # Email - Informations
-EMAIL_FROM="Sanoki Studios <noreply@sanoki-studios.com>"
-ADMIN_EMAIL=admin@sanoki-studios.com
+EMAIL_FROM="Sanoki Studios <noreply@sanokistudios.com>"
+ADMIN_EMAIL=admin@sanokistudios.com
 ```
 
 ## 🧪 Configuration Mailtrap (Développement)
@@ -61,10 +61,12 @@ L'email envoyé contient :
 
 ```bash
 # Dans /backend/.env
-MAILTRAP_USER=abc123
-MAILTRAP_PASS=xyz789
-EMAIL_FROM="Sanoki Studios <noreply@sanoki-studios.com>"
+MAILTRAP_USER=votre_username_mailtrap
+MAILTRAP_PASS=votre_password_mailtrap
+EMAIL_FROM="Sanoki Studios <noreply@sanokistudios.com>"
 ```
+
+**⚠️ IMPORTANT** : Remplacez les valeurs par vos vraies identifiants Mailtrap !
 
 ### 2. Passer une commande
 
@@ -117,10 +119,10 @@ SMTP_HOST=smtp.sendgrid.net
 SMTP_PORT=587
 SMTP_SECURE=false
 SMTP_USER=apikey
-SMTP_PASS=votre_api_key_sendgrid
+SMTP_PASS=votre_api_key_sendgrid_ici
 
-EMAIL_FROM="Sanoki Studios <noreply@sanoki-studios.com>"
-ADMIN_EMAIL=admin@sanoki-studios.com
+EMAIL_FROM="Sanoki Studios <noreply@sanokistudios.com>"
+ADMIN_EMAIL=admin@sanokistudios.com
 ```
 
 ## 🎨 Personnalisation Email
