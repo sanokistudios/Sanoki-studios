@@ -12,8 +12,14 @@ exports.createOrder = async (req, res) => {
       return res.status(400).json({ message: 'Données de commande incomplètes' });
     }
 
+    // Générer un numéro de commande unique
+    const timestamp = Date.now().toString().slice(-8);
+    const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+    const orderNumber = `ORD-${timestamp}-${random}`;
+    
     // Ajouter le userId si l'utilisateur est connecté
     const orderData = {
+      orderNumber,
       customer,
       items,
       totalAmount,

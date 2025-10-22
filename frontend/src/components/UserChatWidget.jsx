@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { MessageCircle, X, Send } from 'lucide-react';
-import axios from 'axios';
+import api from '../utils/api';
 import toast from 'react-hot-toast';
 import { getSocket } from '../utils/socket';
 import { useAuth } from '../context/AuthContext';
@@ -60,7 +60,7 @@ const UserChatWidget = () => {
     setLoading(true);
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('/api/conversations/me', {
+      const response = await api.get('/messages/me', {
         headers: { Authorization: `Bearer ${token}` }
       });
       
@@ -94,7 +94,7 @@ const UserChatWidget = () => {
     
     try {
       const token = localStorage.getItem('token');
-      await axios.post(`/api/conversations/${conversationId}/messages`, 
+      await api.post(`/messages/conversations/${conversationId}/messages`, 
         { text: messageText },
         { headers: { Authorization: `Bearer ${token}` }}
       );
