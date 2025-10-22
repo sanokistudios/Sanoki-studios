@@ -163,7 +163,8 @@ exports.sendMessage = async (req, res) => {
 // @access  Private (Admin)
 exports.getAllConversations = async (req, res) => {
   try {
-    const conversations = await Conversation.find()
+    // Récupérer seulement les conversations avec userId (exclure les anciennes conversations invalides)
+    const conversations = await Conversation.find({ userId: { $exists: true, $ne: null } })
       .populate('userId', 'name email phone')
       .sort({ lastMessageAt: -1 });
     
@@ -189,6 +190,12 @@ exports.markAsRead = async (req, res) => {
     
     if (!conversation) {
       return res.status(404).json({ message: 'Conversation non trouvée' });
+    }
+    
+    // Vérifier que la conversation a un userId
+    if (!conversation.userId) {
+      console.warn('Tentative de markAsRead sur conversation sans userId:', id);
+      return res.status(400).json({ message: 'Conversation invalide (pas de userId)' });
     }
     
     // Réinitialiser le compteur
