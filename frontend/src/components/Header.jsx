@@ -41,25 +41,25 @@ const Header = () => {
 
   return (
     <header className="bg-white shadow-md sticky top-0 z-50">
-      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-24">
+      <nav className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
+        <div className="flex items-center justify-between h-20 sm:h-24">
             {/* Gauche: Hamburger + Search */}
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-1 sm:gap-3">
               {/* Menu Hamburger */}
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                className="p-1.5 sm:p-2 hover:bg-gray-100 rounded-full transition-colors"
               >
                 {mobileMenuOpen ? (
-                  <X className="w-6 h-6" />
+                  <X className="w-5 h-5 sm:w-6 sm:h-6" />
                 ) : (
-                  <Menu className="w-6 h-6" />
+                  <Menu className="w-5 h-5 sm:w-6 sm:h-6" />
                 )}
               </button>
               
               {/* Bouton Search */}
-              <button className="p-2 hover:bg-gray-100 rounded-full transition-colors">
-                <Search className="w-6 h-6" />
+              <button className="p-1.5 sm:p-2 hover:bg-gray-100 rounded-full transition-colors">
+                <Search className="w-5 h-5 sm:w-6 sm:h-6" />
               </button>
             </div>
 
@@ -68,23 +68,23 @@ const Header = () => {
               <img 
                 src={logo} 
                 alt="Sanoki Studios" 
-                className="h-20 w-auto object-contain"
+                className="h-14 sm:h-20 md:h-24 w-auto object-contain"
               />
             </Link>
 
             {/* Droite: Compte utilisateur + Panier */}
-            <div className="flex items-center space-x-2 md:space-x-4">
+            <div className="flex items-center gap-1 sm:space-x-2 md:space-x-4">
               {/* Compte utilisateur */}
               <div className="relative" ref={dropdownRef}>
                 {isAuthenticated ? (
                   <div className="relative">
                     <button
                       onClick={() => setUserDropdownOpen(!userDropdownOpen)}
-                      className="flex items-center gap-1 md:gap-2 px-2 md:px-3 py-2 text-primary hover:bg-gray-100 rounded-lg transition-colors"
+                      className="flex items-center gap-1 px-1.5 sm:px-2 md:px-3 py-1.5 sm:py-2 text-primary hover:bg-gray-100 rounded-lg transition-colors"
                     >
                       <User className="w-5 h-5" />
-                      <span className="hidden sm:inline font-medium">{user?.name}</span>
-                      <ChevronDown className={`w-4 h-4 transition-transform ${userDropdownOpen ? 'rotate-180' : ''}`} />
+                      <span className="hidden sm:inline font-medium text-sm">{user?.name}</span>
+                      <ChevronDown className={`w-3 h-3 sm:w-4 sm:h-4 transition-transform ${userDropdownOpen ? 'rotate-180' : ''}`} />
                     </button>
                     
                     {/* Dropdown */}
@@ -132,10 +132,10 @@ const Header = () => {
                 ) : (
                   <Link
                     to="/connexion"
-                    className="flex items-center gap-2 px-3 py-2 text-primary hover:bg-gray-100 rounded-lg transition-colors"
+                    className="flex items-center gap-1 px-1.5 sm:px-3 py-1.5 sm:py-2 text-primary hover:bg-gray-100 rounded-lg transition-colors"
                   >
                     <LogIn className="w-5 h-5" />
-                    <span>Connexion</span>
+                    <span className="hidden sm:inline text-sm">Connexion</span>
                   </Link>
                 )}
               </div>
@@ -143,11 +143,11 @@ const Header = () => {
               {/* Panier */}
               <button
                 onClick={toggleCart}
-                className="relative p-2 hover:bg-gray-100 rounded-full transition-colors"
+                className="relative p-1.5 sm:p-2 hover:bg-gray-100 rounded-full transition-colors"
               >
-                <ShoppingCart className="w-6 h-6" />
+                <ShoppingCart className="w-5 h-5 sm:w-6 sm:h-6" />
                 {getCartCount() > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-accent text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                  <span className="absolute -top-1 -right-1 bg-accent text-white text-xs rounded-full w-4 h-4 sm:w-5 sm:h-5 flex items-center justify-center text-[10px] sm:text-xs">
                     {getCartCount()}
                   </span>
                 )}
