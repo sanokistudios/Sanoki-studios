@@ -94,15 +94,26 @@ io.on('connection', (socket) => {
   });
 
   // Admin rejoint la room admin
-  socket.on('join-admin', (token) => {
+  socket.on('join-admin', async (token) => {
     try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      if (decoded.id && socket.userId) {
+      
+      // Vérifier que l'utilisateur est admin
+      const User = require('./models/User');
+      const user = await User.findById(decoded.id);
+      
+      if (user && user.role === 'admin') {
+        socket.userId = decoded.id; // Définir userId si pas déjà fait
         socket.join('admin');
-        console.log(`Admin ${decoded.id} joined admin room`);
+        console.log(`✅ Admin ${decoded.id} (${user.name}) joined admin room`);
+        socket.emit('admin-joined', { success: true });
+      } else {
+        console.log(`❌ User ${decoded.id} tried to join admin room but is not admin`);
+        socket.emit('admin-joined', { success: false, message: 'Not admin' });
       }
     } catch (error) {
       console.error('Erreur join admin:', error);
+      socket.emit('admin-joined', { success: false, message: 'Token invalide' });
     }
   });
 

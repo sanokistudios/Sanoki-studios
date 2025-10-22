@@ -22,10 +22,20 @@ const AdminMessages = () => {
       socket.emit('join-admin', token);
     }
 
+    // Confirmer que l'admin a rejoint la room
+    socket.on('admin-joined', (data) => {
+      if (data.success) {
+        console.log('✅ Admin joined admin room successfully');
+      } else {
+        console.error('❌ Failed to join admin room:', data.message);
+      }
+    });
+
     // Écouter les nouveaux messages des utilisateurs
     socket.on('new-user-message', handleNewUserMessage);
 
     return () => {
+      socket.off('admin-joined');
       socket.off('new-user-message');
     };
   }, []);
