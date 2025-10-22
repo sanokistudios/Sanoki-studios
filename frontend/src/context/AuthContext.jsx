@@ -1,5 +1,5 @@
 import { createContext, useState, useContext, useEffect } from 'react';
-import axios from 'axios';
+import api from '../utils/api';
 import toast from 'react-hot-toast';
 
 const AuthContext = createContext();
@@ -31,7 +31,7 @@ export const AuthProvider = ({ children }) => {
     }
 
     try {
-      const response = await axios.get('/api/auth/me', {
+      const response = await api.get('/auth/me', {
         headers: { Authorization: `Bearer ${token}` }
       });
       
@@ -49,7 +49,7 @@ export const AuthProvider = ({ children }) => {
 
   const register = async (data) => {
     try {
-      const response = await axios.post('/api/auth/register', data);
+      const response = await api.post('/auth/register', data);
       
       const { token, user } = response.data;
       localStorage.setItem('token', token);
@@ -67,7 +67,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
-      const response = await axios.post('/api/auth/login', { email, password });
+      const response = await api.post('/auth/login', { email, password });
       
       const { token, user } = response.data;
       localStorage.setItem('token', token);
@@ -93,7 +93,7 @@ export const AuthProvider = ({ children }) => {
   const updateProfile = async (data) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.put('/api/auth/profile', data, {
+      const response = await api.put('/auth/profile', data, {
         headers: { Authorization: `Bearer ${token}` }
       });
       
@@ -109,7 +109,7 @@ export const AuthProvider = ({ children }) => {
 
   const forgotPassword = async (email) => {
     try {
-      await axios.post('/api/auth/forgot-password', { email });
+      await api.post('/auth/forgot-password', { email });
       toast.success('Email de réinitialisation envoyé ! Vérifiez votre boîte mail.');
       return { success: true };
     } catch (error) {
@@ -121,7 +121,7 @@ export const AuthProvider = ({ children }) => {
 
   const resetPassword = async (token, password) => {
     try {
-      const response = await axios.post(`/api/auth/reset-password/${token}`, { password });
+      const response = await api.post(`/auth/reset-password/${token}`, { password });
       
       const { token: authToken, user } = response.data;
       localStorage.setItem('token', authToken);
