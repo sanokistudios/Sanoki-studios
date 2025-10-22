@@ -2,7 +2,8 @@ import axios from 'axios';
 
 // En développement, utiliser l'URL relative pour bénéficier du proxy Vite
 // En production, utiliser l'URL complète depuis les variables d'environnement
-const API_URL = import.meta.env.VITE_API_URL || '/api';
+const API_URL = import.meta.env.VITE_API_URL || 
+  (import.meta.env.PROD ? 'https://happy-hope-production.up.railway.app/api' : '/api');
 
 // Configuration axios
 const api = axios.create({
