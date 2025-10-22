@@ -57,9 +57,10 @@ const Checkout = () => {
           email: formData.email,
           phone: formData.phone,
           address: {
-            street: formData.street,
+            line1: formData.street || formData.address,
             city: formData.city,
             postalCode: formData.postalCode,
+            governorate: formData.governorate || formData.city, // Fallback sur city si pas de governorate
             country: 'Tunisie'
           }
         },

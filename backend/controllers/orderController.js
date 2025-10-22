@@ -28,8 +28,12 @@ exports.createOrder = async (req, res) => {
 
     const order = await Order.create(orderData);
 
-    // Peupler les détails des produits
-    await order.populate('items.product');
+    // Peupler les détails des produits (optionnel, continue même si échec)
+    try {
+      await order.populate('items.product');
+    } catch (populateError) {
+      console.warn('Avertissement : Impossible de peupler les produits:', populateError.message);
+    }
 
     res.status(201).json({ success: true, order });
   } catch (error) {
