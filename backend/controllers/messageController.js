@@ -34,15 +34,21 @@ exports.getMessages = async (req, res) => {
   try {
     const { id } = req.params;
     const userId = req.user.id;
+    const isAdmin = req.user.role === 'admin';
     
-    // Vérifier que la conversation appartient à l'utilisateur (ou que c'est un admin)
+    console.log('getMessages - User:', userId, 'Role:', req.user.role, 'ConversationId:', id);
+    
+    // Vérifier que la conversation existe
     const conversation = await Conversation.findById(id);
     
     if (!conversation) {
       return res.status(404).json({ message: 'Conversation non trouvée' });
     }
     
-    if (conversation.userId.toString() !== userId && req.user.role !== 'admin') {
+    console.log('getMessages - Conversation found:', conversation._id, 'Owner:', conversation.userId);
+    
+    // Vérifier les permissions (admin a accès à tout)
+    if (!isAdmin && conversation.userId && conversation.userId.toString() !== userId) {
       return res.status(403).json({ message: 'Accès non autorisé' });
     }
     
@@ -51,13 +57,16 @@ exports.getMessages = async (req, res) => {
       .sort({ createdAt: 1 })
       .populate('userId', 'name email');
     
+    console.log('getMessages - Messages found:', messages.length);
+    
     res.json({
       success: true,
       messages
     });
   } catch (error) {
     console.error('Erreur getMessages:', error);
-    res.status(500).json({ message: 'Erreur serveur' });
+    console.error('Stack:', error.stack);
+    res.status(500).json({ message: 'Erreur serveur', error: error.message });
   }
 };
 
