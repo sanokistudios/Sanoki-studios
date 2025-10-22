@@ -3,7 +3,8 @@ import { ShoppingCart, Menu, X, User, LogIn, Search, LayoutDashboard, ChevronDow
 import { useState, useRef, useEffect } from 'react';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
-import logo from '../assets/logo.png'; // On va ajouter le logo
+import logo from '../assets/logo.png'; // Logo symbole
+import brandName from '../assets/brand-name.png'; // Nom de la marque
 
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -42,33 +43,43 @@ const Header = () => {
   return (
     <header className="bg-white shadow-md sticky top-0 z-50">
       <nav className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
-        <div className="flex items-center justify-between h-20 sm:h-24">
-            {/* Gauche: Hamburger + Search */}
-            <div className="flex items-center gap-1 sm:gap-3">
-              {/* Menu Hamburger */}
-              <button
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="p-1.5 sm:p-2 hover:bg-gray-100 rounded-full transition-colors"
-              >
-                {mobileMenuOpen ? (
-                  <X className="w-5 h-5 sm:w-6 sm:h-6" />
-                ) : (
-                  <Menu className="w-5 h-5 sm:w-6 sm:h-6" />
-                )}
-              </button>
+        <div className="flex items-center justify-between py-3 sm:py-4">
+            {/* Gauche: Nom de la marque + Hamburger & Search */}
+            <div className="flex flex-col gap-2">
+              {/* Nom de la marque */}
+              <Link to="/" className="flex items-center">
+                <img 
+                  src={brandName} 
+                  alt="Sanoki Studios" 
+                  className="h-6 sm:h-8 w-auto object-contain"
+                />
+              </Link>
               
-              {/* Bouton Search */}
-              <button className="p-1.5 sm:p-2 hover:bg-gray-100 rounded-full transition-colors">
-                <Search className="w-5 h-5 sm:w-6 sm:h-6" />
-              </button>
+              {/* Hamburger + Search */}
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                  className="p-1.5 hover:bg-gray-100 rounded-full transition-colors"
+                >
+                  {mobileMenuOpen ? (
+                    <X className="w-5 h-5" />
+                  ) : (
+                    <Menu className="w-5 h-5" />
+                  )}
+                </button>
+                
+                <button className="p-1.5 hover:bg-gray-100 rounded-full transition-colors">
+                  <Search className="w-5 h-5" />
+                </button>
+              </div>
             </div>
 
-            {/* Centre: Logo seul (agrandi) */}
+            {/* Centre: Logo symbole */}
             <Link to="/" className="absolute left-1/2 transform -translate-x-1/2">
               <img 
                 src={logo} 
-                alt="Sanoki Studios" 
-                className="h-14 sm:h-20 md:h-24 w-auto object-contain"
+                alt="Logo" 
+                className="h-16 sm:h-20 md:h-24 w-auto object-contain"
               />
             </Link>
 
