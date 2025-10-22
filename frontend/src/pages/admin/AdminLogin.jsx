@@ -23,9 +23,14 @@ const AdminLogin = () => {
     e.preventDefault();
     setLoading(true);
 
-    const success = await login(formData);
-    if (success) {
-      navigate('/admin');
+    const result = await login(formData.email, formData.password);
+    if (result.success) {
+      // Vérifier si l'utilisateur est admin
+      if (result.user?.role === 'admin') {
+        navigate('/admin');
+      } else {
+        navigate('/');
+      }
     }
     setLoading(false);
   };

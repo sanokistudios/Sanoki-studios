@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { User, Mail, Phone, Package, LogOut, Calendar, CreditCard } from 'lucide-react';
-import axios from 'axios';
+import api from '../utils/api';
 import toast from 'react-hot-toast';
 
 const Profile = () => {
@@ -16,7 +16,7 @@ const Profile = () => {
   const loadOrders = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('/api/orders/me', {
+      const response = await api.get('/orders/me', {
         headers: { Authorization: `Bearer ${token}` }
       });
       setOrders(response.data.orders);

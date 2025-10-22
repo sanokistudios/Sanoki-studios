@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { Send, MessageCircle, User, Check } from 'lucide-react';
-import axios from 'axios';
+import api from '../../utils/api';
 import { getSocket } from '../../utils/socket';
 import toast from 'react-hot-toast';
 
@@ -58,7 +58,7 @@ const AdminMessages = () => {
   const loadConversations = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('/api/conversations/all', {
+      const response = await api.get('/messages/conversations/all', {
         headers: { Authorization: `Bearer ${token}` }
       });
       setConversations(response.data.conversations);
@@ -73,14 +73,14 @@ const AdminMessages = () => {
   const loadMessages = async (conversation) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get(`/api/conversations/${conversation._id}/messages`, {
+      const response = await api.get(`/messages/conversations/${conversation._id}/messages`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setMessages(response.data.messages);
       setSelectedConversation(conversation);
 
       // Marquer comme lu
-      await axios.put(`/api/conversations/${conversation._id}/read`, {}, {
+      await api.put(`/messages/conversations/${conversation._id}/read`, {}, {
         headers: { Authorization: `Bearer ${token}` }
       });
 
@@ -112,8 +112,8 @@ const AdminMessages = () => {
 
     try {
       const token = localStorage.getItem('token');
-      await axios.post(
-        `/api/conversations/${selectedConversation._id}/messages`,
+      await api.post(
+        `/messages/conversations/${selectedConversation._id}/messages`,
         { text: messageText },
         { headers: { Authorization: `Bearer ${token}` }}
       );
