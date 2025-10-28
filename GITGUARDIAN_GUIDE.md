@@ -88,3 +88,4 @@ Les **vraies** valeurs sensibles sont :
 ---
 
 **Rappel** : La sécurité est importante, mais les faux positifs sont normaux dans la documentation ! 🛡️
+

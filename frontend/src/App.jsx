@@ -17,7 +17,6 @@ import Profile from './pages/Profile'
 import AdminLogin from './pages/admin/AdminLogin'
 import AdminDashboard from './pages/admin/AdminDashboard'
 import AdminProducts from './pages/admin/AdminProducts'
-import AdminOrders from './pages/admin/AdminOrders'
 import AdminMessages from './pages/admin/AdminMessages'
 import ProtectedRoute from './components/ProtectedRoute'
 
@@ -55,7 +54,6 @@ function App() {
         <Route path="/admin" element={<ProtectedRoute adminOnly><AdminDashboard /></ProtectedRoute>}>
           <Route index element={<AdminProducts />} />
           <Route path="produits" element={<AdminProducts />} />
-          <Route path="commandes" element={<AdminOrders />} />
           <Route path="messages" element={<AdminMessages />} />
         </Route>
       </Routes>

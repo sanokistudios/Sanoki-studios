@@ -52,3 +52,4 @@ secrets:
     - "remplacer_par_votre_"
     - "votre_.*_ici"
     - "exemple_"
+
