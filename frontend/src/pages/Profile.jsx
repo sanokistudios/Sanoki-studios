@@ -1,17 +1,30 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { User, Mail, Phone, Package, LogOut, Calendar, CreditCard } from 'lucide-react';
+import { User, Mail, Phone, Package, LogOut, Calendar, CreditCard, Edit2, Save, X } from 'lucide-react';
 import api from '../utils/api';
 import toast from 'react-hot-toast';
 
 const Profile = () => {
-  const { user, logout } = useAuth();
+  const { user, logout, updateProfile } = useAuth();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [editing, setEditing] = useState(false);
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: ''
+  });
 
   useEffect(() => {
     loadOrders();
-  }, []);
+    if (user) {
+      setFormData({
+        name: user.name || '',
+        email: user.email || '',
+        phone: user.phone || ''
+      });
+    }
+  }, [user]);
 
   const loadOrders = async () => {
     try {
@@ -26,6 +39,28 @@ const Profile = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleUpdateProfile = async () => {
+    try {
+      const result = await updateProfile(formData);
+      
+      if (result.success) {
+        setEditing(false);
+      }
+    } catch (error) {
+      console.error('Erreur mise à jour profil:', error);
+      toast.error('Erreur lors de la mise à jour du profil');
+    }
+  };
+
+  const cancelEdit = () => {
+    setFormData({
+      name: user.name || '',
+      email: user.email || '',
+      phone: user.phone || ''
+    });
+    setEditing(false);
   };
 
   const getStatusBadge = (status) => {
@@ -62,23 +97,88 @@ const Profile = () => {
         <div className="grid gap-6">
           {/* Informations personnelles */}
           <div className="card">
-            <h2 className="text-xl font-semibold mb-4">Informations personnelles</h2>
-            <div className="space-y-3">
-              <div className="flex items-center gap-3">
-                <User className="h-5 w-5 text-gray-medium" />
-                <span>{user?.name}</span>
-              </div>
-              <div className="flex items-center gap-3">
-                <Mail className="h-5 w-5 text-gray-medium" />
-                <span>{user?.email}</span>
-              </div>
-              {user?.phone && (
-                <div className="flex items-center gap-3">
-                  <Phone className="h-5 w-5 text-gray-medium" />
-                  <span>{user.phone}</span>
-                </div>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-xl font-semibold">Informations personnelles</h2>
+              {!editing && (
+                <button
+                  onClick={() => setEditing(true)}
+                  className="flex items-center gap-2 px-4 py-2 text-accent hover:bg-gray-100 rounded-lg transition-colors"
+                >
+                  <Edit2 className="h-5 w-5" />
+                  <span>Modifier</span>
+                </button>
               )}
             </div>
+
+            {editing ? (
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium mb-2">Nom complet</label>
+                  <input
+                    type="text"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium mb-2">Email</label>
+                  <input
+                    type="email"
+                    value={formData.email}
+                    disabled
+                    className="w-full px-4 py-2 border rounded-lg bg-gray-100 cursor-not-allowed"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">L'email ne peut pas être modifié</p>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium mb-2">Téléphone</label>
+                  <input
+                    type="tel"
+                    value={formData.phone}
+                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                    placeholder="Votre numéro de téléphone"
+                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
+                  />
+                </div>
+
+                <div className="flex gap-2">
+                  <button
+                    onClick={handleUpdateProfile}
+                    className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-accent text-white rounded-lg hover:bg-blue-600 transition-colors"
+                  >
+                    <Save className="h-5 w-5" />
+                    <span>Enregistrer</span>
+                  </button>
+                  <button
+                    onClick={cancelEdit}
+                    className="flex items-center justify-center gap-2 px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors"
+                  >
+                    <X className="h-5 w-5" />
+                    <span>Annuler</span>
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                <div className="flex items-center gap-3">
+                  <User className="h-5 w-5 text-gray-medium" />
+                  <span>{user?.name}</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Mail className="h-5 w-5 text-gray-medium" />
+                  <span>{user?.email}</span>
+                </div>
+                {user?.phone && (
+                  <div className="flex items-center gap-3">
+                    <Phone className="h-5 w-5 text-gray-medium" />
+                    <span>{user.phone}</span>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
 
           {/* Historique des commandes */}
