@@ -14,7 +14,16 @@ exports.getOrCreateConversation = async (req, res) => {
     
     // Si elle n'existe pas, la créer
     if (!conversation) {
-      conversation = await Conversation.create({ userId });
+      try {
+        conversation = await Conversation.create({ userId });
+      } catch (createError) {
+        // Si erreur de duplication (conversation créée entre temps), récupérer l'existante
+        if (createError.code === 11000) {
+          conversation = await Conversation.findOne({ userId });
+        } else {
+          throw createError;
+        }
+      }
     }
     
     res.json({
@@ -257,7 +266,16 @@ exports.getMyConversation = async (req, res) => {
     
     // Si elle n'existe pas, la créer
     if (!conversation) {
-      conversation = await Conversation.create({ userId });
+      try {
+        conversation = await Conversation.create({ userId });
+      } catch (createError) {
+        // Si erreur de duplication (conversation créée entre temps), récupérer l'existante
+        if (createError.code === 11000) {
+          conversation = await Conversation.findOne({ userId });
+        } else {
+          throw createError;
+        }
+      }
     }
     
     // Récupérer les messages

@@ -4,8 +4,8 @@ const conversationSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
-    required: false, // Optionnel pour compatibilité avec anciennes conversations
-    sparse: true, // Index unique seulement si userId existe
+    required: true, // Requis pour les nouvelles conversations
+    unique: true, // Un seul conversation par utilisateur
     index: true
   },
   lastMessage: {
