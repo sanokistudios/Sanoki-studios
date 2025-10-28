@@ -6,7 +6,7 @@ import CartSidebar from './CartSidebar';
 import { useAuth } from '../context/AuthContext';
 
 const Layout = () => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   
   return (
     <div className="min-h-screen flex flex-col">
@@ -15,8 +15,8 @@ const Layout = () => {
         <Outlet />
       </main>
       <Footer />
-      {/* Chat uniquement pour utilisateurs connectés */}
-      {isAuthenticated && <UserChatWidget />}
+      {/* Chat uniquement pour utilisateurs connectés (pas admin) */}
+      {isAuthenticated && user?.role !== 'admin' && <UserChatWidget />}
       <CartSidebar />
     </div>
   );
