@@ -1,4 +1,12 @@
 const mongoose = require('mongoose');
+const Collection = require('../models/Collection');
+
+const collections = [
+  { name: 'firebloom', description: 'Collection Firebloom' },
+  { name: 'souvenirs d\'été Chic Chic', description: 'Collection Souvenirs d\'été Chic Chic' },
+  { name: 'tunis', description: 'Collection Tunis' },
+  { name: 'origami', description: 'Collection Origami' }
+];
 
 const connectDB = async () => {
   try {
@@ -8,9 +16,27 @@ const connectDB = async () => {
     });
     
     console.log(`✅ MongoDB connecté: ${conn.connection.host}`);
+    
+    // Initialiser les collections automatiquement
+    await initCollections();
   } catch (error) {
     console.error(`❌ Erreur de connexion MongoDB: ${error.message}`);
     process.exit(1);
+  }
+};
+
+const initCollections = async () => {
+  try {
+    for (const collectionData of collections) {
+      const existingCollection = await Collection.findOne({ name: collectionData.name });
+      if (!existingCollection) {
+        const collection = await Collection.create(collectionData);
+        console.log(`✅ Collection créée: ${collection.name}`);
+      }
+    }
+  } catch (error) {
+    console.error('⚠️ Erreur lors de l\'initialisation des collections:', error.message);
+    // Ne pas bloquer le démarrage du serveur si l'initialisation échoue
   }
 };
 
