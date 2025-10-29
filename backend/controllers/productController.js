@@ -5,13 +5,24 @@ const Product = require('../models/Product');
 // @access  Public
 exports.getProducts = async (req, res) => {
   try {
-    const { category, featured, search, sort, limit } = req.query;
+    const { category, featured, search, sort, limit, collection } = req.query;
     
     let query = {};
     
     // Filtrer par catégorie
     if (category) {
       query.category = category;
+    }
+    
+    // Filtrer par collection (slug ou ID)
+    if (collection) {
+      const Collection = require('../models/Collection');
+      const collectionDoc = await Collection.findOne({ 
+        $or: [{ slug: collection }, { _id: collection }] 
+      });
+      if (collectionDoc) {
+        query.collection = collectionDoc._id;
+      }
     }
     
     // Filtrer les produits en vedette
@@ -24,7 +35,7 @@ exports.getProducts = async (req, res) => {
       query.name = { $regex: search, $options: 'i' };
     }
     
-    let products = Product.find(query);
+    let products = Product.find(query).populate('collection');
     
     // Tri
     if (sort === 'price-asc') {
@@ -54,7 +65,7 @@ exports.getProducts = async (req, res) => {
 // @access  Public
 exports.getProductById = async (req, res) => {
   try {
-    const product = await Product.findById(req.params.id);
+    const product = await Product.findById(req.params.id).populate('collection');
     
     if (!product) {
       return res.status(404).json({ message: 'Produit non trouvé' });
@@ -72,8 +83,18 @@ exports.getProductById = async (req, res) => {
 // @access  Private/Admin
 exports.createProduct = async (req, res) => {
   try {
-    const product = await Product.create(req.body);
-    res.status(201).json({ success: true, product });
+    // Convertir stockBySize en Map si c'est un objet
+    const productData = { ...req.body };
+    if (productData.stockBySize && typeof productData.stockBySize === 'object' && !(productData.stockBySize instanceof Map)) {
+      const map = new Map();
+      Object.entries(productData.stockBySize).forEach(([key, value]) => {
+        map.set(key, value);
+      });
+      productData.stockBySize = map;
+    }
+    
+    const product = await Product.create(productData);
+    res.status(201).json({ success: true, product: await Product.findById(product._id).populate('collection') });
   } catch (error) {
     console.error('Erreur lors de la création du produit:', error);
     res.status(500).json({ message: 'Erreur serveur' });
@@ -85,11 +106,21 @@ exports.createProduct = async (req, res) => {
 // @access  Private/Admin
 exports.updateProduct = async (req, res) => {
   try {
+    // Convertir stockBySize en Map si c'est un objet
+    const updateData = { ...req.body };
+    if (updateData.stockBySize && typeof updateData.stockBySize === 'object' && !(updateData.stockBySize instanceof Map)) {
+      const map = new Map();
+      Object.entries(updateData.stockBySize).forEach(([key, value]) => {
+        map.set(key, value);
+      });
+      updateData.stockBySize = map;
+    }
+    
     const product = await Product.findByIdAndUpdate(
       req.params.id,
-      req.body,
+      updateData,
       { new: true, runValidators: true }
-    );
+    ).populate('collection');
     
     if (!product) {
       return res.status(404).json({ message: 'Produit non trouvé' });

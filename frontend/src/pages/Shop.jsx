@@ -17,17 +17,31 @@ const Shop = () => {
   });
 
   useEffect(() => {
-    loadProducts();
+    const urlParams = new URLSearchParams(window.location.search);
+    const collectionSlug = urlParams.get('collection');
+    loadProducts(collectionSlug || null);
   }, []);
+  
+  // Recharger si le paramètre collection change dans l'URL
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const collectionSlug = urlParams.get('collection');
+    if (collectionSlug) {
+      loadProducts(collectionSlug);
+    } else {
+      loadProducts();
+    }
+  }, [window.location.search]);
 
   useEffect(() => {
     applyFilters();
   }, [filters, allProducts]);
 
-  const loadProducts = async () => {
+  const loadProducts = async (collectionSlug = null) => {
     setLoading(true);
     try {
-      const response = await productsAPI.getAll();
+      const params = collectionSlug ? { collection: collectionSlug } : {};
+      const response = await productsAPI.getAll(params);
       setAllProducts(response.data.products);
       setProducts(response.data.products);
     } catch (error) {
@@ -110,7 +124,7 @@ const Shop = () => {
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-2 gap-y-8 md:gap-x-4 md:gap-y-10">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-2 gap-y-4 md:gap-x-2 md:gap-y-6">
           {products.map((product) => (
             <ProductCard key={product._id} product={product} />
           ))}

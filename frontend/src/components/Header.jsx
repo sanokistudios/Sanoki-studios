@@ -1,10 +1,10 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { ShoppingCart, Menu, X, User, LogIn, Search, LayoutDashboard, ChevronDown, Package, LogOut } from 'lucide-react';
+import { ShoppingBag, Menu, X, User, Search, LayoutDashboard, ChevronDown, Package, LogOut, Circle } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
+import { collectionsAPI } from '../utils/api';
 import logo from '../assets/logo.png'; // Logo symbole
-import brandName from '../assets/brand-name.png'; // Nom de la marque
 
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -34,58 +34,57 @@ const Header = () => {
     navigate('/');
   };
 
-  // Navigation simplifiée pour le menu hamburger
-  const navigation = [
-    { name: 'Boutique', path: '/boutique' },
-    { name: 'About Us', path: '/a-propos' }
-  ];
+  const [collections, setCollections] = useState([]);
+
+  // Charger les collections depuis l'API
+  useEffect(() => {
+    const loadCollections = async () => {
+      try {
+        const response = await collectionsAPI.getAll();
+        setCollections(response.data.collections || []);
+      } catch (error) {
+        console.error('Erreur lors du chargement des collections:', error);
+      }
+    };
+    loadCollections();
+  }, []);
 
   return (
     <header className="bg-white shadow-md sticky top-0 z-50">
       <nav className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
         <div className="flex items-center justify-between py-3 sm:py-4">
-            {/* Gauche: Nom de la marque + Hamburger & Search */}
-            <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
-              {/* Nom de la marque */}
-              <Link to="/" className="flex items-center">
-                <img 
-                  src={brandName} 
-                  alt="Sanoki Studios" 
-                  className="h-6 sm:h-7 md:h-8 w-auto object-contain"
-                />
-              </Link>
+            {/* Gauche: Hamburger & Search (sans nom de marque) */}
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="p-1.5 hover:bg-gray-100 rounded-full transition-colors"
+              >
+                {mobileMenuOpen ? (
+                  <X className="w-5 h-5" />
+                ) : (
+                  <Menu className="w-5 h-5" />
+                )}
+              </button>
               
-              {/* Hamburger + Search */}
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                  className="p-1.5 hover:bg-gray-100 rounded-full transition-colors"
-                >
-                  {mobileMenuOpen ? (
-                    <X className="w-5 h-5" />
-                  ) : (
-                    <Menu className="w-5 h-5" />
-                  )}
-                </button>
-                
-                <button className="p-1.5 hover:bg-gray-100 rounded-full transition-colors">
-                  <Search className="w-5 h-5" />
-                </button>
-              </div>
+              {/* Icône recherche avec cercle plus petit */}
+              <button className="p-1 hover:bg-gray-100 rounded-full transition-colors relative">
+                <Circle className="w-4 h-4 text-gray-600" strokeWidth={2.5} />
+                <Search className="w-3 h-3 text-gray-600 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" strokeWidth={2} />
+              </button>
             </div>
 
-            {/* Centre: Logo symbole */}
+            {/* Centre: Logo symbole (plus petit) */}
             <Link to="/" className="absolute left-1/2 transform -translate-x-1/2">
               <img 
                 src={logo} 
                 alt="Logo" 
-                className="h-12 sm:h-14 md:h-16 w-auto object-contain"
+                className="h-8 sm:h-10 md:h-12 w-auto object-contain"
               />
             </Link>
 
             {/* Droite: Compte utilisateur + Panier */}
             <div className="flex items-center gap-1 sm:space-x-2 md:space-x-4">
-              {/* Compte utilisateur */}
+              {/* Compte utilisateur - Icône personne au lieu de "Connexion" */}
               <div className="relative" ref={dropdownRef}>
                 {isAuthenticated ? (
                   <div className="relative">
@@ -143,20 +142,19 @@ const Header = () => {
                 ) : (
                   <Link
                     to="/connexion"
-                    className="flex items-center gap-1 px-1.5 sm:px-3 py-1.5 sm:py-2 text-primary hover:bg-gray-100 rounded-lg transition-colors"
+                    className="flex items-center p-1.5 sm:p-2 text-primary hover:bg-gray-100 rounded-lg transition-colors"
                   >
-                    <LogIn className="w-5 h-5" />
-                    <span className="hidden sm:inline text-sm">Connexion</span>
+                    <User className="w-5 h-5" />
                   </Link>
                 )}
               </div>
 
-              {/* Panier */}
+              {/* Panier - Icône sac au lieu de panier */}
               <button
                 onClick={toggleCart}
                 className="relative p-1.5 sm:p-2 hover:bg-gray-100 rounded-full transition-colors"
               >
-                <ShoppingCart className="w-5 h-5 sm:w-6 sm:h-6" />
+                <ShoppingBag className="w-5 h-5 sm:w-6 sm:h-6" />
                 {getCartCount() > 0 && (
                   <span className="absolute -top-1 -right-1 bg-accent text-white text-xs rounded-full w-4 h-4 sm:w-5 sm:h-5 flex items-center justify-center text-[10px] sm:text-xs">
                     {getCartCount()}
@@ -182,19 +180,43 @@ const Header = () => {
                     </button>
                   </div>
 
-                  {/* Navigation - Seulement les liens de navigation */}
-                  <nav className="space-y-2">
-                    {navigation.map((item) => (
+                  {/* Collections */}
+                  <div className="mb-6">
+                    <h3 className="text-sm font-semibold text-gray-500 uppercase mb-3">Collections</h3>
+                    <nav className="space-y-2">
+                      {collections.map((collection) => (
+                        <Link
+                          key={collection._id}
+                          to={`/boutique?collection=${collection.slug}`}
+                          className="block py-3 px-4 text-lg text-gray-dark hover:bg-gray-100 hover:text-accent transition-colors rounded-lg"
+                          onClick={() => setMobileMenuOpen(false)}
+                        >
+                          collection « {collection.name} »
+                        </Link>
+                      ))}
+                    </nav>
+                  </div>
+                  
+                  {/* Navigation */}
+                  <div className="mb-6">
+                    <h3 className="text-sm font-semibold text-gray-500 uppercase mb-3">Navigation</h3>
+                    <nav className="space-y-2">
                       <Link
-                        key={item.name}
-                        to={item.path}
-                        className="block py-4 px-4 text-lg text-gray-dark hover:bg-gray-100 hover:text-accent transition-colors rounded-lg"
+                        to="/boutique"
+                        className="block py-3 px-4 text-lg text-gray-dark hover:bg-gray-100 hover:text-accent transition-colors rounded-lg"
                         onClick={() => setMobileMenuOpen(false)}
                       >
-                        {item.name}
+                        Boutique
                       </Link>
-                    ))}
-                  </nav>
+                      <Link
+                        to="/a-propos"
+                        className="block py-3 px-4 text-lg text-gray-dark hover:bg-gray-100 hover:text-accent transition-colors rounded-lg"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        About Us
+                      </Link>
+                    </nav>
+                  </div>
                 </div>
               </div>
             </div>

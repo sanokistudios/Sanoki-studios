@@ -1,26 +1,36 @@
 import { Link } from 'react-router-dom';
 import { XCircle } from 'lucide-react';
+import { useState } from 'react';
 
 const ProductCard = ({ product }) => {
   // Vérifier si le produit est en rupture
   const isOutOfStock = product.stock !== null && product.stock === 0;
+  const [hovered, setHovered] = useState(false);
+
+  // Image alternative pour le hover (placeholder pour l'instant)
+  const hoverImage = product.images?.[1] || product.images?.[0] || 'https://via.placeholder.com/400?text=Person+Wearing+Product';
+  const defaultImage = product.images?.[0] || 'https://via.placeholder.com/400';
 
   return (
     <Link to={`/produit/${product._id}`} className="group block">
       <div className="animate-fade-in">
-        {/* Image - Sans bordure */}
-        <div className="relative overflow-hidden aspect-square bg-gray-100 mb-3">
+        {/* Image - Sans bordure avec effet hover */}
+        <div 
+          className="relative overflow-hidden aspect-square bg-gray-100 mb-3"
+          onMouseEnter={() => setHovered(true)}
+          onMouseLeave={() => setHovered(false)}
+        >
           <img
-            src={product.images?.[0] || 'https://via.placeholder.com/400'}
+            src={hovered ? hoverImage : defaultImage}
             alt={product.name}
-            className="w-full h-full object-cover group-hover:opacity-90 transition-opacity duration-300"
+            className="w-full h-full object-cover transition-opacity duration-300"
           />
           
-          {/* Badge rupture de stock */}
+          {/* Badge SOLD OUT */}
           {isOutOfStock && (
             <div className="absolute top-2 right-2 bg-black text-white px-3 py-1 text-xs font-bold uppercase flex items-center gap-1">
               <XCircle className="w-3 h-3" />
-              EN RUPTURE
+              SOLD OUT
             </div>
           )}
         </div>
@@ -40,4 +50,3 @@ const ProductCard = ({ product }) => {
 };
 
 export default ProductCard;
-

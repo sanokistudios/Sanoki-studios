@@ -121,31 +121,41 @@ const ProductDetail = () => {
             <p className="text-gray-600 leading-relaxed">{product.description}</p>
           </div>
 
-          {/* Tailles */}
+          {/* Tailles - Boutons carrés sans arrondi */}
           {product.sizes && product.sizes.length > 0 && (
             <div className="mb-6">
               <label className="block text-sm font-semibold mb-2">
                 Taille
               </label>
               <div className="flex gap-2">
-                {product.sizes.map((size) => (
-                  <button
-                    key={size}
-                    onClick={() => setSelectedSize(size)}
-                    className={`px-4 py-2 border-2 rounded-lg font-medium transition-all ${
-                      selectedSize === size
-                        ? 'border-accent bg-accent text-white'
-                        : 'border-gray-300 hover:border-accent'
-                    }`}
-                  >
-                    {size}
-                  </button>
-                ))}
+                {product.sizes.map((size) => {
+                  // Vérifier si la taille est en stock
+                  const sizeStock = product.stockBySize?.[size];
+                  const isSizeOutOfStock = sizeStock !== undefined && sizeStock !== null && sizeStock === 0;
+                  const isSizeDisabled = isSizeOutOfStock;
+                  
+                  return (
+                    <button
+                      key={size}
+                      onClick={() => !isSizeDisabled && setSelectedSize(size)}
+                      disabled={isSizeDisabled}
+                      className={`px-4 py-2 border-2 font-medium transition-all ${
+                        isSizeDisabled
+                          ? 'border-gray-200 bg-gray-100 text-gray-400 cursor-not-allowed'
+                          : selectedSize === size
+                          ? 'border-black bg-black text-white'
+                          : 'border-gray-300 hover:border-black'
+                      }`}
+                    >
+                      {size}
+                    </button>
+                  );
+                })}
               </div>
             </div>
           )}
 
-          {/* Couleurs */}
+          {/* Couleurs - Boutons carrés sans arrondi */}
           {product.colors && product.colors.length > 0 && (
             <div className="mb-6">
               <label className="block text-sm font-semibold mb-2">
@@ -156,10 +166,10 @@ const ProductDetail = () => {
                   <button
                     key={color}
                     onClick={() => setSelectedColor(color)}
-                    className={`px-4 py-2 border-2 rounded-lg font-medium transition-all ${
+                    className={`px-4 py-2 border-2 font-medium transition-all ${
                       selectedColor === color
-                        ? 'border-accent bg-accent text-white'
-                        : 'border-gray-300 hover:border-accent'
+                        ? 'border-black bg-black text-white'
+                        : 'border-gray-300 hover:border-black'
                     }`}
                   >
                     {color}
@@ -169,7 +179,7 @@ const ProductDetail = () => {
             </div>
           )}
 
-          {/* Quantité */}
+          {/* Quantité - Boutons carrés sans arrondi */}
           <div className="mb-6">
             <label className="block text-sm font-semibold mb-2">
               Quantité
@@ -177,7 +187,7 @@ const ProductDetail = () => {
             <div className="flex items-center gap-4">
               <button
                 onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                className="w-10 h-10 border-2 rounded-lg hover:bg-gray-100 font-semibold"
+                className="w-10 h-10 border-2 hover:bg-gray-100 font-semibold"
               >
                 -
               </button>
@@ -186,37 +196,95 @@ const ProductDetail = () => {
               </span>
               <button
                 onClick={() => setQuantity(quantity + 1)}
-                className="w-10 h-10 border-2 rounded-lg hover:bg-gray-100 font-semibold"
+                className="w-10 h-10 border-2 hover:bg-gray-100 font-semibold"
               >
                 +
               </button>
             </div>
           </div>
 
-          {/* Stock */}
-          <div className="mb-6">
-            {product.stock > 0 ? (
-              <div className="flex items-center gap-2 text-green-600">
-                <Package className="w-5 h-5" />
-                <span>En stock ({product.stock} disponible(s))</span>
-              </div>
-            ) : (
-              <div className="flex items-center gap-2 text-red-600">
-                <Package className="w-5 h-5" />
-                <span>Rupture de stock</span>
-              </div>
-            )}
-          </div>
+          {/* Stock - MASQUÉ pour les utilisateurs (interne uniquement) */}
 
           {/* Bouton ajouter au panier */}
           <button
             onClick={handleAddToCart}
-            disabled={product.stock === 0}
+            disabled={
+              (product.stock !== null && product.stock === 0) ||
+              (selectedSize && product.stockBySize?.[selectedSize] === 0)
+            }
             className="w-full btn-primary flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <ShoppingCart className="w-5 h-5" />
             Ajouter au panier
           </button>
+
+          {/* Composition */}
+          {product.composition && (
+            <div className="mt-8">
+              <h3 className="text-lg font-bold mb-3">COMPOSITION</h3>
+              <div className="text-sm text-gray-700 whitespace-pre-line">
+                {product.composition}
+              </div>
+            </div>
+          )}
+
+          {/* Guide des tailles */}
+          {product.sizeGuide && (product.sizeGuide.referenceModel?.name || (product.sizeGuide.sizeRange && Object.keys(product.sizeGuide.sizeRange).length > 0)) && (
+            <div className="mt-8">
+              <h3 className="text-lg font-bold mb-3">INFORMATIONS SUR LES TAILLES</h3>
+              {product.sizeGuide.referenceModel && product.sizeGuide.referenceModel.name && (
+                <div className="mb-4 text-sm text-gray-700">
+                  <p className="font-semibold mb-2">
+                    {product.sizeGuide.referenceModel.name.toUpperCase()} (FOND BLANC) MESURE {product.sizeGuide.referenceModel.height || ''}, 
+                    PÈSE {product.sizeGuide.referenceModel.weight || ''} ET PORTE UNE TAILLE {product.sizeGuide.referenceModel.size || ''}.
+                  </p>
+                </div>
+              )}
+              {product.sizeGuide.sizeRange && Object.keys(product.sizeGuide.sizeRange).length > 0 && (
+                <div className="text-sm text-gray-700">
+                  <p className="font-semibold mb-2">PLAGE DE TAILLES (BASÉE SUR LES COMMANDES USUELLES) :</p>
+                  <ul className="list-disc pl-5 space-y-1">
+                    {Object.entries(product.sizeGuide.sizeRange).map(([range, size]) => (
+                      <li key={range}>
+                        {range}: {size}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Instructions de lavage */}
+          {product.washingInstructions && (
+            <div className="mt-8">
+              <h3 className="text-lg font-bold mb-3">INFORMATIONS DE LAVAGE</h3>
+              <div className="text-sm text-gray-700 space-y-3">
+                {product.washingInstructions.handWash && (
+                  <div>
+                    <p className="font-semibold">LAVAGE À LA MAIN RECOMMANDÉ :</p>
+                    <p>{product.washingInstructions.handWash}</p>
+                  </div>
+                )}
+                {product.washingInstructions.machineWash && (
+                  <div>
+                    <p className="font-semibold">LAVAGE EN MACHINE :</p>
+                    <ul className="list-disc pl-5 space-y-1">
+                      {product.washingInstructions.machineWash.temperature && (
+                        <li>TEMPERATURE : MAX {product.washingInstructions.machineWash.temperature}</li>
+                      )}
+                      {product.washingInstructions.machineWash.cycle && (
+                        <li>CYCLE : {product.washingInstructions.machineWash.cycle}</li>
+                      )}
+                      {product.washingInstructions.machineWash.spin && (
+                        <li>ESSORAGE : {product.washingInstructions.machineWash.spin}</li>
+                      )}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
 
           {/* Infos livraison */}
           <div className="mt-8 p-4 bg-gray-light rounded-lg">

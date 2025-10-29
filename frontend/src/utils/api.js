@@ -85,5 +85,11 @@ export const contactAPI = {
   updateStatus: (id, status) => api.put(`/contact/${id}`, { status })
 };
 
+// Collections
+export const collectionsAPI = {
+  getAll: () => api.get('/collections'),
+  getById: (id) => api.get(`/collections/${id}`)
+};
+
 export default api;
 

@@ -21,6 +21,11 @@ const productSchema = new mongoose.Schema({
     enum: ['t-shirt', 'sweat', 'accessoire', 'autre'],
     default: 't-shirt'
   },
+  collection: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Collection',
+    required: false
+  },
   sizes: [{
     type: String,
     enum: ['XS', 'S', 'M', 'L', 'XL', 'XXL']
@@ -36,6 +41,38 @@ const productSchema = new mongoose.Schema({
     required: false,
     min: 0,
     default: null
+  },
+  // Stock par taille
+  stockBySize: {
+    type: Map,
+    of: Number,
+    default: {}
+  },
+  // Informations supplémentaires
+  composition: {
+    type: String,
+    default: ''
+  },
+  sizeGuide: {
+    referenceModel: {
+      name: String,
+      height: String,
+      weight: String,
+      size: String
+    },
+    sizeRange: {
+      type: Map,
+      of: String,
+      default: {}
+    }
+  },
+  washingInstructions: {
+    handWash: String,
+    machineWash: {
+      temperature: String,
+      cycle: String,
+      spin: String
+    }
   },
   featured: {
     type: Boolean,
@@ -58,4 +95,3 @@ productSchema.pre('save', function(next) {
 });
 
 module.exports = mongoose.model('Product', productSchema);
-

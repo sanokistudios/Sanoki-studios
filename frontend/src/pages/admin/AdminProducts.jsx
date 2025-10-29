@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import { Plus, Edit, Trash2, Search } from 'lucide-react';
-import { productsAPI } from '../../utils/api';
+import { productsAPI, collectionsAPI } from '../../utils/api';
 import toast from 'react-hot-toast';
 import ImageUpload from '../../components/ImageUpload';
 
 const AdminProducts = () => {
   const [products, setProducts] = useState([]);
+  const [collections, setCollections] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
@@ -14,16 +15,37 @@ const AdminProducts = () => {
     description: '',
     price: '',
     category: 't-shirt',
+    collection: '',
     sizes: [],
     colors: [],
     images: [],
     stock: '',
+    stockBySize: {},
+    composition: '',
+    sizeGuide: {
+      referenceModel: { name: '', height: '', weight: '', size: '' },
+      sizeRange: {}
+    },
+    washingInstructions: {
+      handWash: '',
+      machineWash: { temperature: '', cycle: '', spin: '' }
+    },
     featured: false
   });
 
   useEffect(() => {
     loadProducts();
+    loadCollections();
   }, []);
+
+  const loadCollections = async () => {
+    try {
+      const response = await collectionsAPI.getAll();
+      setCollections(response.data.collections || []);
+    } catch (error) {
+      console.error('Erreur lors du chargement des collections:', error);
+    }
+  };
 
   const loadProducts = async () => {
     try {
@@ -45,11 +67,22 @@ const AdminProducts = () => {
         description: product.description,
         price: product.price,
         category: product.category,
+        collection: product.collection?._id || product.collection || '',
         sizes: product.sizes || [],
         colors: product.colors || [],
         images: product.images || [],
-        stock: product.stock,
-        featured: product.featured
+        stock: product.stock || '',
+        stockBySize: product.stockBySize || {},
+        composition: product.composition || '',
+        sizeGuide: product.sizeGuide || {
+          referenceModel: { name: '', height: '', weight: '', size: '' },
+          sizeRange: {}
+        },
+        washingInstructions: product.washingInstructions || {
+          handWash: '',
+          machineWash: { temperature: '', cycle: '', spin: '' }
+        },
+        featured: product.featured || false
       });
     } else {
       setEditingProduct(null);
@@ -58,10 +91,21 @@ const AdminProducts = () => {
         description: '',
         price: '',
         category: 't-shirt',
+        collection: '',
         sizes: [],
         colors: [],
         images: [],
         stock: '',
+        stockBySize: {},
+        composition: '',
+        sizeGuide: {
+          referenceModel: { name: '', height: '', weight: '', size: '' },
+          sizeRange: {}
+        },
+        washingInstructions: {
+          handWash: '',
+          machineWash: { temperature: '', cycle: '', spin: '' }
+        },
         featured: false
       });
     }
@@ -312,6 +356,44 @@ const AdminProducts = () => {
                 </p>
               </div>
 
+              {/* Stock par taille */}
+              {formData.sizes.length > 0 && (
+                <div>
+                  <label className="block text-sm font-medium mb-2">
+                    Stock par taille (optionnel - pour marquer une taille comme épuisée)
+                  </label>
+                  <div className="space-y-2">
+                    {formData.sizes.map((size) => (
+                      <div key={size} className="flex items-center gap-2">
+                        <label className="w-12 text-sm">{size}:</label>
+                        <input
+                          type="number"
+                          min="0"
+                          value={formData.stockBySize[size] || ''}
+                          onChange={(e) => {
+                            const newStockBySize = { ...formData.stockBySize };
+                            if (e.target.value === '') {
+                              delete newStockBySize[size];
+                            } else {
+                              newStockBySize[size] = parseInt(e.target.value) || 0;
+                            }
+                            setFormData({ ...formData, stockBySize: newStockBySize });
+                          }}
+                          placeholder="Quantité disponible"
+                          className="input-field flex-1"
+                        />
+                        {formData.stockBySize[size] === 0 && (
+                          <span className="text-xs text-red-600">ÉPUISÉ</span>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                  <p className="text-xs text-gray-500 mt-2">
+                    Laissez vide ou mettez 0 pour marquer une taille comme épuisée
+─                  </p>
+                </div>
+              )}
+
               <div>
                 <label className="block text-sm font-medium mb-2">
                   Couleurs disponibles
@@ -415,6 +497,210 @@ const AdminProducts = () => {
                     }
                   }}
                 />
+              </div>
+
+              {/* Composition */}
+              <div>
+                <label className="block text-sm font-medium mb-2">Composition (optionnel)</label>
+                <textarea
+                  name="composition"
+                  value={formData.composition}
+                  onChange={handleChange}
+                  rows="4"
+                  placeholder="Ex: 100% COTTON TWILL. FRONT PLEATS. TONE-ON-TONE EMBROIDERY..."
+                  className="input-field resize-none"
+                />
+              </div>
+
+              {/* Guide des tailles */}
+              <div className="border-t pt-4">
+                <h4 className="text-lg font-semibold mb-3">Guide des tailles (optionnel)</h4>
+                
+                {/* Modèle de référence */}
+                <div className="mb-4">
+                  <label className="block text-sm font-medium mb-2">Modèle de référence</label>
+                  <div className="grid grid-cols-2 gap-2">
+                    <input
+                      type="text"
+                      placeholder="Nom du modèle"
+                      value={formData.sizeGuide.referenceModel.name}
+                      onChange={(e) => setFormData({
+                        ...formData,
+                        sizeGuide: {
+                          ...formData.sizeGuide,
+                          referenceModel: {
+                            ...formData.sizeGuide.referenceModel,
+                            name: e.target.value
+                          }
+                        }
+                      })}
+                      className="input-field"
+                    />
+                    <input
+                      type="text"
+                      placeholder="Taille portée"
+                      value={formData.sizeGuide.referenceModel.size}
+                      onChange={(e) => setFormData({
+                        ...formData,
+                        sizeGuide: {
+                          ...formData.sizeGuide,
+                          referenceModel: {
+                            ...formData.sizeGuide.referenceModel,
+                            size: e.target.value
+                          }
+                        }
+                      })}
+                      className="input-field"
+                    />
+                    <input
+                      type="text"
+                      placeholder="Taille (ex: 1M82)"
+                      value={formData.sizeGuide.referenceModel.height}
+                      onChange={(e) => setFormData({
+                        ...formData,
+                        sizeGuide: {
+                          ...formData.sizeGuide,
+                          referenceModel: {
+                            ...formData.sizeGuide.referenceModel,
+                            height: e.target.value
+                          }
+                        }
+                      })}
+                      className="input-field"
+                    />
+                    <input
+                      type="text"
+                      placeholder="Poids (ex: 70KG)"
+                      value={formData.sizeGuide.referenceModel.weight}
+                      onChange={(e) => setFormData({
+                        ...formData,
+                        sizeGuide: {
+                          ...formData.sizeGuide,
+                          referenceModel: {
+                            ...formData.sizeGuide.referenceModel,
+                            weight: e.target.value
+                          }
+                        }
+                      })}
+                      className="input-field"
+                    />
+                  </div>
+                </div>
+
+                {/* Plage de tailles */}
+                <div>
+                  <label className="block text-sm font-medium mb-2">Plage de tailles</label>
+                  <div className="space-y-2">
+                    {[
+                      { key: '160-170CM', label: '160-170CM' },
+                      { key: '165-180CM', label: '165-180CM' },
+                      { key: '175-185CM', label: '175-185CM' },
+                      { key: '185-195CM', label: '185-195CM' },
+                      { key: '190CM-200CM', label: '190CM-200CM' }
+                    ].map((range) => (
+                      <div key={range.key} className="flex items-center gap-2">
+                        <label className="w-32 text-sm">{range.label}:</label>
+                        <input
+                          type="text"
+                          placeholder="Ex: SMALL"
+                          value={formData.sizeGuide.sizeRange[range.key] || ''}
+                          onChange={(e) => {
+                            const newSizeRange = { ...formData.sizeGuide.sizeRange };
+                            if (e.target.value === '') {
+                              delete newSizeRange[range.key];
+                            } else {
+                              newSizeRange[range.key] = e.target.value;
+                            }
+                            setFormData({
+                              ...formData,
+                              sizeGuide: {
+                                ...formData.sizeGuide,
+                                sizeRange: newSizeRange
+                              }
+                            });
+                          }}
+                          className="input-field flex-1"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Instructions de lavage */}
+              <div className="border-t pt-4">
+                <h4 className="text-lg font-semibold mb-3">Instructions de lavage (optionnel)</h4>
+                
+                <div className="mb-4">
+                  <label className="block text-sm font-medium mb-2">Lavage à la main</label>
+                  <textarea
+                    placeholder="Ex: TO PRESERVE EMBROIDERY, ESPECIALLY IF IT IS FINE OR INTRICATE."
+                    value={formData.washingInstructions.handWash}
+                    onChange={(e) => setFormData({
+                      ...formData,
+                      washingInstructions: {
+                        ...formData.washingInstructions,
+                        handWash: e.target.value
+                      }
+                    })}
+                    rows="2"
+                    className="input-field resize-none"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium mb-2">Lavage en machine</label>
+                  <div className="grid grid-cols-3 gap-2">
+                    <input
+                      type="text"
+                      placeholder="Température (ex: MAX 30°C)"
+                      value={formData.washingInstructions.machineWash.temperature}
+                      onChange={(e) => setFormData({
+                        ...formData,
+                        washingInstructions: {
+                          ...formData.washingInstructions,
+                          machineWash: {
+                            ...formData.washingInstructions.machineWash,
+                            temperature: e.target.value
+                          }
+                        }
+                      })}
+                      className="input-field"
+                    />
+                    <input
+                      type="text"
+                      placeholder="Cycle (ex: DELICATE / FRAGILE LAUNDRY)"
+                      value={formData.washingInstructions.machineWash.cycle}
+                      onChange={(e) => setFormData({
+                        ...formData,
+                        washingInstructions: {
+                          ...formData.washingInstructions,
+                          machineWash: {
+                            ...formData.washingInstructions.machineWash,
+                            cycle: e.target.value
+                          }
+                        }
+                      })}
+                      className="input-field"
+                    />
+                    <input
+                      type="text"
+                      placeholder="Essorage (ex: LOW (MAX 800 RPM))"
+                      value={formData.washingInstructions.machineWash.spin}
+                      onChange={(e) => setFormData({
+                        ...formData,
+                        washingInstructions: {
+                          ...formData.washingInstructions,
+                          machineWash: {
+                            ...formData.washingInstructions.machineWash,
+                            spin: e.target.value
+                          }
+                        }
+                      })}
+                      className="input-field"
+                    />
+                  </div>
+                </div>
               </div>
 
               <div className="flex items-center gap-2">
