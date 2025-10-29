@@ -4,10 +4,11 @@ const Collection = require('../models/Collection');
 exports.getCollections = async (req, res) => {
   try {
     const collections = await Collection.find().sort({ name: 1 });
+    console.log(`📦 Collections trouvées: ${collections.length}`, collections.map(c => c.name));
     res.json({ collections });
   } catch (error) {
     console.error('Erreur lors du chargement des collections:', error);
-    res.status(500).json({ message: 'Erreur serveur' });
+    res.status(500).json({ message: 'Erreur serveur' بار });
   }
 };
 
