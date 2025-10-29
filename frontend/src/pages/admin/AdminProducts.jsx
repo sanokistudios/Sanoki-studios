@@ -3,6 +3,7 @@ import { Plus, Edit, Trash2, Search } from 'lucide-react';
 import { productsAPI, collectionsAPI } from '../../utils/api';
 import toast from 'react-hot-toast';
 import ImageUpload from '../../components/ImageUpload';
+import { productDefaults } from '../../config/productDefaults';
 
 const AdminProducts = () => {
   const [products, setProducts] = useState([]);
@@ -86,6 +87,7 @@ const AdminProducts = () => {
       });
     } else {
       setEditingProduct(null);
+      // Utiliser les valeurs par défaut pour les nouveaux produits
       setFormData({
         name: '',
         description: '',
@@ -97,14 +99,14 @@ const AdminProducts = () => {
         images: [],
         stock: '',
         stockBySize: {},
-        composition: '',
+        composition: productDefaults.composition,
         sizeGuide: {
-          referenceModel: { name: '', height: '', weight: '', size: '' },
-          sizeRange: {}
+          referenceModel: { ...productDefaults.sizeGuide.referenceModel },
+          sizeRange: { ...productDefaults.sizeGuide.sizeRange }
         },
         washingInstructions: {
-          handWash: '',
-          machineWash: { temperature: '', cycle: '', spin: '' }
+          handWash: productDefaults.washingInstructions.handWash,
+          machineWash: { ...productDefaults.washingInstructions.machineWash }
         },
         featured: false
       });
@@ -499,21 +501,15 @@ const AdminProducts = () => {
                 />
               </div>
 
-              {/* Composition */}
-              <div>
-                <label className="block text-sm font-medium mb-2">Composition (optionnel)</label>
-                <textarea
-                  name="composition"
-                  value={formData.composition}
-                  onChange={handleChange}
-                  rows="4"
-                  placeholder="Ex: 100% COTTON TWILL. FRONT PLEATS. TONE-ON-TONE EMBROIDERY..."
-                  className="input-field resize-none"
-                />
+              {/* Composition - Appliquée automatiquement par le backend */}
+              <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg mb-4">
+                <p className="text-sm text-blue-800">
+                  <strong>ℹ️ Information :</strong> Les informations de <strong>composition</strong>, <strong>guide des tailles</strong> et <strong>instructions de lavage</strong> sont automatiquement appliquées à tous les produits. Vous n'avez pas besoin de les remplir manuellement.
+                </p>
               </div>
 
-              {/* Guide des tailles */}
-              <div className="border-t pt-4">
+              {/* Guide des tailles - Masqué (appliqué automatiquement)
+              <div className="border-t pt-4" style={{display: 'none'}}>
                 <h4 className="text-lg font-semibold mb-3">Guide des tailles (optionnel)</h4>
                 
                 {/* Modèle de référence */}
@@ -627,8 +623,10 @@ const AdminProducts = () => {
                 </div>
               </div>
 
-              {/* Instructions de lavage */}
-              <div className="border-t pt-4">
+              </div> */}
+
+              {/* Instructions de lavage - Masqué (appliqué automatiquement)
+              <div className="border-t pt-4" style={{display: 'none'}}>
                 <h4 className="text-lg font-semibold mb-3">Instructions de lavage (optionnel)</h4>
                 
                 <div className="mb-4">
@@ -701,7 +699,7 @@ const AdminProducts = () => {
                     />
                   </div>
                 </div>
-              </div>
+              </div> */}
 
               <div className="flex items-center gap-2">
                 <input
