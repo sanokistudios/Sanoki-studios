@@ -41,9 +41,11 @@ const Header = () => {
     const loadCollections = async () => {
       try {
         const response = await collectionsAPI.getAll();
+        console.log('Collections chargées:', response.data);
         setCollections(response.data.collections || []);
       } catch (error) {
         console.error('Erreur lors du chargement des collections:', error);
+        setCollections([]);
       }
     };
     loadCollections();
@@ -182,19 +184,25 @@ const Header = () => {
 
                   {/* Collections */}
                   <div className="mb-6">
-                    <h3 className="text-sm font-semibold text-gray-500 uppercase mb-3">Collections</h3>
-                    <nav className="space-y-2">
-                      {collections.map((collection) => (
-                        <Link
-                          key={collection._id}
-                          to={`/boutique?collection=${collection.slug}`}
-                          className="block py-3 px-4 text-lg text-gray-dark hover:bg-gray-100 hover:text-accent transition-colors rounded-lg"
-                          onClick={() => setMobileMenuOpen(false)}
-                        >
-                          collection « {collection.name} »
-                        </Link>
-                      ))}
-                    </nav>
+                    <h3 className="text-sm font-semibold text-gray- crises500 uppercase mb-3">
+                      Collections {collections.length > 0 && `(${collections.length})`}
+                    </h3>
+                    {collections.length > 0 ? (
+                      <nav className="space-y-2">
+                        {collections.map((collection) => (
+                          <Link
+                            key={collection._id || collection.name}
+                            to={`/boutique?collection=${collection.slug || collection.name.toLowerCase().replace(/\s+/g, '-')}`}
+                            className="block py-3 px-4 text-lg text-gray-dark hover:bg-gray-100 hover:text-accent transition-colors rounded-lg cursor-pointer"
+                            onClick={() => setMobileMenuOpen(false)}
+                          >
+                            {collection.name}
+                          </Link>
+                        ))}
+                      </nav>
+                    ) : (
+                      <p className="text-sm text-gray-400 px-4">Aucune collection disponible</p>
+                    )}
                   </div>
                   
                   {/* Navigation */}
