@@ -30,8 +30,10 @@ const initCollections = async () => {
     for (const collectionData of collections) {
       const existingCollection = await Collection.findOne({ name: collectionData.name });
       if (!existingCollection) {
-        const collection = await Collection.create(collectionData);
-        console.log(`✅ Collection créée: ${collection.name}`);
+        // Utiliser new Collection().save() pour que le hook pre('save') génère le slug
+        const collection = new Collection(collectionData);
+        await collection.save();
+        console.log(`✅ Collection créée: ${collection.name} (slug: ${collection.slug})`);
       }
     }
   } catch (error) {
