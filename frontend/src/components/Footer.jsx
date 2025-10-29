@@ -10,13 +10,55 @@ const Footer = () => {
         {/* MENTIONS LÉGALES - Remplace MARQUE et Navigation */}
         <div className="mb-8">
           <h3 className="text-xl font-bold mb-4 text-black">MENTIONS LÉGALES</h3>
-          <div className="bg-gray-50 p-6 rounded-lg">
+          <div className="bg-gray-50 p-6 rounded-lg space-y-3">
             <Link 
               to="/mentions-legales" 
               className="block text-gray-700 hover:text-black transition-colors flex items-center gap-2"
             >
               <span className="w-2 h-2 bg-black rounded-full"></span>
               MENTIONS LÉGALES
+            </Link>
+            <Link 
+              to="/faq" 
+              className="block text-gray-700 hover:text-black transition-colors flex items-center gap-2"
+            >
+              <span className="w-2 h-2 bg-black rounded-full"></span>
+              FAQ
+            </Link>
+            <Link 
+              to="/contact" 
+              className="block text-gray-700 hover:text-black transition-colors flex items-center gap-2"
+            >
+              <span className="w-2 h-2 bg-black rounded-full"></span>
+              CONTACT
+            </Link>
+            <Link 
+              to="/privacy-policy" 
+              className="block text-gray-700 hover:text-black transition-colors flex items-center gap-2"
+            >
+              <span className="w-2 h-2 bg-black rounded-full"></span>
+              PRIVACY POLICY
+            </Link>
+            <Link 
+              to="/refund-policy" 
+              className="block text-gray-700 hover:text-black transition-colors flex items-center gap-2"
+            >
+              <span className="w-2 h-2 bg-black rounded-full"></span>
+              REFUND POLICY
+            </Link>
+            <Link 
+              to="/delivery-policy" 
+              className="block text-gray-700 hover:text-black transition-colors flex items-center gap-2"
+            >
+              <span className="w-2 h-2 bg-black rounded-full"></span>
+              DELIVERY POLICY
+            </Link>
+            <Link 
+              to="/conditions-of-sale" 
+              className="block text-gray-700 hover:text-black transition-colors flex items-center gap-2"
+            >
+              <span className="w-2 h-2 bg-black rounded-full"></span>
+              CONDITIONS OF SALE
             </Link>
           </div>
         </div>
@@ -41,7 +83,7 @@ const Footer = () => {
         </div>
 
         <div className="border-t border-gray-300 mt-8 pt-8 text-center text-gray-600">
-          <p>&copy; {currentYear} MARQUE. Tous droits réservés.</p>
+          <p>&copy; { atmosphereYear} MARQUE. Tous droits réservουσ.</p>
         </div>
       </div>
     </footer>
