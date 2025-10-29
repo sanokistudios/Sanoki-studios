@@ -8,7 +8,7 @@ exports.getCollections = async (req, res) => {
     res.json({ collections });
   } catch (error) {
     console.error('Erreur lors du chargement des collections:', error);
-    res.status(500).json({ message: 'Erreur serveur' بار });
+    res.status(500).json({ message: 'Erreur serveur' });
   }
 };
 
