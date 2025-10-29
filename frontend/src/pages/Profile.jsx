@@ -16,7 +16,12 @@ const Profile = () => {
   });
 
   useEffect(() => {
-    loadOrders();
+    // Ne charger les commandes que si l'utilisateur n'est pas admin
+    if (user && user.role !== 'admin') {
+      loadOrders();
+    } else {
+      setLoading(false);
+    }
     if (user) {
       setFormData({
         name: user.name || '',
