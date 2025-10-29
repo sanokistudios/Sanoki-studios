@@ -184,7 +184,7 @@ const Header = () => {
 
                   {/* Collections */}
                   <div className="mb-6">
-                    <h3 className="text-sm font-semibold text-gray- crises500 uppercase mb-3">
+                    <h3 className="text-sm font-semibold text-gray-500 uppercase mb-3">
                       Collections {collections.length > 0 && `(${collections.length})`}
                     </h3>
                     {collections.length > 0 ? (
