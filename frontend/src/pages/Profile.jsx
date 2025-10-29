@@ -181,7 +181,8 @@ const Profile = () => {
             )}
           </div>
 
-          {/* Historique des commandes */}
+          {/* Historique des commandes - Masqué pour les admins */}
+          {user?.role !== 'admin' && (
           <div className="card">
             <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
               <Package className="h-6 w-6" />
@@ -243,6 +244,7 @@ const Profile = () => {
               </div>
             )}
           </div>
+          )}
 
           {/* Actions */}
           <button
