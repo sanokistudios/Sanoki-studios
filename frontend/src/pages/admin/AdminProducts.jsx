@@ -508,8 +508,8 @@ const AdminProducts = () => {
                 </p>
               </div>
 
-              {/* Guide des tailles - Masqué (appliqué automatiquement)
-              <div className="border-t pt-4" style={{display: 'none'}}>
+              {/* Guide des tailles - Masqué (appliqué automatiquement) */}
+              {/* <div className="border-t pt-4">
                 <h4 className="text-lg font-semibold mb-3">Guide des tailles (optionnel)</h4>
                 
                 {/* Modèle de référence */}
@@ -625,8 +625,8 @@ const AdminProducts = () => {
 
               </div> */}
 
-              {/* Instructions de lavage - Masqué (appliqué automatiquement)
-              <div className="border-t pt-4" style={{display: 'none'}}>
+              {/* Instructions de lavage - Masqué (appliqué automatiquement) */}
+              {/* <div className="border-t pt-4">
                 <h4 className="text-lg font-semibold mb-3">Instructions de lavage (optionnel)</h4>
                 
                 <div className="mb-4">
