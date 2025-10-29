@@ -29,7 +29,8 @@ const collectionSchema = new mongoose.Schema({
 
 // Générer le slug automatiquement
 collectionSchema.pre('save', function(next) {
-  if (this.isModified('name') && !this.slug) {
+  // Générer le slug si le nom est modifié ou si le slug n'existe pas
+  if ((this.isModified('name') || !this.slug) && this.name) {
     this.slug = this.name
       .toLowerCase()
       .normalize('NFD')
@@ -38,6 +39,19 @@ collectionSchema.pre('save', function(next) {
       .replace(/^-|-$/g, '');
   }
   this.updatedAt = Date.now();
+  next();
+});
+
+// Also handle create operations
+collectionSchema.pre('validate', function(next) {
+  if (!this.slug && this.name) {
+    this.slug = this.name
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-|-$/g, '');
+  }
   next();
 });
 
