@@ -11,6 +11,9 @@ const AdminProducts = () => {
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
+  const [showCollectionsModal, setShowCollectionsModal] = useState(false);
+  const [collectionForm, setCollectionForm] = useState({ id: '', name: '', description: '' });
+  const [editingCollection, setEditingCollection] = useState(null);
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -117,6 +120,52 @@ const AdminProducts = () => {
   const handleCloseModal = () => {
     setShowModal(false);
     setEditingProduct(null);
+  };
+
+  const openCreateCollection = () => {
+    setEditingCollection(null);
+    setCollectionForm({ id: '', name: '', description: '' });
+    setShowCollectionsModal(true);
+  };
+
+  const openEditCollection = (col) => {
+    setEditingCollection(col);
+    setCollectionForm({ id: col._id, name: col.name, description: col.description || '' });
+    setShowCollectionsModal(true);
+  };
+
+  const saveCollection = async (e) => {
+    e.preventDefault();
+    try {
+      if (editingCollection) {
+        await collectionsAPI.update(collectionForm.id, { name: collectionForm.name, description: collectionForm.description });
+        toast.success('Collection mise à jour');
+      } else {
+        await collectionsAPI.create({ name: collectionForm.name, description: collectionForm.description });
+        toast.success('Collection créée');
+      }
+      setShowCollectionsModal(false);
+      await loadCollections();
+    } catch (error) {
+      console.error('Erreur lors de l\'enregistrement de la collection:', error);
+      toast.error('Erreur lors de l\'enregistrement de la collection');
+    }
+  };
+
+  const removeCollection = async (id) => {
+    if (!window.confirm('Supprimer cette collection ?')) return;
+    try {
+      await collectionsAPI.delete(id);
+      toast.success('Collection supprimée');
+      await loadCollections();
+      // Si la collection sélectionnée a été supprimée, vider le champ
+      if (formData.collection === id) {
+        setFormData({ ...formData, collection: '' });
+      }
+    } catch (error) {
+      console.error('Erreur lors de la suppression de la collection:', error);
+      toast.error('Erreur lors de la suppression de la collection');
+    }
   };
 
   const handleChange = (e) => {
@@ -335,6 +384,26 @@ const AdminProducts = () => {
               </div>
 
               <div>
+                <div className="flex items-center justify-between mb-2">
+                  <label className="block text-sm font-medium">Collection</label>
+                  <button type="button" onClick={openCreateCollection} className="text-sm text-blue-600 hover:underline">
+                    Gérer les collections
+                  </button>
+                </div>
+                <select
+                  name="collection"
+                  value={formData.collection}
+                  onChange={handleChange}
+                  className="input-field"
+                >
+                  <option value="">Aucune</option>
+                  {collections.map((col) => (
+                    <option key={col._id} value={col._id}>{col.name}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
                 <label className="block text-sm font-medium mb-2">
                   Tailles disponibles
                 </label>
@@ -544,6 +613,66 @@ const AdminProducts = () => {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {showCollectionsModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg max-w-xl w-full max-h-[90vh] overflow-y-auto p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-xl font-semibold">Gérer les collections</h3>
+              <button type="button" onClick={() => setShowCollectionsModal(false)} className="text-gray-500 hover:text-black">✕</button>
+            </div>
+
+            <form onSubmit={saveCollection} className="space-y-3 mb-6">
+              <div>
+                <label className="block text-sm font-medium mb-1">Nom</label>
+                <input
+                  type="text"
+                  value={collectionForm.name}
+                  onChange={(e) => setCollectionForm({ ...collectionForm, name: e.target.value })}
+                  className="input-field"
+                  placeholder="Nom de la collection"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Description (optionnel)</label>
+                <textarea
+                  value={collectionForm.description}
+                  onChange={(e) => setCollectionForm({ ...collectionForm, description: e.target.value })}
+                  className="input-field resize-none"
+                  rows="3"
+                  placeholder="Description de la collection"
+                />
+              </div>
+              <div className="flex gap-2">
+                <button type="submit" className="btn-primary flex-1">{editingCollection ? 'Mettre à jour' : 'Créer'}</button>
+                <button type="button" onClick={() => setShowCollectionsModal(false)} className="btn-outline flex-1">Annuler</button>
+              </div>
+            </form>
+
+            <div>
+              <h4 className="text-lg font-semibold mb-2">Collections existantes</h4>
+              <div className="divide-y border rounded">
+                {collections.length === 0 && (
+                  <div className="p-3 text-sm text-gray-500">Aucune collection</div>
+                )}
+                {collections.map((col) => (
+                  <div key={col._id} className="p-3 flex items-center justify-between">
+                    <div>
+                      <div className="font-medium">{col.name}</div>
+                      {col.description && <div className="text-sm text-gray-500">{col.description}</div>}
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <button type="button" onClick={() => openEditCollection(col)} className="btn-outline px-3 py-1 text-sm">Modifier</button>
+                      <button type="button" onClick={() => removeCollection(col._id)} className="btn-danger px-3 py-1 text-sm">Supprimer</button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       )}

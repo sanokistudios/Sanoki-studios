@@ -88,7 +88,10 @@ export const contactAPI = {
 // Collections
 export const collectionsAPI = {
   getAll: () => api.get('/collections'),
-  getById: (id) => api.get(`/collections/${id}`)
+  getById: (id) => api.get(`/collections/${id}`),
+  create: (payload) => api.post('/collections', payload),
+  update: (id, payload) => api.put(`/collections/${id}`, payload),
+  delete: (id) => api.delete(`/collections/${id}`)
 };
 
 export default api;
