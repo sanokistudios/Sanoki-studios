@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { SlidersHorizontal, X } from 'lucide-react';
 import ProductCard from '../components/ProductCard';
 import { productsAPI } from '../utils/api';
@@ -16,22 +17,18 @@ const Shop = () => {
     inStockOnly: false
   });
 
+  const location = useLocation();
+
+  // Charger et recharger lors des changements d'URL (ex: menu hamburger -> /boutique?collection=slug)
   useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const collectionSlug = urlParams.get('collection');
-    loadProducts(collectionSlug || null);
-  }, []);
-  
-  // Recharger si le paramètre collection change dans l'URL
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
+    const urlParams = new URLSearchParams(location.search);
     const collectionSlug = urlParams.get('collection');
     if (collectionSlug) {
       loadProducts(collectionSlug);
     } else {
       loadProducts();
     }
-  }, [window.location.search]);
+  }, [location.search]);
 
   useEffect(() => {
     applyFilters();
