@@ -1,4 +1,5 @@
 const Product = require('../models/Product');
+const mongoose = require('mongoose');
 
 // @desc    Récupérer tous les produits
 // @route   GET /api/products
@@ -17,9 +18,15 @@ exports.getProducts = async (req, res) => {
     // Filtrer par collection (slug ou ID)
     if (collection) {
       const Collection = require('../models/Collection');
-      const collectionDoc = await Collection.findOne({ 
-        $or: [{ slug: collection }, { _id: collection }] 
-      });
+      let collectionDoc = null;
+      // Si l'ID est un ObjectId valide, on tente par ID d'abord
+      if (mongoose.Types.ObjectId.isValid(collection)) {
+        collectionDoc = await Collection.findById(collection);
+      }
+      // Sinon (ou si non trouvé), on tente par slug
+      if (!collectionDoc) {
+        collectionDoc = await Collection.findOne({ slug: collection });
+      }
       if (collectionDoc) {
         query.collection = collectionDoc._id;
       }
