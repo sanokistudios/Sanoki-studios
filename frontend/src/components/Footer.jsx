@@ -39,9 +39,9 @@ const Footer = () => {
         </div>
 
         {/* Réseaux sociaux - Icônes noires sur fond gris très clair */}
-        <div className="mb-8 flex items-center justify-between flex-wrap gap-4">
+        <div className="mb-8">
           <h3 className="text-lg font-semibold mb-4 text-black">Suivez-nous</h3>
-          <div className="flex space-x-4 ml-auto">
+          <div className="flex justify-start">
             <a
               href="https://www.instagram.com/sanoki.studios/?igsh=MXJqZ2Nsc2FibGJycw%3D%3D&fbclid=IwY2xjawNw0YdleHRuA2FlbQIxMABicmlkETF4UXNtUkZKaWZSSHBubURBAR4qk7h9BPAUj_8su46QH7ODbOCRUDGScN_y0YZZno20JdOrIBsmjAYHtFNU2Q_aem_jQWyWVJ1tCjZptpt1RrMyQ#"
               target="_blank"
