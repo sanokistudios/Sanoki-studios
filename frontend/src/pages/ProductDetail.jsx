@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, ShoppingCart, Package, Truck } from 'lucide-react';
+import { ArrowLeft, ShoppingBag, Package, Truck } from 'lucide-react';
 import { productsAPI } from '../utils/api';
 import { useCart } from '../context/CartContext';
 import toast from 'react-hot-toast';
@@ -214,7 +214,7 @@ const ProductDetail = () => {
             }
             className="w-full btn-primary flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <ShoppingCart className="w-5 h-5" />
+            <ShoppingBag className="w-5 h-5" />
             Ajouter au panier
           </button>
 

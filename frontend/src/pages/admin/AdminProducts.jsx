@@ -286,7 +286,7 @@ const AdminProducts = () => {
                     <div className="flex gap-2">
                       <button
                         onClick={() => handleOpenModal(product)}
-                        className="p-2 text-blue-600 hover:bg-blue-50 rounded"
+                        className="p-2 text-primary hover:bg-primary/10 rounded"
                       >
                         <Edit className="w-5 h-5" />
                       </button>
@@ -420,8 +420,8 @@ const AdminProducts = () => {
                       }}
                       className={`px-4 py-2 rounded-lg border-2 transition-all ${
                         formData.sizes.includes(size)
-                          ? 'bg-blue-500 text-white border-blue-500'
-                          : 'bg-white text-gray-700 border-gray-300 hover:border-blue-500'
+                          ? 'bg-primary text-white border-primary'
+                          : 'bg-white text-gray-700 border-gray-300 hover:border-primary'
                       }`}
                     >
                       {size}
