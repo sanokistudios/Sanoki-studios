@@ -7,13 +7,12 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        'poppins': ['Poppins', 'sans-serif'],
-        'bricolage': ['Bricolage Grotesque', 'sans-serif'],
+        'arcon': ['Arcon', 'sans-serif'],
       },
       colors: {
-        primary: '#3b5449',
+        primary: '#000000',
         secondary: '#ffffff',
-        accent: '#3b5449',
+        accent: '#000000',
         gray: {
           light: '#f3f4f6',
           medium: '#9ca3af',

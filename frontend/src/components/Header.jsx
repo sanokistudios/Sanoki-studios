@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { ShoppingBag, Menu, X, User, Search, LayoutDashboard, ChevronDown, Package, LogOut, Circle } from 'lucide-react';
+import { ShoppingBag, Menu, X, User, Search, LayoutDashboard, ChevronDown, Package, LogOut } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
@@ -59,19 +59,18 @@ const Header = () => {
             <div className="flex items-center gap-2">
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="p-1.5 hover:bg-gray-100 rounded-full transition-colors"
+                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
               >
                 {mobileMenuOpen ? (
-                  <X className="w-5 h-5" />
+                  <X className="w-6 h-6" />
                 ) : (
-                  <Menu className="w-5 h-5" />
+                  <Menu className="w-6 h-6" />
                 )}
               </button>
               
-              {/* Icône recherche avec cercle plus petit */}
-              <button className="p-1 hover:bg-gray-100 rounded-full transition-colors relative">
-                <Circle className="w-4 h-4 text-gray-600" strokeWidth={2.5} />
-                <Search className="w-3 h-3 text-gray-600 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" strokeWidth={2} />
+              {/* Icône recherche minimaliste */}
+              <button className="p-2 hover:bg-gray-100 rounded-full transition-colors" aria-label="Rechercher">
+                <Search className="w-6 h-6 text-gray-700" />
               </button>
             </div>
 
@@ -92,9 +91,9 @@ const Header = () => {
                   <div className="relative">
                     <button
                       onClick={() => setUserDropdownOpen(!userDropdownOpen)}
-                      className="flex items-center gap-1 px-1.5 sm:px-2 md:px-3 py-1.5 sm:py-2 text-primary hover:bg-gray-100 rounded-lg transition-colors"
+                      className="flex items-center gap-1 px-2 md:px-3 py-2 text-primary hover:bg-gray-100 rounded-none transition-colors"
                     >
-                      <User className="w-5 h-5" />
+                      <User className="w-6 h-6" />
                       <span className="hidden sm:inline font-medium text-sm">{user?.name}</span>
                       <ChevronDown className={`w-3 h-3 sm:w-4 sm:h-4 transition-transform ${userDropdownOpen ? 'rotate-180' : ''}`} />
                     </button>
@@ -144,9 +143,9 @@ const Header = () => {
                 ) : (
                   <Link
                     to="/connexion"
-                    className="flex items-center p-1.5 sm:p-2 text-primary hover:bg-gray-100 rounded-lg transition-colors"
+                    className="flex items-center p-2 text-primary hover:bg-gray-100 rounded-none transition-colors"
                   >
-                    <User className="w-5 h-5" />
+                    <User className="w-6 h-6" />
                   </Link>
                 )}
               </div>
@@ -154,9 +153,9 @@ const Header = () => {
               {/* Panier - Icône sac au lieu de panier */}
               <button
                 onClick={toggleCart}
-                className="relative p-1.5 sm:p-2 hover:bg-gray-100 rounded-full transition-colors"
+                className="relative p-2 hover:bg-gray-100 rounded-full transition-colors"
               >
-                <ShoppingBag className="w-5 h-5 sm:w-6 sm:h-6" />
+                <ShoppingBag className="w-6 h-6" />
                 {getCartCount() > 0 && (
                   <span className="absolute -top-1 -right-1 bg-accent text-white text-xs rounded-full w-4 h-4 sm:w-5 sm:h-5 flex items-center justify-center text-[10px] sm:text-xs">
                     {getCartCount()}

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@300..800&display=swap');
+@import url('https://fonts.cdnfonts.com/css/arcon');
 
 @tailwind base;
 @tailwind components;
@@ -38,7 +38,7 @@
 }
 
 body {
-  font-family: 'Bricolage Grotesque', sans-serif;
+  font-family: 'Arcon', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: #ffffff;
@@ -86,15 +86,15 @@ body {
 
 /* Classes utilitaires */
 .btn-primary {
-  @apply bg-primary text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors duration-300;
+  @apply bg-primary text-white px-6 py-3 rounded-none font-medium hover:bg-gray-800 transition-colors duration-300;
 }
 
 .btn-secondary {
-  @apply bg-accent text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors duration-300;
+  @apply bg-accent text-white px-6 py-3 rounded-none font-medium hover:bg-blue-700 transition-colors duration-300;
 }
 
 .btn-outline {
-  @apply border-2 border-primary text-primary px-6 py-3 rounded-lg font-medium hover:bg-primary hover:text-white transition-all duration-300;
+  @apply border-2 border-primary text-primary px-6 py-3 rounded-none font-medium hover:bg-primary hover:text-white transition-all duration-300;
 }
 
 .input-field {
