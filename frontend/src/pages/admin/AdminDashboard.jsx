@@ -1,6 +1,6 @@
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { Package, MessageSquare, LogOut, Home, ShoppingCart } from 'lucide-react';
+import { Package, MessageSquare, LogOut, Home, ShoppingCart, Layers } from 'lucide-react';
 
 const AdminDashboard = () => {
   const location = useLocation();
@@ -8,6 +8,7 @@ const AdminDashboard = () => {
 
   const navigation = [
     { name: 'Produits', path: '/admin/produits', icon: Package },
+    { name: 'Collections', path: '/admin/collections', icon: Layers },
     { name: 'Commandes', path: '/admin/commandes', icon: ShoppingCart },
     { name: 'Messages', path: '/admin/messages', icon: MessageSquare }
   ];
