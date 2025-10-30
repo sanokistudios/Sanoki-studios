@@ -11,9 +11,9 @@ export default {
         'bricolage': ['Bricolage Grotesque', 'sans-serif'],
       },
       colors: {
-        primary: '#009B7D',
+        primary: '#3b5449',
         secondary: '#ffffff',
-        accent: '#009B7D',
+        accent: '#3b5449',
         gray: {
           light: '#f3f4f6',
           medium: '#9ca3af',
