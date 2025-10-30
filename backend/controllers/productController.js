@@ -85,6 +85,11 @@ exports.createProduct = async (req, res) => {
   try {
     // Convertir stockBySize en Map si c'est un objet
     const productData = { ...req.body };
+
+    // Nettoyer la collection vide ("" ou null) pour éviter les erreurs de cast ObjectId
+    if (productData.collection === '' || productData.collection === null) {
+      delete productData.collection;
+    }
     if (productData.stockBySize && typeof productData.stockBySize === 'object' && !(productData.stockBySize instanceof Map)) {
       const map = new Map();
       Object.entries(productData.stockBySize).forEach(([key, value]) => {
@@ -108,6 +113,11 @@ exports.updateProduct = async (req, res) => {
   try {
     // Convertir stockBySize en Map si c'est un objet
     const updateData = { ...req.body };
+
+    // Nettoyer la collection vide ("" ou null) pour éviter les erreurs de cast ObjectId
+    if (updateData.collection === '' || updateData.collection === null) {
+      delete updateData.collection;
+    }
     if (updateData.stockBySize && typeof updateData.stockBySize === 'object' && !(updateData.stockBySize instanceof Map)) {
       const map = new Map();
       Object.entries(updateData.stockBySize).forEach(([key, value]) => {

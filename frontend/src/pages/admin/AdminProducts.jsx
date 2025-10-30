@@ -139,11 +139,17 @@ const AdminProducts = () => {
     e.preventDefault();
 
     try {
+      // Sanitize payload to avoid sending empty collection value
+      const payload = { ...formData };
+      if (!payload.collection) {
+        delete payload.collection;
+      }
+
       if (editingProduct) {
-        await productsAPI.update(editingProduct._id, formData);
+        await productsAPI.update(editingProduct._id, payload);
         toast.success('Produit mis à jour');
       } else {
-        await productsAPI.create(formData);
+        await productsAPI.create(payload);
         toast.success('Produit créé');
       }
       handleCloseModal();
