@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Facebook, Instagram, Mail, Phone } from 'lucide-react';
+import { Instagram, Mail, Phone } from 'lucide-react';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -34,7 +34,6 @@ const Footer = () => {
                 <Mail className="w-5 h-5" />
                 <span>contact@marque.tn</span>
               </a>
-              <Link to="/contact" className="text-sm text-primary hover:underline">Formulaire de contact</Link>
             </div>
           </div>
         </div>
@@ -44,13 +43,9 @@ const Footer = () => {
           <h3 className="text-lg font-semibold mb-4 text-black">Suivez-nous</h3>
           <div className="flex space-x-4 ml-auto">
             <a
-              href="#"
-              className="w-10 h-10 bg-gray-50 text-black rounded-full flex items-center justify-center hover:bg-gray-200 transition-all border border-gray-200"
-            >
-              <Facebook className="w-5 h-5" />
-            </a>
-            <a
-              href="#"
+              href="https://www.instagram.com/sanoki.studios/?igsh=MXJqZ2Nsc2FibGJycw%3D%3D&fbclid=IwY2xjawNw0YdleHRuA2FlbQIxMABicmlkETF4UXNtUkZKaWZSSHBubURBAR4qk7h9BPAUj_8su46QH7ODbOCRUDGScN_y0YZZno20JdOrIBsmjAYHtFNU2Q_aem_jQWyWVJ1tCjZptpt1RrMyQ#"
+              target="_blank"
+              rel="noopener noreferrer"
               className="w-10 h-10 bg-gray-50 text-black rounded-full flex items-center justify-center hover:bg-gray-200 transition-all border border-gray-200"
             >
               <Instagram className="w-5 h-5" />
