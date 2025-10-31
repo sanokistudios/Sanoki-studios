@@ -54,7 +54,7 @@ const Footer = () => {
         </div>
 
         <div className="border-t border-gray-300 mt-8 pt-8 text-center text-gray-600">
-          <p>&copy; {new Date().getFullYear()} MARQUE. Tous droits réservés.</p>
+          <p>&copy; {new Date().getFullYear()} SANOKI STUDIOS. Tous droits réservés.</p>
         </div>
       </div>
     </footer>
