@@ -96,7 +96,7 @@ const Header = () => {
                       onClick={() => setUserDropdownOpen(!userDropdownOpen)}
                       className="flex items-center gap-1 px-2 md:px-3 py-2 text-primary hover:bg-gray-100 rounded-none transition-colors"
                     >
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-6 h-6">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-5 h-5">
                         <circle cx="12" cy="8" r="3" stroke="currentColor" strokeWidth="1.5"/>
                         <path d="M4 20c0-4 4-6 8-6s8 2 8 6" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round"/>
                       </svg>
@@ -151,7 +151,7 @@ const Header = () => {
                     to="/connexion"
                     className="flex items-center p-2 text-primary hover:bg-gray-100 rounded-none transition-colors"
                   >
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-6 h-6">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-5 h-5">
                       <circle cx="12" cy="8" r="3" stroke="currentColor" strokeWidth="1.5"/>
                       <path d="M4 20c0-4 4-6 8-6s8 2 8 6" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round"/>
                     </svg>
@@ -164,7 +164,7 @@ const Header = () => {
                 onClick={toggleCart}
                 className="relative p-2 hover:bg-gray-100 rounded-full transition-colors"
               >
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-6 h-6">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-5 h-5">
                   {/* Corps du sac - rectangle avec coins inférieurs arrondis */}
                   <path d="M7 8h10v10c0 1.1-.9 2-2 2H9c-1.1 0-2-.9-2-2V8z" stroke="currentColor" strokeWidth="1.5" fill="none"/>
                   {/* Ouverture du sac - ligne horizontale légèrement incurvée */}
