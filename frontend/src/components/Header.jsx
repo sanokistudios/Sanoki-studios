@@ -68,9 +68,12 @@ const Header = () => {
                 )}
               </button>
               
-              {/* Icône recherche minimaliste */}
+              {/* Icône recherche minimaliste avec rond plus petit */}
               <button className="p-2 hover:bg-gray-100 rounded-full transition-colors" aria-label="Rechercher">
-                <Search className="w-5 h-5 text-gray-700" />
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-gray-700">
+                  <circle cx="10" cy="10" r="6" stroke="currentColor" strokeWidth="1.5" fill="none"/>
+                  <path d="m16 16 4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                </svg>
               </button>
             </div>
 
@@ -156,14 +159,15 @@ const Header = () => {
                 )}
               </div>
 
-              {/* Panier - Icône sac au lieu de panier */}
+              {/* Panier - Autre icône de panier */}
               <button
                 onClick={toggleCart}
                 className="relative p-2 hover:bg-gray-100 rounded-full transition-colors"
               >
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-6 h-6">
-                  <path d="M6 8h12l-1 13H7L6 8z" stroke="currentColor" strokeWidth="1.5" fill="none"/>
-                  <path d="M9 8V6a3 3 0 0 1 6 0v2" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round"/>
+                  <path d="M3 3h4l2 12h10l2-8H9" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                  <circle cx="9" cy="19" r="1" fill="currentColor"/>
+                  <circle cx="19" cy="19" r="1" fill="currentColor"/>
                 </svg>
                 {getCartCount() > 0 && (
                   <span className="absolute -top-1 -right-1 bg-accent text-white text-xs rounded-full w-4 h-4 sm:w-5 sm:h-5 flex items-center justify-center text-[10px] sm:text-xs">

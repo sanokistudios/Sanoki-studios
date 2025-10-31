@@ -11,27 +11,27 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
           {/* Colonne Mentions légales */}
           <div>
-            <h3 className="text-xl font-bold mb-4 text-black">MENTIONS LÉGALES</h3>
+            <h3 className="text-base font-bold mb-4 text-black">MENTIONS LÉGALES</h3>
             <div className="bg-gray-50 p-6 rounded-lg space-y-3">
-              <Link to="/mentions-legales" className="block text-gray-700 hover:text-black transition-colors">MENTIONS LÉGALES</Link>
-              <Link to="/faq" className="block text-gray-700 hover:text-black transition-colors">FAQ</Link>
-              <Link to="/privacy-policy" className="block text-gray-700 hover:text-black transition-colors">PRIVACY POLICY</Link>
-              <Link to="/refund-policy" className="block text-gray-700 hover:text-black transition-colors">REFUND POLICY</Link>
-              <Link to="/delivery-policy" className="block text-gray-700 hover:text-black transition-colors">DELIVERY POLICY</Link>
-              <Link to="/conditions-of-sale" className="block text-gray-700 hover:text-black transition-colors">CONDITIONS OF SALE</Link>
+              <Link to="/mentions-legales" className="block text-sm text-gray-700 hover:text-black transition-colors">MENTIONS LÉGALES</Link>
+              <Link to="/faq" className="block text-sm text-gray-700 hover:text-black transition-colors">FAQ</Link>
+              <Link to="/privacy-policy" className="block text-sm text-gray-700 hover:text-black transition-colors">PRIVACY POLICY</Link>
+              <Link to="/refund-policy" className="block text-sm text-gray-700 hover:text-black transition-colors">REFUND POLICY</Link>
+              <Link to="/delivery-policy" className="block text-sm text-gray-700 hover:text-black transition-colors">DELIVERY POLICY</Link>
+              <Link to="/conditions-of-sale" className="block text-sm text-gray-700 hover:text-black transition-colors">CONDITIONS OF SALE</Link>
             </div>
           </div>
 
           {/* Colonne Contact */}
           <div>
-            <h3 className="text-xl font-bold mb-4 text-black">CONTACT</h3>
+            <h3 className="text-base font-bold mb-4 text-black">CONTACT</h3>
             <div className="bg-gray-50 p-6 rounded-lg space-y-3">
-              <a href="tel:+21600000000" className="flex items-center gap-3 text-gray-700 hover:text-black transition-colors">
-                <Phone className="w-5 h-5" />
+              <a href="tel:+21600000000" className="flex items-center gap-3 text-sm text-gray-700 hover:text-black transition-colors">
+                <Phone className="w-4 h-4" />
                 <span>+216 00 000 000</span>
               </a>
-              <a href="mailto:contact@marque.tn" className="flex items-center gap-3 text-gray-700 hover:text-black transition-colors">
-                <Mail className="w-5 h-5" />
+              <a href="mailto:contact@marque.tn" className="flex items-center gap-3 text-sm text-gray-700 hover:text-black transition-colors">
+                <Mail className="w-4 h-4" />
                 <span>contact@marque.tn</span>
               </a>
             </div>

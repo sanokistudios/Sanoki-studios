@@ -221,19 +221,19 @@ const ProductDetail = () => {
           {/* Composition */}
           {product.composition && (
             <div className="mt-8">
-              <h3 className="text-lg font-bold mb-3">COMPOSITION</h3>
-              <div className="text-sm text-gray-700 whitespace-pre-line">
+              <h3 className="text-sm font-bold mb-2">COMPOSITION</h3>
+              <div className="text-xs text-gray-700 whitespace-pre-line">
                 {product.composition}
               </div>
             </div>
           )}
 
           {/* Guide des tailles */}
-          {product.sizeGuide && (product.sizeGuide.referenceModel?.name || (product.sizeGuide.sizeRange && Object.keys(product.sizeGuide.sizeRange).length > 0)) && (
+          {product.sizeGuide && ((product.sizeGuide.referenceModel && product.sizeGuide.referenceModel.name) || (product.sizeGuide.sizeRange && Object.keys(product.sizeGuide.sizeRange).length > 0)) && (
             <div className="mt-8">
-              <h3 className="text-lg font-bold mb-3">INFORMATIONS SUR LES TAILLES</h3>
+              <h3 className="text-sm font-bold mb-2">INFORMATIONS SUR LES TAILLES</h3>
               {product.sizeGuide.referenceModel && product.sizeGuide.referenceModel.name && (
-                <div className="mb-4 text-sm text-gray-700">
+                <div className="mb-4 text-xs text-gray-700">
                   <p className="font-semibold mb-2">
                     {product.sizeGuide.referenceModel.name.toUpperCase()} (FOND BLANC) MESURE {product.sizeGuide.referenceModel.height || ''}, 
                     PÈSE {product.sizeGuide.referenceModel.weight || ''} ET PORTE UNE TAILLE {product.sizeGuide.referenceModel.size || ''}.
@@ -241,7 +241,7 @@ const ProductDetail = () => {
                 </div>
               )}
               {product.sizeGuide.sizeRange && Object.keys(product.sizeGuide.sizeRange).length > 0 && (
-                <div className="text-sm text-gray-700">
+                <div className="text-xs text-gray-700">
                   <p className="font-semibold mb-2">PLAGE DE TAILLES (BASÉE SUR LES COMMANDES USUELLES) :</p>
                   <ul className="list-disc pl-5 space-y-1">
                     {Object.entries(product.sizeGuide.sizeRange).map(([range, size]) => (
@@ -258,8 +258,8 @@ const ProductDetail = () => {
           {/* Instructions de lavage */}
           {product.washingInstructions && (
             <div className="mt-8">
-              <h3 className="text-lg font-bold mb-3">INFORMATIONS DE LAVAGE</h3>
-              <div className="text-sm text-gray-700 space-y-3">
+              <h3 className="text-sm font-bold mb-2">INFORMATIONS DE LAVAGE</h3>
+              <div className="text-xs text-gray-700 space-y-3">
                 {product.washingInstructions.handWash && (
                   <div>
                     <p className="font-semibold">LAVAGE À LA MAIN RECOMMANDÉ :</p>
@@ -287,7 +287,7 @@ const ProductDetail = () => {
           )}
 
           {/* Infos livraison */}
-          <div className="mt-8 p-4 bg-gray-light rounded-lg">
+          <div className="mt-8 p-4 bg-gray-light rounded-none">
             <div className="flex items-start gap-3">
               <Truck className="w-6 h-6 text-accent flex-shrink-0 mt-1" />
               <div>

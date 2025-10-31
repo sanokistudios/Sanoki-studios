@@ -33,8 +33,7 @@ const AdminProducts = () => {
     washingInstructions: {
       handWash: '',
       machineWash: { temperature: '', cycle: '', spin: '' }
-    },
-    featured: false
+    }
   });
 
   useEffect(() => {
@@ -86,7 +85,6 @@ const AdminProducts = () => {
           handWash: '',
           machineWash: { temperature: '', cycle: '', spin: '' }
         },
-        featured: product.featured || false
       });
     } else {
       setEditingProduct(null);
@@ -111,7 +109,6 @@ const AdminProducts = () => {
           handWash: productDefaults.washingInstructions.handWash,
           machineWash: { ...productDefaults.washingInstructions.machineWash }
         },
-        featured: false
       });
     }
     setShowModal(true);
@@ -682,7 +679,7 @@ const AdminProducts = () => {
                       { key: '190CM-200CM', label: '190CM-200CM' }
                     ].map((range) => (
                       <div key={range.key} className="flex items-center gap-2">
-                        <label className="w-32 text-sm">{range.label}:</label>
+                        <label className="w-32 text-sm">{range.label} -</label>
                         <input
                           type="text"
                           placeholder="Ex: SMALL"
@@ -784,19 +781,6 @@ const AdminProducts = () => {
                 </div>
               </div>
 
-              <div className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  name="featured"
-                  checked={formData.featured}
-                  onChange={handleChange}
-                  id="featured"
-                  className="w-4 h-4"
-                />
-                <label htmlFor="featured" className="text-sm font-medium">
-                  Produit en vedette
-                </label>
-              </div>
 
               <div className="flex gap-4 pt-4">
                 <button type="submit" className="flex-1 btn-primary">
