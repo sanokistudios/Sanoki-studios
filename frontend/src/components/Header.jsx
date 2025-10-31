@@ -159,15 +159,20 @@ const Header = () => {
                 )}
               </div>
 
-              {/* Panier - Autre icône de panier */}
+              {/* Panier - Icône sac minimaliste */}
               <button
                 onClick={toggleCart}
                 className="relative p-2 hover:bg-gray-100 rounded-full transition-colors"
               >
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-6 h-6">
-                  <path d="M3 3h4l2 12h10l2-8H9" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
-                  <circle cx="9" cy="19" r="1" fill="currentColor"/>
-                  <circle cx="19" cy="19" r="1" fill="currentColor"/>
+                  {/* Corps du sac - rectangle avec coins inférieurs arrondis */}
+                  <path d="M7 8h10v10c0 1.1-.9 2-2 2H9c-1.1 0-2-.9-2-2V8z" stroke="currentColor" strokeWidth="1.5" fill="none"/>
+                  {/* Ouverture du sac - ligne horizontale légèrement incurvée */}
+                  <path d="M7 8h10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                  {/* Anse gauche - demi-cercle au-dessus */}
+                  <path d="M9 8c0-1.1.9-2 2-2s2 .9 2 2" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round"/>
+                  {/* Anse droite - demi-cercle au-dessus */}
+                  <path d="M13 8c0-1.1.9-2 2-2s2 .9 2 2" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round"/>
                 </svg>
                 {getCartCount() > 0 && (
                   <span className="absolute -top-1 -right-1 bg-accent text-white text-xs rounded-full w-4 h-4 sm:w-5 sm:h-5 flex items-center justify-center text-[10px] sm:text-xs">
