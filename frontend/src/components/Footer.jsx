@@ -13,12 +13,12 @@ const Footer = () => {
           <div>
             <h3 className="text-base font-bold mb-4 text-black">MENTIONS LÉGALES</h3>
             <div className="bg-gray-50 p-6 rounded-lg space-y-3">
-              <Link to="/mentions-legales" className="block text-sm text-gray-700 hover:text-black transition-colors">MENTIONS LÉGALES</Link>
-              <Link to="/faq" className="block text-sm text-gray-700 hover:text-black transition-colors">FAQ</Link>
-              <Link to="/privacy-policy" className="block text-sm text-gray-700 hover:text-black transition-colors">PRIVACY POLICY</Link>
-              <Link to="/refund-policy" className="block text-sm text-gray-700 hover:text-black transition-colors">REFUND POLICY</Link>
-              <Link to="/delivery-policy" className="block text-sm text-gray-700 hover:text-black transition-colors">DELIVERY POLICY</Link>
-              <Link to="/conditions-of-sale" className="block text-sm text-gray-700 hover:text-black transition-colors">CONDITIONS OF SALE</Link>
+              <Link to="/mentions-legales" className="block text-xs text-gray-700 hover:text-black transition-colors">MENTIONS LÉGALES</Link>
+              <Link to="/faq" className="block text-xs text-gray-700 hover:text-black transition-colors">FAQ</Link>
+              <Link to="/privacy-policy" className="block text-xs text-gray-700 hover:text-black transition-colors">PRIVACY POLICY</Link>
+              <Link to="/refund-policy" className="block text-xs text-gray-700 hover:text-black transition-colors">REFUND POLICY</Link>
+              <Link to="/delivery-policy" className="block text-xs text-gray-700 hover:text-black transition-colors">DELIVERY POLICY</Link>
+              <Link to="/conditions-of-sale" className="block text-xs text-gray-700 hover:text-black transition-colors">CONDITIONS OF SALE</Link>
             </div>
           </div>
 

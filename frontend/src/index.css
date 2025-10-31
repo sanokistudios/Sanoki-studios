@@ -120,3 +120,66 @@ body {
   100% { transform: rotate(360deg); }
 }
 
+/* Animation personnalisée pour le panier - Balancement doux */
+@keyframes cartSwing {
+  0%, 100% {
+    transform: rotate(0deg) translateY(0);
+  }
+  25% {
+    transform: rotate(-8deg) translateY(-2px);
+  }
+  75% {
+    transform: rotate(8deg) translateY(-2px);
+  }
+}
+
+/* Animation alternative - Pulsation douce */
+@keyframes cartPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+/* Animation alternative - Balancement vertical */
+@keyframes cartBounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+/* Animation alternative - Rotation subtile */
+@keyframes cartRotate {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-5deg);
+  }
+  75% {
+    transform: rotate(5deg);
+  }
+}
+
+/* Classe pour l'animation du panier */
+.animate-cart-swing {
+  animation: cartSwing 2s ease-in-out infinite;
+}
+
+.animate-cart-pulse {
+  animation: cartPulse 1.5s ease-in-out infinite;
+}
+
+.animate-cart-bounce {
+  animation: cartBounce 1.8s ease-in-out infinite;
+}
+
+.animate-cart-rotate {
+  animation: cartRotate 2.5s ease-in-out infinite;
+}
+
