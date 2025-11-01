@@ -253,19 +253,3 @@ const Header = () => {
 
 export default Header;
 
-
-                        About Us
-                      </Link>
-                    </nav>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-      </nav>
-    </header>
-  );
-};
-
-export default Header;
-
