@@ -94,5 +94,14 @@ export const collectionsAPI = {
   delete: (id) => api.delete(`/collections/${id}`)
 };
 
+// Hero Images
+export const heroImagesAPI = {
+  getAll: () => api.get('/hero-images'),
+  create: (payload) => api.post('/hero-images', payload),
+  update: (id, payload) => api.put(`/hero-images/${id}`, payload),
+  updateOrder: (images) => api.put('/hero-images/order', { images }),
+  delete: (id) => api.delete(`/hero-images/${id}`)
+};
+
 export default api;
 

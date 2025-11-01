@@ -20,6 +20,7 @@ import AdminProducts from './pages/admin/AdminProducts'
 import AdminMessages from './pages/admin/AdminMessages'
 import AdminCollections from './pages/admin/AdminCollections'
 import AdminOrders from './pages/admin/AdminOrders'
+import AdminHeroImages from './pages/admin/AdminHeroImages'
 import ProtectedRoute from './components/ProtectedRoute'
 
 function App() {
@@ -59,6 +60,7 @@ function App() {
           <Route path="collections" element={<AdminCollections />} />
           <Route path="commandes" element={<AdminOrders />} />
           <Route path="messages" element={<AdminMessages />} />
+          <Route path="hero-images" element={<AdminHeroImages />} />
         </Route>
       </Routes>
     </AuthProvider>
