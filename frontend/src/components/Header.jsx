@@ -191,8 +191,8 @@ const Header = () => {
               <div className="fixed left-0 top-0 h-full w-80 bg-white shadow-xl animate-slide-in-left" onClick={(e) => e.stopPropagation()}>
                 <div className="p-6">
                   {/* Header du menu */}
-                  <div className="flex items-center justify-between mb-8">
-                    <h2 className="text-xl font-bold text-primary">Navigation</h2>
+                  <div className="flex items-center justify-between mb-6">
+                    <h2 className="text-lg font-bold text-primary">Navigation</h2>
                     <button
                       onClick={() => setMobileMenuOpen(false)}
                       className="p-2 hover:bg-gray-100 rounded-full transition-colors"
@@ -201,18 +201,26 @@ const Header = () => {
                     </button>
                   </div>
 
+                  {/* ALL - Lien vers la boutique */}
+                  <div className="mb-6">
+                    <Link
+                      to="/boutique"
+                      className="block py-2 px-4 text-base text-gray-dark hover:bg-gray-100 hover:text-accent transition-colors rounded-lg"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      ALL
+                    </Link>
+                  </div>
+
                   {/* Collections */}
                   <div className="mb-6">
-                    <h3 className="text-sm font-semibold text-gray-500 uppercase mb-3">
-                      Collections {collections.length > 0 && `(${collections.length})`}
-                    </h3>
                     {collections.length > 0 ? (
-                      <nav className="space-y-2">
+                      <nav className="space-y-1">
                         {collections.map((collection) => (
                           <Link
                             key={collection._id || collection.name}
                             to={`/boutique?collection=${collection.slug || collection.name.toLowerCase().replace(/\s+/g, '-')}`}
-                            className="block py-3 px-4 text-lg text-gray-dark hover:bg-gray-100 hover:text-accent transition-colors rounded-lg cursor-pointer"
+                            className="block py-2 px-4 text-base text-gray-dark hover:bg-gray-100 hover:text-accent transition-colors rounded-lg cursor-pointer"
                             onClick={() => setMobileMenuOpen(false)}
                           >
                             {collection.name}
@@ -224,20 +232,13 @@ const Header = () => {
                     )}
                   </div>
                   
-                  {/* Navigation */}
+                  {/* MORE */}
                   <div className="mb-6">
-                    <h3 className="text-sm font-semibold text-gray-500 uppercase mb-3">Navigation</h3>
-                    <nav className="space-y-2">
-                      <Link
-                        to="/boutique"
-                        className="block py-3 px-4 text-lg text-gray-dark hover:bg-gray-100 hover:text-accent transition-colors rounded-lg"
-                        onClick={() => setMobileMenuOpen(false)}
-                      >
-                        Boutique
-                      </Link>
+                    <h3 className="text-sm font-semibold text-gray-500 uppercase mb-3">MORE</h3>
+                    <nav className="space-y-1">
                       <Link
                         to="/a-propos"
-                        className="block py-3 px-4 text-lg text-gray-dark hover:bg-gray-100 hover:text-accent transition-colors rounded-lg"
+                        className="block py-2 px-4 text-base text-gray-dark hover:bg-gray-100 hover:text-accent transition-colors rounded-lg"
                         onClick={() => setMobileMenuOpen(false)}
                       >
                         About Us
