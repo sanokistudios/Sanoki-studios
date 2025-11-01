@@ -205,18 +205,34 @@ const ProductDetail = () => {
 
           {/* Stock - MASQUÉ pour les utilisateurs (interne uniquement) */}
 
-          {/* Bouton ajouter au panier */}
-          <button
-            onClick={handleAddToCart}
-            disabled={
-              (product.stock !== null && product.stock === 0) ||
-              (selectedSize && product.stockBySize?.[selectedSize] === 0)
-            }
-            className="w-full btn-primary flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            <ShoppingBag className="w-5 h-5" />
-            Ajouter au panier
-          </button>
+          {/* Vérifier si toutes les tailles sont épuisées */}
+          {(() => {
+            const stockBySize = product.stockBySize || {};
+            const allSizesOutOfStock = product.sizes && product.sizes.length > 0 && 
+              product.sizes.every(size => {
+                const stock = stockBySize[size];
+                return stock !== undefined && stock !== null && stock === 0;
+              });
+            
+            return allSizesOutOfStock ? (
+              <div className="w-full bg-red-50 border-2 border-red-500 text-red-700 py-4 px-6 text-center font-bold uppercase">
+                PRODUIT ÉPUISÉ
+              </div>
+            ) : (
+              <button
+                onClick={handleAddToCart}
+                disabled={
+                  selectedSize && product.stockBySize?.[selectedSize] === 0
+                }
+                className="w-full btn-primary flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <ShoppingBag className="w-5 h-5" />
+                {selectedSize && product.stockBySize?.[selectedSize] === 0 
+                  ? 'Taille épuisée' 
+                  : 'Ajouter au panier'}
+              </button>
+            );
+          })()}
 
           {/* Composition */}
           {product.composition && (

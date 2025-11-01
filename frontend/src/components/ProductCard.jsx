@@ -3,8 +3,19 @@ import { XCircle } from 'lucide-react';
 import { useState } from 'react';
 
 const ProductCard = ({ product }) => {
-  // Vérifier si le produit est en rupture
-  const isOutOfStock = product.stock !== null && product.stock === 0;
+  // Vérifier si toutes les tailles sont épuisées
+  const isOutOfStock = (() => {
+    // Si le produit n'a pas de tailles, considérer comme disponible
+    if (!product.sizes || product.sizes.length === 0) {
+      return false;
+    }
+    // Si toutes les tailles ont un stock de 0, le produit est épuisé
+    const stockBySize = product.stockBySize || {};
+    return product.sizes.every(size => {
+      const stock = stockBySize[size];
+      return stock !== undefined && stock !== null && stock === 0;
+    });
+  })();
   const [hovered, setHovered] = useState(false);
 
   // Image alternative pour le hover (placeholder pour l'instant)

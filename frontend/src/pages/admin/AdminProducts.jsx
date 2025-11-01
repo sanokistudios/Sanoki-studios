@@ -23,7 +23,6 @@ const AdminProducts = () => {
     sizes: [],
     colors: [],
     images: [],
-    stock: '',
     stockBySize: {},
     composition: '',
     sizeGuide: {
@@ -74,7 +73,6 @@ const AdminProducts = () => {
         sizes: product.sizes || [],
         colors: product.colors || [],
         images: product.images || [],
-        stock: product.stock || '',
         stockBySize: product.stockBySize || {},
         composition: product.composition || '',
         sizeGuide: product.sizeGuide || {
@@ -98,7 +96,6 @@ const AdminProducts = () => {
         sizes: [],
         colors: [],
         images: [],
-        stock: '',
         stockBySize: {},
         composition: productDefaults.composition,
         sizeGuide: {
@@ -190,6 +187,10 @@ const AdminProducts = () => {
       if (!payload.collection) {
         delete payload.collection;
       }
+      // Ne pas envoyer le champ stock s'il existe (on utilise uniquement stockBySize)
+      if (payload.stock !== undefined) {
+        delete payload.stock;
+      }
 
       if (editingProduct) {
         await productsAPI.update(editingProduct._id, payload);
@@ -250,7 +251,6 @@ const AdminProducts = () => {
                 <th className="px-6 py-3 text-left text-sm font-semibold">Image</th>
                 <th className="px-6 py-3 text-left text-sm font-semibold">Nom</th>
                 <th className="px-6 py-3 text-left text-sm font-semibold">Prix</th>
-                <th className="px-6 py-3 text-left text-sm font-semibold">Stock</th>
                 <th className="px-6 py-3 text-left text-sm font-semibold">Catégorie</th>
                 <th className="px-6 py-3 text-left text-sm font-semibold">Actions</th>
               </tr>
@@ -267,17 +267,6 @@ const AdminProducts = () => {
                   </td>
                   <td className="px-6 py-4 font-medium">{product.name}</td>
                   <td className="px-6 py-4">{product.price} TND</td>
-                  <td className="px-6 py-4">
-                    <span
-                      className={`px-2 py-1 rounded-full text-sm ${
-                        product.stock > 0
-                          ? 'bg-green-100 text-green-800'
-                          : 'bg-red-100 text-red-800'
-                      }`}
-                    >
-                      {product.stock}
-                    </span>
-                  </td>
                   <td className="px-6 py-4">{product.category}</td>
                   <td className="px-6 py-4">
                     <div className="flex gap-2">
@@ -334,35 +323,18 @@ const AdminProducts = () => {
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium mb-2">Prix (TND) *</label>
-                  <input
-                    type="number"
-                    name="price"
-                    value={formData.price}
-                    onChange={handleChange}
-                    min="0"
-                    step="0.01"
-                    className="input-field"
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-2">Stock (optionnel)</label>
-                  <input
-                    type="number"
-                    name="stock"
-                    value={formData.stock}
-                    onChange={handleChange}
-                    min="0"
-                    placeholder="Laissez vide pour stock illimité"
-                    className="input-field"
-                  />
-                  <p className="text-xs text-gray-500 mt-1">
-                    Laissez vide si vous gérez le stock manuellement
-                  </p>
-                </div>
+              <div>
+                <label className="block text-sm font-medium mb-2">Prix (TND) *</label>
+                <input
+                  type="number"
+                  name="price"
+                  value={formData.price}
+                  onChange={handleChange}
+                  min="0"
+                  step="0.01"
+                  className="input-field"
+                  required
+                />
               </div>
 
               <div>
@@ -434,7 +406,7 @@ const AdminProducts = () => {
               {formData.sizes.length > 0 && (
                 <div>
                   <label className="block text-sm font-medium mb-2">
-                    Stock par taille (optionnel - pour marquer une taille comme épuisée)
+                    Stock par taille *
                   </label>
                   <div className="space-y-2">
                     {formData.sizes.map((size) => (
@@ -463,8 +435,8 @@ const AdminProducts = () => {
                     ))}
                   </div>
                   <p className="text-xs text-gray-500 mt-2">
-                    Laissez vide ou mettez 0 pour marquer une taille comme épuisée
-─                  </p>
+                    Indiquez la quantité disponible pour chaque taille. Mettez 0 pour marquer une taille comme épuisée. Le produit sera marqué "SOLD OUT" si toutes les tailles sont épuisées.
+                  </p>
                 </div>
               )}
 

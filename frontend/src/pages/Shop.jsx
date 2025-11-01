@@ -51,9 +51,20 @@ const Shop = () => {
   const applyFilters = () => {
     let filtered = [...allProducts];
 
-    // Filtre stock
+    // Filtre stock - vérifier si toutes les tailles sont épuisées
     if (filters.inStockOnly) {
-      filtered = filtered.filter(p => p.stock === null || p.stock > 0);
+      filtered = filtered.filter(p => {
+        // Si pas de tailles, considérer comme disponible
+        if (!p.sizes || p.sizes.length === 0) {
+          return true;
+        }
+        // Si au moins une taille a du stock, le produit est disponible
+        const stockBySize = p.stockBySize || {};
+        return p.sizes.some(size => {
+          const stock = stockBySize[size];
+          return stock === undefined || stock === null || stock > 0;
+        });
+      });
     }
 
     // Filtre prix
