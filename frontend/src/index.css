@@ -183,3 +183,66 @@ body {
   animation: cartRotate 2.5s ease-in-out infinite;
 }
 
+/* Animations personnalisées pour les nouvelles icônes PNG */
+
+/* Animation pour le menu hamburger - Rotation subtile */
+@keyframes menuRotate {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(10deg);
+  }
+}
+
+.animate-menu-rotate {
+  animation: menuRotate 2s ease-in-out infinite;
+}
+
+/* Animation pour la loupe - Zoom doux */
+@keyframes searchPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+}
+
+.animate-search-pulse {
+  animation: searchPulse 2s ease-in-out infinite;
+}
+
+/* Animation pour le panier - Balancement amélioré */
+@keyframes cartSwingImproved {
+  0%, 100% {
+    transform: rotate(0deg) translateY(0);
+  }
+  25% {
+    transform: rotate(-10deg) translateY(-3px);
+  }
+  75% {
+    transform: rotate(10deg) translateY(-3px);
+  }
+}
+
+.animate-cart-swing-improved {
+  animation: cartSwingImproved 2.5s ease-in-out infinite;
+}
+
+/* Animation pour le profil - Pulsation douce */
+@keyframes profilePulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.9;
+  }
+}
+
+.animate-profile-pulse {
+  animation: profilePulse 2.2s ease-in-out infinite;
+}
+

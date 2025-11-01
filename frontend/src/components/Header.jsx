@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { Menu, X, Search, LayoutDashboard, ChevronDown, Package, LogOut, User } from 'lucide-react';
+import { X, LayoutDashboard, ChevronDown, Package, LogOut, User } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
@@ -64,16 +64,21 @@ const Header = () => {
                 {mobileMenuOpen ? (
                   <X className="w-5 h-5" />
                 ) : (
-                  <Menu className="w-5 h-5" />
+                  <img 
+                    src="/images/icone_menu_hamburger.png" 
+                    alt="Menu" 
+                    className="w-5 h-5 animate-menu-rotate"
+                  />
                 )}
               </button>
               
-              {/* Icône recherche minimaliste avec rond plus petit */}
+              {/* Icône recherche */}
               <button className="p-2 hover:bg-gray-100 rounded-full transition-colors" aria-label="Rechercher">
-                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-gray-700">
-                  <circle cx="10" cy="10" r="6" stroke="currentColor" strokeWidth="1.5" fill="none"/>
-                  <path d="m16 16 4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-                </svg>
+                <img 
+                  src="/images/icone_loupe.png" 
+                  alt="Rechercher" 
+                  className="w-5 h-5 animate-search-pulse"
+                />
               </button>
             </div>
 
@@ -96,10 +101,11 @@ const Header = () => {
                       onClick={() => setUserDropdownOpen(!userDropdownOpen)}
                       className="flex items-center gap-1 px-2 md:px-3 py-2 text-primary hover:bg-gray-100 rounded-none transition-colors"
                     >
-                      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-5 h-5">
-                        <circle cx="12" cy="8" r="3" stroke="currentColor" strokeWidth="1.5"/>
-                        <path d="M4 20c0-4 4-6 8-6s8 2 8 6" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round"/>
-                      </svg>
+                      <img 
+                        src="/images/icone_profil.png" 
+                        alt="Profil" 
+                        className="w-5 h-5 animate-profile-pulse"
+                      />
                       <span className="hidden sm:inline font-medium text-sm">{user?.name}</span>
                       <ChevronDown className={`w-3 h-3 sm:w-4 sm:h-4 transition-transform ${userDropdownOpen ? 'rotate-180' : ''}`} />
                     </button>
@@ -151,29 +157,25 @@ const Header = () => {
                     to="/connexion"
                     className="flex items-center p-2 text-primary hover:bg-gray-100 rounded-none transition-colors"
                   >
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-5 h-5">
-                      <circle cx="12" cy="8" r="3" stroke="currentColor" strokeWidth="1.5"/>
-                      <path d="M4 20c0-4 4-6 8-6s8 2 8 6" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round"/>
-                    </svg>
+                    <img 
+                      src="/images/icone_profil.png" 
+                      alt="Connexion" 
+                      className="w-5 h-5 animate-profile-pulse"
+                    />
                   </Link>
                 )}
               </div>
 
-              {/* Panier - Icône sac minimaliste */}
+              {/* Panier - Icône sac */}
               <button
                 onClick={toggleCart}
                 className="relative p-2 hover:bg-gray-100 rounded-full transition-colors"
               >
-                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 animate-cart-swing">
-                  {/* Corps du sac - rectangle avec coins inférieurs arrondis */}
-                  <path d="M7 8h10v10c0 1.1-.9 2-2 2H9c-1.1 0-2-.9-2-2V8z" stroke="currentColor" strokeWidth="1.5" fill="none"/>
-                  {/* Ouverture du sac - ligne horizontale légèrement incurvée */}
-                  <path d="M7 8h10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-                  {/* Anse gauche - demi-cercle au-dessus */}
-                  <path d="M9 8c0-1.1.9-2 2-2s2 .9 2 2" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round"/>
-                  {/* Anse droite - demi-cercle au-dessus */}
-                  <path d="M13 8c0-1.1.9-2 2-2s2 .9 2 2" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round"/>
-                </svg>
+                <img 
+                  src="/images/icone_panier.png" 
+                  alt="Panier" 
+                  className="w-5 h-5 animate-cart-swing-improved"
+                />
                 {getCartCount() > 0 && (
                   <span className="absolute -top-1 -right-1 bg-accent text-white text-xs rounded-full w-4 h-4 sm:w-5 sm:h-5 flex items-center justify-center text-[10px] sm:text-xs">
                     {getCartCount()}
