@@ -62,12 +62,12 @@ const Header = () => {
                 className="p-2 hover:bg-gray-100 rounded-full transition-colors"
               >
                 {mobileMenuOpen ? (
-                  <X className="w-10 h-10" />
+                  <X className="w-9 h-9" />
                 ) : (
                   <img 
                     src="/images/icone_menu_hamburger.png" 
                     alt="Menu" 
-                    className="w-10 h-10 animate-menu-rotate"
+                    className="w-9 h-9"
                   />
                 )}
               </button>
@@ -77,7 +77,7 @@ const Header = () => {
                 <img 
                   src="/images/icone_loupe.png" 
                   alt="Rechercher" 
-                  className="w-10 h-10 animate-search-pulse"
+                  className="w-9 h-9"
                 />
               </button>
             </div>
@@ -104,7 +104,7 @@ const Header = () => {
                       <img 
                         src="/images/icone_profil.png" 
                         alt="Profil" 
-                        className="w-10 h-10 animate-profile-pulse"
+                        className="w-9 h-9"
                       />
                       <span className="hidden sm:inline font-medium text-sm">{user?.name}</span>
                       <ChevronDown className={`w-3 h-3 sm:w-4 sm:h-4 transition-transform ${userDropdownOpen ? 'rotate-180' : ''}`} />
@@ -156,7 +156,7 @@ const Header = () => {
                     <img 
                       src="/images/icone_profil.png" 
                       alt="Connexion" 
-                      className="w-10 h-10 animate-profile-pulse"
+                      className="w-9 h-9"
                     />
                   </Link>
                 )}
@@ -170,7 +170,7 @@ const Header = () => {
                 <img 
                   src="/images/icone_panier.png" 
                   alt="Panier" 
-                  className="w-10 h-10 animate-cart-swing-improved"
+                  className="w-9 h-9"
                 />
                 {getCartCount() > 0 && (
                   <span className="absolute -top-1 -right-1 bg-accent text-white text-xs rounded-full w-4 h-4 sm:w-5 sm:h-5 flex items-center justify-center text-[10px] sm:text-xs">
@@ -193,7 +193,7 @@ const Header = () => {
                       onClick={() => setMobileMenuOpen(false)}
                       className="p-2 hover:bg-gray-100 rounded-full transition-colors"
                     >
-                      <X className="w-10 h-10" />
+                      <X className="w-9 h-9" />
                     </button>
                   </div>
 
@@ -237,6 +237,22 @@ const Header = () => {
                         className="block py-2 px-4 text-base text-gray-dark hover:bg-gray-100 hover:text-accent transition-colors rounded-lg"
                         onClick={() => setMobileMenuOpen(false)}
                       >
+                        About Us
+                      </Link>
+                    </nav>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+      </nav>
+    </header>
+  );
+};
+
+export default Header;
+
+
                         About Us
                       </Link>
                     </nav>
