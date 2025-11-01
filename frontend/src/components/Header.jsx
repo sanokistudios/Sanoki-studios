@@ -62,12 +62,12 @@ const Header = () => {
                 className="p-2 hover:bg-gray-100 rounded-full transition-colors"
               >
                 {mobileMenuOpen ? (
-                  <X className="w-6 h-6" />
+                  <X className="w-7 h-7" />
                 ) : (
                   <img 
                     src="/images/icone_menu_hamburger.png" 
                     alt="Menu" 
-                    className="w-6 h-6 animate-menu-rotate"
+                    className="w-7 h-7 animate-menu-rotate"
                   />
                 )}
               </button>
@@ -77,7 +77,7 @@ const Header = () => {
                 <img 
                   src="/images/icone_loupe.png" 
                   alt="Rechercher" 
-                  className="w-6 h-6 animate-search-pulse"
+                  className="w-7 h-7 animate-search-pulse"
                 />
               </button>
             </div>
@@ -104,7 +104,7 @@ const Header = () => {
                       <img 
                         src="/images/icone_profil.png" 
                         alt="Profil" 
-                        className="w-6 h-6 animate-profile-pulse"
+                        className="w-7 h-7 animate-profile-pulse"
                       />
                       <span className="hidden sm:inline font-medium text-sm">{user?.name}</span>
                       <ChevronDown className={`w-3 h-3 sm:w-4 sm:h-4 transition-transform ${userDropdownOpen ? 'rotate-180' : ''}`} />
@@ -174,7 +174,7 @@ const Header = () => {
                 <img 
                   src="/images/icone_panier.png" 
                   alt="Panier" 
-                  className="w-6 h-6 animate-cart-swing-improved"
+                  className="w-7 h-7 animate-cart-swing-improved"
                 />
                 {getCartCount() > 0 && (
                   <span className="absolute -top-1 -right-1 bg-accent text-white text-xs rounded-full w-4 h-4 sm:w-5 sm:h-5 flex items-center justify-center text-[10px] sm:text-xs">
