@@ -210,6 +210,7 @@ const Header = () => {
 
                   {/* Collections */}
                   <div className="mb-6">
+                    <h3 className="text-sm font-semibold text-gray-500 uppercase mb-3">Collections</h3>
                     {collections.length > 0 ? (
                       <nav className="space-y-1">
                         {collections.map((collection) => (
