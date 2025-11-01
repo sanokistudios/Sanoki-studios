@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { X, LayoutDashboard, ChevronDown, Package, LogOut, User } from 'lucide-react';
+import { X, ChevronDown } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
@@ -116,37 +116,33 @@ const Header = () => {
                         <div className="py-1">
                           <Link
                             to="/profil"
-                            className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors"
+                            className="block px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors"
                             onClick={() => setUserDropdownOpen(false)}
                           >
-                            <User className="w-4 h-4" />
-                            <span>Mon Profil</span>
+                            Mon Profil
                           </Link>
                           <Link
                             to="/profil"
-                            className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors"
+                            className="block px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors"
                             onClick={() => setUserDropdownOpen(false)}
                           >
-                            <Package className="w-4 h-4" />
-                            <span>Mes Commandes</span>
+                            Mes Commandes
                           </Link>
                           {user?.role === 'admin' && (
                             <Link
                               to="/admin"
-                              className="flex items-center gap-2 px-4 py-2 text-blue-600 hover:bg-blue-50 transition-colors"
+                              className="block px-4 py-2 text-blue-600 hover:bg-blue-50 transition-colors"
                               onClick={() => setUserDropdownOpen(false)}
                             >
-                              <LayoutDashboard className="w-4 h-4" />
-                              <span>Dashboard Admin</span>
+                              Dashboard Admin
                             </Link>
                           )}
                           <hr className="my-1" />
                           <button
                             onClick={handleLogout}
-                            className="flex items-center gap-2 px-4 py-2 text-red-600 hover:bg-red-50 transition-colors w-full text-left"
+                            className="block px-4 py-2 text-red-600 hover:bg-red-50 transition-colors w-full text-left"
                           >
-                            <LogOut className="w-4 h-4" />
-                            <span>Déconnexion</span>
+                            Déconnexion
                           </button>
                         </div>
                       </div>
