@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from 'react';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import { collectionsAPI } from '../utils/api';
-import logo from '../assets/logo.png'; // Logo symbole
+// Logo animé GIF
 
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -82,10 +82,10 @@ const Header = () => {
               </button>
             </div>
 
-            {/* Centre: Logo symbole (plus petit) */}
+            {/* Centre: Logo animé GIF */}
             <Link to="/" className="absolute left-1/2 transform -translate-x-1/2">
               <img 
-                src={logo} 
+                src="/images/logo.gif" 
                 alt="Logo" 
                 className="h-8 sm:h-10 md:h-12 w-auto object-contain"
               />
