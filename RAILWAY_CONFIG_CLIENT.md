@@ -9,11 +9,19 @@ Ce fichier liste les variables d'environnement à configurer dans Railway pour l
 Allez dans Railway → Projet → Service **Backend** → **Variables** → Ajoutez :
 
 ### ✅ Identifiants Cloudinary (Client)
+⚠️ **ATTENTION : Les identifiants Cloudinary sont sensibles**  
+Les valeurs réelles sont stockées localement dans `CLOUDINARY_CREDENTIALS_LOCAL.txt` (non commité).
+
+Pour configurer Railway, utilisez les valeurs suivantes :
 ```env
-CLOUDINARY_CLOUD_NAME=dhgnwnkno
-CLOUDINARY_API_KEY=571232989695956
-CLOUDINARY_API_SECRET=tKhD8-RuNN-NlT9McH7gu8oAiBc
+CLOUDINARY_CLOUD_NAME=votre_cloud_name
+CLOUDINARY_API_KEY=votre_api_key
+CLOUDINARY_API_SECRET=votre_api_secret
 ```
+
+**Les identifiants réels doivent être récupérés depuis :**
+- Le fichier local `CLOUDINARY_CREDENTIALS_LOCAL.txt` (non tracké par Git)
+- OU directement depuis le Dashboard Cloudinary du client
 
 ### 📊 Base de données MongoDB
 ```env
@@ -74,9 +82,9 @@ PORT=4173
 ## 📋 Checklist de Configuration
 
 ### Backend
-- [ ] `CLOUDINARY_CLOUD_NAME` = `dhgnwnkno` ✅
-- [ ] `CLOUDINARY_API_KEY` = `571232989695956` ✅
-- [ ] `CLOUDINARY_API_SECRET` = `tKhD8-RuNN-NlT9McH7gu8oAiBc` ✅
+- [ ] `CLOUDINARY_CLOUD_NAME` = (récupérer depuis `CLOUDINARY_CREDENTIALS_LOCAL.txt` ou Dashboard Cloudinary)
+- [ ] `CLOUDINARY_API_KEY` = (récupérer depuis `CLOUDINARY_CREDENTIALS_LOCAL.txt` ou Dashboard Cloudinary)
+- [ ] `CLOUDINARY_API_SECRET` = (récupérer depuis `CLOUDINARY_CREDENTIALS_LOCAL.txt` ou Dashboard Cloudinary)
 - [ ] `MONGODB_URI` = URI MongoDB Atlas du client
 - [ ] `JWT_SECRET` = Secret généré (32+ caractères)
 - [ ] `FRONTEND_URL` = URL du frontend Railway (après déploiement)
