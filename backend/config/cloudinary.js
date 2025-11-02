@@ -29,18 +29,24 @@ const storage = new CloudinaryStorage({
     transformation: [
       { width: 1000, height: 1000, crop: 'limit' },
       { quality: 'auto' }
-    ]
+    ],
+    // Limite de taille pour Cloudinary (100 MB)
+    resource_type: 'image',
+    chunk_size: 100 * 1024 * 1024
   }
 });
 
 const upload = multer({ 
   storage: storage,
   limits: {
-    fileSize: 100 * 1024 * 1024, // Limite de 100MB
+    fileSize: 100 * 1024 * 1024, // Limite de 100MB (104857600 bytes)
     files: 1,
-    fieldSize: 100 * 1024 * 1024
+    fieldSize: 100 * 1024 * 1024,
+    fieldNameSize: 255,
+    fields: 10
   },
   fileFilter: (req, file, cb) => {
+    console.log('📋 Fichier à uploader:', file.originalname, 'Type:', file.mimetype);
     const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
     if (allowedTypes.includes(file.mimetype)) {
       cb(null, true);
