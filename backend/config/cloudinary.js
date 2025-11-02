@@ -20,9 +20,10 @@ console.log('✅ Cloudinary configuré:', {
   api_secret: process.env.CLOUDINARY_API_SECRET ? '✓' : '✗'
 });
 
-// Définir la limite à 100 MB
-const MAX_FILE_SIZE = 100 * 1024 * 1024; // 104857600 bytes
-console.log('✅ Limite de taille fichier configurée: 100 MB (104857600 bytes)');
+// Définir la limite à 10 MB (limitation plan gratuit Cloudinary)
+// Pour augmenter : upgrader le compte Cloudinary vers un plan payant
+const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10485760 bytes
+console.log('✅ Limite de taille fichier configurée: 10 MB (limitation plan gratuit Cloudinary)');
 
 // Utiliser memoryStorage au lieu de CloudinaryStorage pour contourner la limite de 10 MB
 // Les fichiers seront stockés en mémoire puis uploadés directement vers Cloudinary
@@ -31,7 +32,7 @@ const storage = multer.memoryStorage();
 const upload = multer({ 
   storage: storage,
   limits: {
-    fileSize: MAX_FILE_SIZE, // Limite de 100MB (104857600 bytes)
+    fileSize: MAX_FILE_SIZE, // Limite de 10MB (plan gratuit Cloudinary)
     files: 1,
     fieldSize: MAX_FILE_SIZE,
     fieldNameSize: 255,

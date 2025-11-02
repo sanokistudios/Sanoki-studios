@@ -283,9 +283,9 @@ const AdminPaintings = () => {
                 <label className="block text-sm font-medium mb-2">
                   Images de la peinture
                 </label>
-                <p className="text-xs text-gray-500 mb-2">
-                  Taille maximale par image : <strong>100 MB</strong>
-                </p>
+              <p className="text-xs text-gray-500 mb-2">
+                Taille maximale par image : <strong>10 MB</strong> (plan gratuit Cloudinary)
+              </p>
                 <ImageUpload
                   multiple={true}
                   onUploadSuccess={(urls) => {
