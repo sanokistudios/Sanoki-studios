@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { upload } = require('../config/cloudinary');
+const { upload, uploadToCloudinary } = require('../config/cloudinary');
 const { protect, admin } = require('../middleware/auth');
 
 // @desc    Upload une image
@@ -44,20 +44,28 @@ router.post('/', protect, admin, (req, res, next) => {
     
     next();
   });
-}, (req, res) => {
+}, async (req, res) => {
   try {
     if (!req.file) {
       console.error('❌ Aucun fichier reçu');
       return res.status(400).json({ message: 'Aucune image fournie' });
     }
 
-    console.log('✅ Upload Cloudinary réussi:', req.file.path);
-    console.log('🔗 URL:', req.file.path);
+    console.log('📤 Upload vers Cloudinary en cours...');
+    
+    // Upload vers Cloudinary depuis le buffer
+    const result = await uploadToCloudinary(req.file.buffer, {
+      folder: 'ecommerce-vetements'
+    });
+
+    console.log('✅ Upload Cloudinary réussi:', result.secure_url);
+    console.log('🔗 URL:', result.secure_url);
+    console.log('🆔 Public ID:', result.public_id);
     
     res.json({
       success: true,
-      url: req.file.path,
-      publicId: req.file.filename
+      url: result.secure_url,
+      publicId: result.public_id
     });
   } catch (error) {
     console.error('❌ Erreur lors de l\'upload:', error.message);
@@ -72,23 +80,36 @@ router.post('/', protect, admin, (req, res, next) => {
 // @desc    Upload plusieurs images
 // @route   POST /api/upload/multiple
 // @access  Private/Admin
-router.post('/multiple', protect, admin, upload.array('images', 5), (req, res) => {
+router.post('/multiple', protect, admin, upload.array('images', 5), async (req, res) => {
   try {
     if (!req.files || req.files.length === 0) {
       return res.status(400).json({ message: 'Aucune image fournie' });
     }
 
-    const urls = req.files.map(file => ({
-      url: file.path,
-      publicId: file.filename
+    console.log('📤 Upload de', req.files.length, 'images vers Cloudinary...');
+
+    // Upload chaque fichier vers Cloudinary
+    const uploadPromises = req.files.map(file => 
+      uploadToCloudinary(file.buffer, {
+        folder: 'ecommerce-vetements'
+      })
+    );
+
+    const results = await Promise.all(uploadPromises);
+
+    const urls = results.map(result => ({
+      url: result.secure_url,
+      publicId: result.public_id
     }));
+
+    console.log('✅', results.length, 'images uploadées avec succès');
 
     res.json({
       success: true,
       images: urls
     });
   } catch (error) {
-    console.error('Erreur lors de l\'upload:', error);
+    console.error('❌ Erreur lors de l\'upload:', error);
     res.status(500).json({ message: 'Erreur lors de l\'upload des images' });
   }
 });

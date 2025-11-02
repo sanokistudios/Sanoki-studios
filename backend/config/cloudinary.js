@@ -1,6 +1,6 @@
 const cloudinary = require('cloudinary').v2;
-const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const multer = require('multer');
+const streamifier = require('streamifier');
 
 // Configuration Cloudinary
 if (!process.env.CLOUDINARY_CLOUD_NAME || !process.env.CLOUDINARY_API_KEY || !process.env.CLOUDINARY_API_SECRET) {
@@ -20,30 +20,13 @@ console.log('✅ Cloudinary configuré:', {
   api_secret: process.env.CLOUDINARY_API_SECRET ? '✓' : '✗'
 });
 
-// Configuration du storage pour Multer
-// IMPORTANT: Ne pas utiliser de transformations pour éviter les limites de taille
-const storage = new CloudinaryStorage({
-  cloudinary: cloudinary,
-  params: async (req, file) => {
-    return {
-      folder: 'ecommerce-vetements',
-      allowed_formats: ['jpg', 'jpeg', 'png', 'webp'],
-      resource_type: 'image'
-      // Pas de transformation pour autoriser les gros fichiers
-      // Les transformations seront appliquées à l'affichage si nécessaire
-    };
-  }
-});
-
-// Définir explicitement la limite à 100 MB
+// Définir la limite à 100 MB
 const MAX_FILE_SIZE = 100 * 1024 * 1024; // 104857600 bytes
+console.log('✅ Limite de taille fichier configurée: 100 MB (104857600 bytes)');
 
-// Vérifier que la limite est bien à 100 MB
-if (MAX_FILE_SIZE === 104857600) {
-  console.log('✅ Limite de taille fichier configurée: 100 MB (104857600 bytes)');
-} else {
-  console.error('❌ ERREUR: Limite incorrecte! Valeur:', MAX_FILE_SIZE, 'bytes');
-}
+// Utiliser memoryStorage au lieu de CloudinaryStorage pour contourner la limite de 10 MB
+// Les fichiers seront stockés en mémoire puis uploadés directement vers Cloudinary
+const storage = multer.memoryStorage();
 
 const upload = multer({ 
   storage: storage,
@@ -65,5 +48,26 @@ const upload = multer({
   }
 });
 
-module.exports = { cloudinary, upload };
+// Fonction utilitaire pour uploader vers Cloudinary depuis un buffer
+const uploadToCloudinary = (buffer, options = {}) => {
+  return new Promise((resolve, reject) => {
+    const uploadStream = cloudinary.uploader.upload_stream(
+      {
+        folder: options.folder || 'ecommerce-vetements',
+        resource_type: 'image',
+        ...options
+      },
+      (error, result) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(result);
+        }
+      }
+    );
+    streamifier.createReadStream(buffer).pipe(uploadStream);
+  });
+};
+
+module.exports = { cloudinary, upload, uploadToCloudinary };
 
