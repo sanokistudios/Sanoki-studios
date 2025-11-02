@@ -85,8 +85,8 @@ const Header = () => {
                 />
               </Link>
               
-              {/* Icône recherche */}
-              <button className="p-2 hover:bg-gray-100 rounded-full transition-colors" aria-label="Rechercher">
+              {/* Icône recherche - cachée sur mobile */}
+              <button className="hidden md:flex p-2 hover:bg-gray-100 rounded-full transition-colors" aria-label="Rechercher">
                 <img 
                   src="/images/icone_loupe.png" 
                   alt="Rechercher" 
