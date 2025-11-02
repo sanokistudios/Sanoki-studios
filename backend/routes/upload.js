@@ -12,14 +12,19 @@ router.post('/', protect, admin, upload.single('image'), (req, res) => {
       return res.status(400).json({ message: 'Aucune image fournie' });
     }
 
+    console.log('✅ Upload réussi:', req.file.path);
     res.json({
       success: true,
       url: req.file.path,
       publicId: req.file.filename
     });
   } catch (error) {
-    console.error('Erreur lors de l\'upload:', error);
-    res.status(500).json({ message: 'Erreur lors de l\'upload de l\'image' });
+    console.error('❌ Erreur lors de l\'upload:', error);
+    console.error('Stack:', error.stack);
+    res.status(500).json({ 
+      message: 'Erreur lors de l\'upload de l\'image',
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
   }
 });
 
