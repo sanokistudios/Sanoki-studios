@@ -1,0 +1,12 @@
+# Variables d'environnement Frontend - Format Railway Raw Editor
+# Copiez-collez tout ce bloc dans Railway → Service Frontend → Variables → Raw Editor
+
+# Backend API URL (À METTRE À JOUR avec l'URL réelle du backend Railway)
+VITE_API_URL=https://backend-production-xxxx.up.railway.app/api
+
+# Socket.io URL (Même URL que le backend, sans /api)
+VITE_SOCKET_URL=https://backend-production-xxxx.up.railway.app
+
+# Port (Géré automatiquement par Railway)
+PORT=4173
+

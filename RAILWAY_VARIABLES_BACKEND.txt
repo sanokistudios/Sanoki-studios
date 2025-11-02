@@ -1,0 +1,25 @@
+# Variables d'environnement Backend - Format Railway Raw Editor
+# Copiez-collez tout ce bloc dans Railway → Service Backend → Variables → Raw Editor
+
+# Cloudinary (Client Sanoki Studios)
+CLOUDINARY_CLOUD_NAME=dhgnwnkno
+CLOUDINARY_API_KEY=571232989695956
+CLOUDINARY_API_SECRET=tKhD8-RuNN-NlT9McH7gu8oAiBc
+
+# MongoDB Atlas (À COMPLÉTER - Récupérer depuis MongoDB Atlas)
+MONGODB_URI=mongodb+srv://username:password@cluster0.xxxxx.mongodb.net/ecommerce?retryWrites=true&w=majority
+
+# JWT Secret (À GÉNÉRER - Utilisez openssl rand -base64 32 ou randomkeygen.com)
+JWT_SECRET=GENERATE_A_SECURE_SECRET_HERE_256_BITS
+
+# Frontend URL (À METTRE À JOUR après déploiement du frontend)
+FRONTEND_URL=https://frontend-production-xxxx.up.railway.app
+
+# Environnement
+NODE_ENV=production
+PORT=5000
+
+# Admin (Optionnel - Définir pour créer le compte admin)
+ADMIN_EMAIL=admin@sanokistudios.com
+ADMIN_PASSWORD=GENERATE_A_SECURE_PASSWORD_HERE
+
