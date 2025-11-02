@@ -6,11 +6,11 @@ CLOUDINARY_CLOUD_NAME=dhgnwnkno
 CLOUDINARY_API_KEY=571232989695956
 CLOUDINARY_API_SECRET=tKhD8-RuNN-NlT9McH7gu8oAiBc
 
-# MongoDB Atlas (À COMPLÉTER - Récupérer depuis MongoDB Atlas)
-MONGODB_URI=mongodb+srv://username:password@cluster0.xxxxx.mongodb.net/ecommerce?retryWrites=true&w=majority
+# MongoDB Atlas (À COMPLÉTER - Remplacez cluster0.xxxxx par l'URL réelle de votre cluster)
+MONGODB_URI=mongodb+srv://sanoki:StanStud@cluster0.xxxxx.mongodb.net/ecommerce?retryWrites=true&w=majority&appName=Cluster0
 
-# JWT Secret (À GÉNÉRER - Utilisez openssl rand -base64 32 ou randomkeygen.com)
-JWT_SECRET=GENERATE_A_SECURE_SECRET_HERE_256_BITS
+# JWT Secret
+JWT_SECRET=supersecretkey_change_in_production_2024_ecommerce_sanoki_studios
 
 # Frontend URL (À METTRE À JOUR après déploiement du frontend)
 FRONTEND_URL=https://frontend-production-xxxx.up.railway.app
@@ -19,7 +19,14 @@ FRONTEND_URL=https://frontend-production-xxxx.up.railway.app
 NODE_ENV=production
 PORT=5000
 
-# Admin (Optionnel - Définir pour créer le compte admin)
+# Admin
 ADMIN_EMAIL=admin@sanokistudios.com
-ADMIN_PASSWORD=GENERATE_A_SECURE_PASSWORD_HERE
+ADMIN_PASSWORD=admin123
+
+# Email (Mailtrap - Optionnel)
+MAILTRAP_HOST=sandbox.smtp.mailtrap.io
+MAILTRAP_PORT=2525
+MAILTRAP_USER=VOTRE_MAILTRAP_USER
+MAILTRAP_PASS=VOTRE_MAILTRAP_PASSWORD
+EMAIL_FROM=Sanoki Studios <noreply@sanokistudios.com>
 
