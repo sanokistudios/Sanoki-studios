@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Collection = require('../models/Collection');
+const User = require('../models/User');
 
 const collections = [
   { name: 'firebloom', description: 'Collection Firebloom' },
@@ -16,6 +17,9 @@ const connectDB = async () => {
     
     // Initialiser les collections automatiquement
     await initCollections();
+    
+    // Créer l'admin automatiquement s'il n'existe pas
+    await initAdmin();
   } catch (error) {
     console.error(`❌ Erreur de connexion MongoDB: ${error.message}`);
     process.exit(1);
@@ -48,6 +52,38 @@ const initCollections = async () => {
     console.error('⚠️ Erreur lors de l\'initialisation des collections:', error.message);
     console.error('Stack:', error.stack);
     // Ne pas bloquer le démarrage du serveur si l'initialisation échoue
+  }
+};
+
+const initAdmin = async () => {
+  try {
+    // Vérifier si un admin existe déjà
+    const existingAdmin = await User.findOne({ 
+      email: process.env.ADMIN_EMAIL || 'admin@sanokistudios.com',
+      role: 'admin'
+    });
+    
+    if (existingAdmin) {
+      console.log(`ℹ️  Admin existe déjà: ${existingAdmin.email}`);
+      return;
+    }
+
+    // Créer l'admin si les variables sont définies
+    if (process.env.ADMIN_EMAIL && process.env.ADMIN_PASSWORD) {
+      const admin = await User.create({
+        name: 'Admin',
+        email: process.env.ADMIN_EMAIL,
+        password: process.env.ADMIN_PASSWORD,
+        role: 'admin'
+      });
+
+      console.log(`✅ Admin créé automatiquement: ${admin.email}`);
+    } else {
+      console.log(`⚠️  ADMIN_EMAIL ou ADMIN_PASSWORD non définis - admin non créé`);
+    }
+  } catch (error) {
+    console.error('⚠️ Erreur lors de la création de l\'admin:', error.message);
+    // Ne pas bloquer le démarrage si la création de l'admin échoue
   }
 };
 
