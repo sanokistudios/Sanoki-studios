@@ -43,8 +43,18 @@ app.use(cors({
   },
   credentials: true
 }));
+// Augmenter les limites pour les gros fichiers
 app.use(express.json({ limit: '100mb' }));
 app.use(express.urlencoded({ extended: true, limit: '100mb' }));
+
+// Augmenter le timeout pour les uploads
+app.use((req, res, next) => {
+  if (req.path.includes('/upload')) {
+    req.setTimeout(300000); // 5 minutes pour les uploads
+    res.setTimeout(300000);
+  }
+  next();
+});
 
 // Servir les fichiers statiques (uploads)
 app.use('/uploads', express.static('uploads'));
