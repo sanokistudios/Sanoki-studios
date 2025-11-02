@@ -118,7 +118,7 @@ const ImageUpload = ({ onUploadSuccess, multiple = false }) => {
       )}
 
       <p className="text-xs text-gray-500">
-        Formats acceptés : JPG, PNG, WEBP (max 5MB)
+        Formats acceptés : JPG, PNG, WEBP (max 100MB)
       </p>
     </div>
   );

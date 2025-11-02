@@ -517,6 +517,9 @@ const AdminProducts = () => {
                 <label className="block text-sm font-medium mb-2">
                   Images du produit
                 </label>
+                <p className="text-xs text-gray-500 mb-2">
+                  Taille maximale par image : <strong>100 MB</strong>
+                </p>
                 <ImageUpload
                   multiple={true}
                   onUploadSuccess={(urls) => {
