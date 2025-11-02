@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "node scripts/setup-env.js && vite build",
-    "preview": "vite preview --host 0.0.0.0 --port $PORT"
+    "preview": "serve -s dist -l ${PORT:-4173}"
   },
   "dependencies": {
     "react": "^18.2.0",
@@ -15,7 +15,8 @@
     "axios": "^1.6.5",
     "socket.io-client": "^4.6.1",
     "lucide-react": "^0.303.0",
-    "react-hot-toast": "^2.4.1"
+    "react-hot-toast": "^2.4.1",
+    "serve": "^14.2.1"
   },
   "devDependencies": {
     "@types/react": "^18.2.48",
