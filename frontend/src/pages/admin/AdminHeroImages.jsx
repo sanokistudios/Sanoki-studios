@@ -226,6 +226,9 @@ const AdminHeroImages = () => {
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium mb-2">Image *</label>
+                <p className="text-xs text-gray-500 mb-2">
+                  Taille maximale : <strong>100 MB</strong>
+                </p>
                 <ImageUpload
                   onUploadSuccess={(url) => {
                     setFormData({ ...formData, imageUrl: url });
