@@ -36,12 +36,17 @@ const storage = new CloudinaryStorage({
   }
 });
 
+// Définir explicitement la limite à 100 MB
+const MAX_FILE_SIZE = 100 * 1024 * 1024; // 104857600 bytes
+
+console.log('📊 Limite de taille fichier configurée:', MAX_FILE_SIZE, 'bytes (', (MAX_FILE_SIZE / 1024 / 1024).toFixed(0), 'MB)');
+
 const upload = multer({ 
   storage: storage,
   limits: {
-    fileSize: 100 * 1024 * 1024, // Limite de 100MB (104857600 bytes)
+    fileSize: MAX_FILE_SIZE, // Limite de 100MB (104857600 bytes)
     files: 1,
-    fieldSize: 100 * 1024 * 1024,
+    fieldSize: MAX_FILE_SIZE,
     fieldNameSize: 255,
     fields: 10
   },
