@@ -24,6 +24,7 @@ const AdminProducts = () => {
     colors: [],
     images: [],
     stockBySize: {},
+    featured: false,
     composition: '',
     sizeGuide: {
       referenceModel: { name: '', height: '', weight: '', size: '' },
@@ -74,6 +75,7 @@ const AdminProducts = () => {
         colors: product.colors || [],
         images: product.images || [],
         stockBySize: product.stockBySize || {},
+        featured: product.featured || false,
         composition: product.composition || '',
         sizeGuide: product.sizeGuide || {
           referenceModel: { name: '', height: '', weight: '', size: '' },
@@ -97,6 +99,7 @@ const AdminProducts = () => {
         colors: [],
         images: [],
         stockBySize: {},
+        featured: false,
         composition: productDefaults.composition,
         sizeGuide: {
           referenceModel: { ...productDefaults.sizeGuide.referenceModel },
@@ -337,19 +340,45 @@ const AdminProducts = () => {
                 />
               </div>
 
-              <div>
-                <label className="block text-sm font-medium mb-2">Catégorie</label>
-                <select
-                  name="category"
-                  value={formData.category}
-                  onChange={handleChange}
-                  className="input-field"
-                >
-                  <option value="t-shirt">T-shirt</option>
-                  <option value="sweat">Sweat</option>
-                  <option value="accessoire">Accessoire</option>
-                  <option value="autre">Autre</option>
-                </select>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium mb-2">Catégorie</label>
+                  <select
+                    name="category"
+                    value={formData.category}
+                    onChange={handleChange}
+                    className="input-field"
+                  >
+                    <option value="t-shirt">T-shirt</option>
+                    <option value="sweat">Sweat</option>
+                    <option value="accessoire">Accessoire</option>
+                    <option value="autre">Autre</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-2">Affichage page d'accueil</label>
+                  <div className="flex items-center gap-3 mt-2">
+                    <button
+                      type="button"
+                      onClick={() => setFormData({ ...formData, featured: !formData.featured })}
+                      className={`relative inline-flex h-8 w-14 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 ${
+                        formData.featured ? 'bg-primary' : 'bg-gray-300'
+                      }`}
+                    >
+                      <span
+                        className={`inline-block h-6 w-6 transform rounded-full bg-white transition-transform ${
+                          formData.featured ? 'translate-x-7' : 'translate-x-1'
+                        }`}
+                      />
+                    </button>
+                    <span className={`text-sm font-medium ${formData.featured ? 'text-primary' : 'text-gray-600'}`}>
+                      {formData.featured ? 'Affiché sur la page d\'accueil' : 'Masqué de la page d\'accueil'}
+                    </span>
+                  </div>
+                  <p className="text-xs text-gray-500 mt-1">
+                    Activez cette option pour afficher ce produit sur la page d'accueil
+                  </p>
+                </div>
               </div>
 
               <div>

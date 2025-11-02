@@ -44,7 +44,8 @@ const Home = () => {
   const loadProducts = async () => {
     setLoading(true);
     try {
-      const response = await productsAPI.getAll();
+      // Charger uniquement les produits featured (affichés sur la page d'accueil)
+      const response = await productsAPI.getAll({ featured: true });
       setProducts(response.data.products || []);
     } catch (error) {
       console.error('Erreur lors du chargement des produits:', error);
