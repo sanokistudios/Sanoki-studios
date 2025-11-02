@@ -9,6 +9,7 @@ const Shop = () => {
   const [allProducts, setAllProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showFilters, setShowFilters] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
   
   // États des filtres
   const [filters, setFilters] = useState({
@@ -19,10 +20,14 @@ const Shop = () => {
 
   const location = useLocation();
 
-  // Charger et recharger lors des changements d'URL (ex: menu hamburger -> /boutique?collection=slug)
+  // Charger et recharger lors des changements d'URL (ex: menu hamburger -> /boutique?collection=slug ou ?search=query)
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
     const collectionSlug = urlParams.get('collection');
+    const search = urlParams.get('search');
+    
+    setSearchQuery(search || '');
+    
     if (collectionSlug) {
       loadProducts(collectionSlug);
     } else {
@@ -32,7 +37,7 @@ const Shop = () => {
 
   useEffect(() => {
     applyFilters();
-  }, [filters, allProducts]);
+  }, [filters, allProducts, searchQuery]);
 
   const loadProducts = async (collectionSlug = null) => {
     setLoading(true);
@@ -50,6 +55,16 @@ const Shop = () => {
 
   const applyFilters = () => {
     let filtered = [...allProducts];
+
+    // Filtre de recherche
+    if (searchQuery && searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter(p => 
+        p.name.toLowerCase().includes(query) || 
+        (p.description && p.description.toLowerCase().includes(query)) ||
+        (p.collection && p.collection.toLowerCase().includes(query))
+      );
+    }
 
     // Filtre stock - vérifier si toutes les tailles sont épuisées
     if (filters.inStockOnly) {
@@ -105,6 +120,24 @@ const Shop = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
+      {/* Indicateur de recherche */}
+      {searchQuery && (
+        <div className="mb-6 p-4 bg-gray-100 rounded-lg flex items-center justify-between">
+          <p className="text-sm">
+            Résultats pour : <span className="font-semibold">"{searchQuery}"</span>
+          </p>
+          <button
+            onClick={() => {
+              setSearchQuery('');
+              window.history.pushState({}, '', '/boutique');
+            }}
+            className="text-sm text-gray-600 hover:text-black transition-colors"
+          >
+            Effacer la recherche
+          </button>
+        </div>
+      )}
+
       {/* Barre avec bouton filtrer et nombre de produits */}
       <div className="flex items-center justify-between mb-6">
         <p className="text-sm text-gray-600">

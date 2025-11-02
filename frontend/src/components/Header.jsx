@@ -9,16 +9,22 @@ import { collectionsAPI } from '../utils/api';
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
   const { getCartCount, toggleCart } = useCart();
   const { isAuthenticated, user, logout } = useAuth();
   const navigate = useNavigate();
   const dropdownRef = useRef(null);
+  const searchRef = useRef(null);
 
-  // Fermer le dropdown si on clique ailleurs
+  // Fermer le dropdown et la recherche si on clique ailleurs
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setUserDropdownOpen(false);
+      }
+      if (searchRef.current && !searchRef.current.contains(event.target)) {
+        setSearchOpen(false);
       }
     };
 
@@ -32,6 +38,15 @@ const Header = () => {
     logout();
     setUserDropdownOpen(false);
     navigate('/');
+  };
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      setSearchOpen(false);
+      setSearchQuery('');
+      navigate(`/boutique?search=${encodeURIComponent(searchQuery.trim())}`);
+    }
   };
 
   const [collections, setCollections] = useState([]);
@@ -86,7 +101,11 @@ const Header = () => {
               </Link>
               
               {/* Icône recherche - cachée sur mobile */}
-              <button className="hidden md:flex p-2 hover:bg-gray-100 rounded-full transition-colors" aria-label="Rechercher">
+              <button 
+                onClick={() => setSearchOpen(!searchOpen)}
+                className="hidden md:flex p-2 hover:bg-gray-100 rounded-full transition-colors" 
+                aria-label="Rechercher"
+              >
                 <img 
                   src="/images/icone_loupe.png" 
                   alt="Rechercher" 
@@ -94,6 +113,40 @@ const Header = () => {
                 />
               </button>
             </div>
+
+            {/* Barre de recherche (desktop uniquement) */}
+            {searchOpen && (
+              <div 
+                ref={searchRef}
+                className="hidden md:block absolute top-full left-0 right-0 bg-white shadow-lg border-t border-gray-200 py-4 px-4 sm:px-8"
+              >
+                <form onSubmit={handleSearch} className="max-w-3xl mx-auto">
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      placeholder="Rechercher des produits..."
+                      className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
+                      autoFocus
+                    />
+                    <button
+                      type="submit"
+                      className="px-6 py-3 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors font-medium"
+                    >
+                      Rechercher
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setSearchOpen(false)}
+                      className="px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors"
+                    >
+                      <X className="w-5 h-5" />
+                    </button>
+                  </div>
+                </form>
+              </div>
+            )}
 
             {/* Centre: Logo animé GIF */}
             <Link to="/" className="absolute left-1/2 transform -translate-x-1/2">
