@@ -21,18 +21,17 @@ console.log('✅ Cloudinary configuré:', {
 });
 
 // Configuration du storage pour Multer
+// IMPORTANT: Ne pas utiliser de transformations pour éviter les limites de taille
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
-  params: {
-    folder: 'ecommerce-vetements',
-    allowed_formats: ['jpg', 'jpeg', 'png', 'webp'],
-    transformation: [
-      { width: 1000, height: 1000, crop: 'limit' },
-      { quality: 'auto' }
-    ],
-    // Limite de taille pour Cloudinary (100 MB)
-    resource_type: 'image',
-    chunk_size: 100 * 1024 * 1024
+  params: async (req, file) => {
+    return {
+      folder: 'ecommerce-vetements',
+      allowed_formats: ['jpg', 'jpeg', 'png', 'webp'],
+      resource_type: 'image'
+      // Pas de transformation pour autoriser les gros fichiers
+      // Les transformations seront appliquées à l'affichage si nécessaire
+    };
   }
 });
 
