@@ -263,6 +263,34 @@ const Header = () => {
                     </button>
                   </div>
 
+                  {/* Barre de recherche mobile */}
+                  <div className="mb-6">
+                    <form onSubmit={(e) => {
+                      handleSearch(e);
+                      setMobileMenuOpen(false);
+                    }}>
+                      <div className="relative">
+                        <input
+                          type="text"
+                          value={searchQuery}
+                          onChange={(e) => setSearchQuery(e.target.value)}
+                          placeholder="Rechercher..."
+                          className="w-full px-4 py-3 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
+                        />
+                        <button
+                          type="submit"
+                          className="absolute right-2 top-1/2 -translate-y-1/2 p-2 hover:bg-gray-100 rounded-full transition-colors"
+                        >
+                          <img 
+                            src="/images/icone_loupe.png" 
+                            alt="Rechercher" 
+                            className="w-5 h-5"
+                          />
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+
                   {/* ALL - Lien vers la boutique */}
                   <div className="mb-6">
                     <Link

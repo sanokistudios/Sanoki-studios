@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, ShoppingBag, Package, Truck } from 'lucide-react';
+import { ArrowLeft, ShoppingBag, Package, Truck, X, ChevronLeft, ChevronRight, ZoomIn } from 'lucide-react';
 import { productsAPI } from '../utils/api';
 import { useCart } from '../context/CartContext';
 import toast from 'react-hot-toast';
@@ -13,6 +13,8 @@ const ProductDetail = () => {
   const [selectedColor, setSelectedColor] = useState('');
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(0);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [zoomLevel, setZoomLevel] = useState(1);
   const { addToCart } = useCart();
 
   useEffect(() => {
@@ -50,6 +52,35 @@ const ProductDetail = () => {
     addToCart(product, quantity, selectedSize, selectedColor);
   };
 
+  const openLightbox = (index) => {
+    setSelectedImage(index);
+    setLightboxOpen(true);
+    setZoomLevel(1);
+  };
+
+  const closeLightbox = () => {
+    setLightboxOpen(false);
+    setZoomLevel(1);
+  };
+
+  const nextImage = () => {
+    if (product.images && selectedImage < product.images.length - 1) {
+      setSelectedImage(selectedImage + 1);
+      setZoomLevel(1);
+    }
+  };
+
+  const previousImage = () => {
+    if (selectedImage > 0) {
+      setSelectedImage(selectedImage - 1);
+      setZoomLevel(1);
+    }
+  };
+
+  const handleZoom = () => {
+    setZoomLevel(zoomLevel === 1 ? 2 : zoomLevel === 2 ? 3 : 1);
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -82,12 +113,19 @@ const ProductDetail = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
         {/* Images */}
         <div>
-          <div className="aspect-square bg-gray-light rounded-lg overflow-hidden mb-4">
+          <div className="relative aspect-square bg-gray-light rounded-lg overflow-hidden mb-4 cursor-zoom-in group">
             <img
               src={product.images?.[selectedImage] || 'https://via.placeholder.com/600'}
               alt={product.name}
               className="w-full h-full object-cover"
+              onClick={() => openLightbox(selectedImage)}
             />
+            <button
+              onClick={() => openLightbox(selectedImage)}
+              className="absolute top-4 right-4 bg-white bg-opacity-80 p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+            >
+              <ZoomIn className="w-5 h-5" />
+            </button>
           </div>
           {product.images && product.images.length > 1 && (
             <div className="grid grid-cols-4 gap-2">
@@ -317,6 +355,85 @@ const ProductDetail = () => {
           </div>
         </div>
       </div>
+
+      {/* Lightbox pour zoom sur les images */}
+      {lightboxOpen && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-95 z-50 flex items-center justify-center"
+          onClick={closeLightbox}
+        >
+          <button
+            onClick={closeLightbox}
+            className="absolute top-4 right-4 text-white p-2 hover:bg-white hover:bg-opacity-20 rounded-full transition-colors z-10"
+          >
+            <X className="w-8 h-8" />
+          </button>
+
+          {/* Boutons de navigation */}
+          {product.images && product.images.length > 1 && (
+            <>
+              {selectedImage > 0 && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    previousImage();
+                  }}
+                  className="absolute left-4 text-white p-2 hover:bg-white hover:bg-opacity-20 rounded-full transition-colors z-10"
+                >
+                  <ChevronLeft className="w-8 h-8" />
+                </button>
+              )}
+              {selectedImage < product.images.length - 1 && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    nextImage();
+                  }}
+                  className="absolute right-4 text-white p-2 hover:bg-white hover:bg-opacity-20 rounded-full transition-colors z-10"
+                >
+                  <ChevronRight className="w-8 h-8" />
+                </button>
+              )}
+            </>
+          )}
+
+          {/* Bouton de zoom */}
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              handleZoom();
+            }}
+            className="absolute bottom-4 right-4 text-white px-4 py-2 bg-white bg-opacity-20 hover:bg-opacity-30 rounded-full transition-colors z-10 flex items-center gap-2"
+          >
+            <ZoomIn className="w-5 h-5" />
+            <span className="text-sm">{zoomLevel}x</span>
+          </button>
+
+          {/* Compteur d'images */}
+          {product.images && product.images.length > 1 && (
+            <div className="absolute bottom-4 left-4 text-white bg-black bg-opacity-50 px-3 py-1 rounded-full text-sm">
+              {selectedImage + 1} / {product.images.length}
+            </div>
+          )}
+
+          {/* Image zoomée */}
+          <div 
+            className="max-w-7xl max-h-screen p-4 overflow-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <img
+              src={product.images?.[selectedImage] || 'https://via.placeholder.com/600'}
+              alt={product.name}
+              className="w-full h-full object-contain transition-transform duration-200 cursor-zoom-in"
+              style={{ 
+                transform: `scale(${zoomLevel})`,
+                maxHeight: '90vh'
+              }}
+              onClick={handleZoom}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };
