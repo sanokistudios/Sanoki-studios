@@ -6,13 +6,38 @@ const { protect, admin } = require('../middleware/auth');
 // @desc    Upload une image
 // @route   POST /api/upload
 // @access  Private/Admin
-router.post('/', protect, admin, upload.single('image'), (req, res) => {
+router.post('/', protect, admin, (req, res, next) => {
+  // Middleware pour logger la taille du fichier avant upload
+  req.on('data', (chunk) => {
+    if (!req.contentLength) req.contentLength = 0;
+    req.contentLength += chunk.length;
+  });
+  
+  upload.single('image')(req, res, (err) => {
+    if (err) {
+      console.error('❌ Erreur Multer:', err.message);
+      console.error('Type:', err.name);
+      if (err.code === 'LIMIT_FILE_SIZE') {
+        return res.status(413).json({ 
+          message: 'Fichier trop volumineux (max 100 MB)',
+          code: 'LIMIT_FILE_SIZE'
+        });
+      }
+      return res.status(500).json({ 
+        message: 'Erreur lors de l\'upload',
+        error: err.message
+      });
+    }
+    next();
+  });
+}, (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ message: 'Aucune image fournie' });
     }
 
     console.log('✅ Upload réussi:', req.file.path);
+    console.log('📊 Taille fichier:', req.file.size, 'bytes');
     res.json({
       success: true,
       url: req.file.path,
@@ -23,7 +48,7 @@ router.post('/', protect, admin, upload.single('image'), (req, res) => {
     console.error('Stack:', error.stack);
     res.status(500).json({ 
       message: 'Erreur lors de l\'upload de l\'image',
-      error: process.env.NODE_ENV === 'development' ? error.message : undefined
+      error: error.message
     });
   }
 });

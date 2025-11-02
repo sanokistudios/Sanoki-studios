@@ -16,7 +16,10 @@ exports.createHeroImage = async (req, res) => {
   try {
     const { imageUrl, order } = req.body;
     
-    if (!imageUrl) {
+    console.log('📥 Création hero image - imageUrl:', imageUrl ? 'présent' : 'manquant', 'order:', order);
+    
+    if (!imageUrl || imageUrl.trim() === '') {
+      console.error('❌ imageUrl manquant ou vide');
       return res.status(400).json({ message: 'L\'URL de l\'image est requise' });
     }
 
@@ -27,11 +30,17 @@ exports.createHeroImage = async (req, res) => {
       imageOrder = lastImage ? lastImage.order + 1 : 0;
     }
 
-    const heroImage = await HeroImage.create({ imageUrl, order: imageOrder });
+    console.log('💾 Création avec order:', imageOrder);
+    const heroImage = await HeroImage.create({ imageUrl: imageUrl.trim(), order: imageOrder });
+    console.log('✅ Hero image créée:', heroImage._id);
     res.status(201).json({ heroImage });
   } catch (error) {
-    console.error('Erreur lors de la création de l\'image hero:', error);
-    res.status(500).json({ message: 'Erreur serveur' });
+    console.error('❌ Erreur lors de la création de l\'image hero:', error.message);
+    console.error('Stack:', error.stack);
+    res.status(500).json({ 
+      message: 'Erreur serveur',
+      error: error.message
+    });
   }
 };
 
