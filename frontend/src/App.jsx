@@ -21,6 +21,9 @@ import AdminMessages from './pages/admin/AdminMessages'
 import AdminCollections from './pages/admin/AdminCollections'
 import AdminOrders from './pages/admin/AdminOrders'
 import AdminHeroImages from './pages/admin/AdminHeroImages'
+import AdminPaintings from './pages/admin/AdminPaintings'
+import Prints from './pages/Prints'
+import PaintingDetail from './pages/PaintingDetail'
 import ProtectedRoute from './components/ProtectedRoute'
 
 function App() {
@@ -32,6 +35,8 @@ function App() {
           <Route index element={<Home />} />
           <Route path="boutique" element={<Shop />} />
           <Route path="produit/:id" element={<ProductDetail />} />
+          <Route path="prints" element={<Prints />} />
+          <Route path="peinture/:id" element={<PaintingDetail />} />
           <Route path="panier" element={<Cart />} />
           <Route path="commande" element={<Checkout />} />
           <Route path="confirmation/:orderId" element={<OrderConfirmation />} />
@@ -61,6 +66,7 @@ function App() {
           <Route path="commandes" element={<AdminOrders />} />
           <Route path="messages" element={<AdminMessages />} />
           <Route path="hero-images" element={<AdminHeroImages />} />
+          <Route path="peintures" element={<AdminPaintings />} />
         </Route>
       </Routes>
     </AuthProvider>

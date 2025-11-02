@@ -55,7 +55,7 @@ const Header = () => {
     <header className="bg-white shadow-md sticky top-0 z-50">
       <nav className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
         <div className="flex items-center justify-between py-3 sm:py-4">
-            {/* Gauche: Hamburger & Search (sans nom de marque) */}
+            {/* Gauche: Hamburger & Prints & Search (sans nom de marque) */}
             <div className="flex items-center gap-2">
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -71,6 +71,19 @@ const Header = () => {
                   />
                 )}
               </button>
+
+              {/* Icône prints/peintures */}
+              <Link 
+                to="/prints" 
+                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                aria-label="Peintures"
+              >
+                <img 
+                  src="/images/icone_prints.png" 
+                  alt="Peintures" 
+                  className="w-9 h-9"
+                />
+              </Link>
               
               {/* Icône recherche */}
               <button className="p-2 hover:bg-gray-100 rounded-full transition-colors" aria-label="Rechercher">

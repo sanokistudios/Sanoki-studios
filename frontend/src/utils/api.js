@@ -103,5 +103,14 @@ export const heroImagesAPI = {
   delete: (id) => api.delete(`/hero-images/${id}`)
 };
 
+// Paintings
+export const paintingsAPI = {
+  getAll: (params) => api.get('/paintings', { params }),
+  getById: (id) => api.get(`/paintings/${id}`),
+  create: (payload) => api.post('/paintings', payload),
+  update: (id, payload) => api.put(`/paintings/${id}`, payload),
+  delete: (id) => api.delete(`/paintings/${id}`)
+};
+
 export default api;
 

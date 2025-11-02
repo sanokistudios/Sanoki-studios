@@ -61,6 +61,7 @@ app.use('/api/messages', require('./routes/messages'));
 app.use('/api/contact', require('./routes/contact'));
 app.use('/api/upload', require('./routes/upload'));
 app.use('/api/hero-images', require('./routes/heroImages'));
+app.use('/api/paintings', require('./routes/paintings'));
 
 // Route de test
 app.get('/api/health', (req, res) => {
