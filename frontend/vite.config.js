@@ -22,7 +22,7 @@ export default defineConfig({
     host: '0.0.0.0',
     port: process.env.PORT || 4173,
     strictPort: false,
-    allowedHosts: () => true
+    allowedHosts: (host) => true
   }
 })
 
