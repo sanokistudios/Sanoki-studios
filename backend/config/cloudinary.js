@@ -49,23 +49,58 @@ const upload = multer({
 });
 
 // Fonction utilitaire pour uploader vers Cloudinary depuis un buffer
+// Utilise upload_large pour les fichiers > 20 MB (chunked upload)
 const uploadToCloudinary = (buffer, options = {}) => {
   return new Promise((resolve, reject) => {
-    const uploadStream = cloudinary.uploader.upload_stream(
-      {
-        folder: options.folder || 'ecommerce-vetements',
-        resource_type: 'image',
-        ...options
-      },
-      (error, result) => {
-        if (error) {
-          reject(error);
-        } else {
-          resolve(result);
+    const sizeInMB = buffer.length / (1024 * 1024);
+    console.log(`📊 Taille fichier: ${sizeInMB.toFixed(2)} MB`);
+    
+    // Pour les fichiers > 20 MB, utiliser chunked upload
+    if (buffer.length > 20 * 1024 * 1024) {
+      console.log('📦 Utilisation de upload_large (chunked) pour fichier volumineux');
+      
+      const uploadStream = cloudinary.uploader.upload_large_stream(
+        {
+          folder: options.folder || 'ecommerce-vetements',
+          resource_type: 'image',
+          chunk_size: 6000000, // 6 MB par chunk
+          ...options
+        },
+        (error, result) => {
+          if (error) {
+            console.error('❌ Erreur upload_large:', error);
+            reject(error);
+          } else {
+            console.log('✅ Upload chunked réussi');
+            resolve(result);
+          }
         }
-      }
-    );
-    streamifier.createReadStream(buffer).pipe(uploadStream);
+      );
+      streamifier.createReadStream(buffer).pipe(uploadStream);
+    } else {
+      // Upload normal pour les fichiers < 20 MB
+      console.log('📦 Utilisation de upload_stream standard');
+      
+      const uploadStream = cloudinary.uploader.upload_stream(
+        {
+          folder: options.folder || 'ecommerce-vetements',
+          resource_type: 'image',
+          ...options
+        },
+        (error, result) => {
+          if (error) {
+            console.error('❌ Erreur upload_stream:', error);
+            console.error('Message:', error.message);
+            console.error('Code HTTP:', error.http_code);
+            reject(error);
+          } else {
+            console.log('✅ Upload standard réussi');
+            resolve(result);
+          }
+        }
+      );
+      streamifier.createReadStream(buffer).pipe(uploadStream);
+    }
   });
 };
 
