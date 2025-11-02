@@ -2,7 +2,24 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+    {
+      name: 'disable-host-check',
+      configureServer(server) {
+        server.middlewares.use((req, res, next) => {
+          req.headers.host = 'localhost'
+          next()
+        })
+      },
+      configurePreviewServer(server) {
+        server.middlewares.use((req, res, next) => {
+          // Ignorer la vérification du host
+          next()
+        })
+      }
+    }
+  ],
   server: {
     port: 5173,
     proxy: {
@@ -21,12 +38,6 @@ export default defineConfig({
   preview: {
     host: '0.0.0.0',
     port: process.env.PORT || 4173,
-    strictPort: false,
-    allowedHosts: [
-      'sanoki-studios.up.railway.app',
-      'localhost',
-      '127.0.0.1'
-    ]
+    strictPort: false
   }
 })
-
