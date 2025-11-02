@@ -30,14 +30,9 @@ const Home = () => {
     try {
       const response = await heroImagesAPI.getAll();
       setHeroImages(response.data.images || []);
-      // Si aucune image, utiliser l'image par défaut
-      if (response.data.images.length === 0) {
-        setHeroImages([{ imageUrl: '/images/hero-1.jpg', order: 0 }]);
-      }
     } catch (error) {
       console.error('Erreur lors du chargement des images hero:', error);
-      // Fallback sur l'image par défaut
-      setHeroImages([{ imageUrl: '/images/hero-1.jpg', order: 0 }]);
+      setHeroImages([]);
     }
   };
 
@@ -75,14 +70,13 @@ const Home = () => {
   return (
     <div className="animate-fade-in">
       {/* Hero Carousel */}
-      <section className="relative h-[70vh] min-h-[500px] bg-gray-200">
-        {heroImages.length > 0 && (
-          <>
-            <img 
-              src={heroImages[currentImageIndex]?.imageUrl || '/images/hero-1.jpg'} 
-              alt="Hero" 
-              className="w-full h-full object-cover"
-            />
+      {heroImages.length > 0 && (
+        <section className="relative h-[70vh] min-h-[500px] bg-gray-200">
+          <img 
+            src={heroImages[currentImageIndex]?.imageUrl} 
+            alt="Hero" 
+            className="w-full h-full object-cover"
+          />
             
             {/* Navigation buttons - seulement si plus d'une image */}
             {showCarousel && (
@@ -119,9 +113,8 @@ const Home = () => {
                 </div>
               </>
             )}
-          </>
-        )}
-      </section>
+        </section>
+      )}
 
       {/* Info Livraison */}
       <div className="bg-gray-50 py-4 border-b">
