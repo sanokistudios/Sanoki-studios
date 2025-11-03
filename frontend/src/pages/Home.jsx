@@ -74,21 +74,28 @@ const Home = () => {
       {/* Hero Carousel */}
       {heroImages.length > 0 && (
         <section className="relative h-[70vh] min-h-[500px] bg-gray-200 overflow-hidden">
-          {/* Toutes les images superposées pour crossfade smooth */}
-          {heroImages.map((heroImage, index) => (
-            <div
-              key={index}
-              className={`absolute inset-0 w-full h-full transition-opacity duration-1000 ease-in-out ${
-                index === currentImageIndex ? 'opacity-100 z-10' : 'opacity-0 z-0'
-              }`}
-            >
-              <img 
-                src={heroImage.imageUrl} 
-                alt={`Hero ${index + 1}`} 
-                className="w-full h-full object-cover"
-              />
-            </div>
-          ))}
+          {/* Conteneur pour les images avec transition slide style album photo */}
+          <div 
+            className="flex h-full transition-transform duration-700 ease-in-out"
+            style={{ 
+              transform: `translateX(-${currentImageIndex * 100}%)`,
+              width: `${heroImages.length * 100}%`
+            }}
+          >
+            {heroImages.map((heroImage, index) => (
+              <div
+                key={index}
+                className="w-full h-full flex-shrink-0"
+                style={{ width: `${100 / heroImages.length}%` }}
+              >
+                <img 
+                  src={heroImage.imageUrl} 
+                  alt={`Hero ${index + 1}`} 
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            ))}
+          </div>
             
             {/* Navigation buttons - seulement si plus d'une image */}
             {showCarousel && (
