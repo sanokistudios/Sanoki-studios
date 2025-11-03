@@ -85,7 +85,7 @@ const Home = () => {
             {heroImages.map((heroImage, index) => (
               <div
                 key={index}
-                className="w-full h-full flex-shrink-0"
+                className="h-full flex-shrink-0"
                 style={{ width: `${100 / heroImages.length}%` }}
               >
                 <img 
