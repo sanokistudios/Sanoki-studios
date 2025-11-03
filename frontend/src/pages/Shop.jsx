@@ -71,55 +71,68 @@ const Shop = () => {
   const matchesSearch = (product, query) => {
     if (!query || !query.trim()) return true;
     
-    const normalizedQuery = normalizeText(query);
-    
     // Normaliser tous les champs à rechercher
     const normalizedName = normalizeText(product.name);
     const normalizedDescription = normalizeText(product.description || '');
     const normalizedCollection = normalizeText(product.collection || '');
+    const allText = normalizedName + ' ' + normalizedDescription + ' ' + normalizedCollection;
     
-    // Chercher dans le nom (recherche exacte ou partielle)
-    if (normalizedName.includes(normalizedQuery) || normalizedQuery.includes(normalizedName)) {
+    // Normaliser la requête (enlever espaces/tirets mais garder pour séparer les mots)
+    const normalizedQuery = normalizeText(query);
+    
+    // 1. Recherche exacte : la requête complète est dans le texte
+    if (allText.includes(normalizedQuery)) {
       return true;
     }
     
-    // Chercher dans la description
-    if (normalizedDescription && normalizedDescription.includes(normalizedQuery)) {
-      return true;
-    }
-    
-    // Chercher dans la collection
-    if (normalizedCollection && normalizedCollection.includes(normalizedQuery)) {
-      return true;
-    }
-    
-    // Recherche par mots-clés : diviser la requête en mots
-    const queryWords = normalizedQuery.split('').filter(c => c !== '');
-    if (queryWords.length > 0) {
-      const allText = normalizedName + ' ' + normalizedDescription + ' ' + normalizedCollection;
-      // Vérifier si tous les caractères de la requête sont présents dans le texte (ordre relatif)
-      let foundIndex = 0;
-      let allCharsFound = true;
-      
-      for (let i = 0; i < normalizedQuery.length; i++) {
-        const char = normalizedQuery[i];
-        const nextIndex = allText.indexOf(char, foundIndex);
-        if (nextIndex === -1) {
-          allCharsFound = false;
-          break;
-        }
-        foundIndex = nextIndex + 1;
-      }
-      
-      if (allCharsFound) {
-        return true;
-      }
-    }
-    
-    // Recherche inverse : vérifier si le nom du produit est contenu dans la requête
+    // 2. Recherche inverse : le nom/description est dans la requête
     // Ex: si on cherche "tshirt" et le produit s'appelle "t-shirt"
     if (normalizedName.length > 0 && normalizedQuery.includes(normalizedName)) {
       return true;
+    }
+    
+    // 3. Recherche approximative : tous les caractères de la requête sont présents dans l'ordre
+    // Ex: "tshirt" trouve "t-shirt", "fleure" trouve "fleuré"
+    let foundIndex = 0;
+    let allCharsFound = true;
+    
+    for (let i = 0; i < normalizedQuery.length; i++) {
+      const char = normalizedQuery[i];
+      const nextIndex = allText.indexOf(char, foundIndex);
+      if (nextIndex === -1) {
+        allCharsFound = false;
+        break;
+      }
+      foundIndex = nextIndex + 1;
+    }
+    
+    if (allCharsFound) {
+      return true;
+    }
+    
+    // 4. Recherche par mots : diviser la requête originale en mots (avant normalisation complète)
+    // Ex: "t-shirt noir" -> ["t-shirt", "noir"]
+    const originalWords = query.toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .split(/[\s\-_]+/)
+      .filter(word => word.length > 0);
+    
+    if (originalWords.length > 1) {
+      // Vérifier si au moins un mot est présent dans le nom/description
+      let matchingWords = 0;
+      for (const word of originalWords) {
+        const normalizedWord = normalizeText(word);
+        if (normalizedName.includes(normalizedWord) || 
+            normalizedDescription.includes(normalizedWord) ||
+            normalizedCollection.includes(normalizedWord)) {
+          matchingWords++;
+        }
+      }
+      // Si au moins 50% des mots correspondent, on considère que c'est un match
+      if (matchingWords >= Math.ceil(originalWords.length * 0.5)) {
+        return true;
+      }
     }
     
     return false;
