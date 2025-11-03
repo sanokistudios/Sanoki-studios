@@ -53,17 +53,84 @@ const Shop = () => {
     }
   };
 
+  // Fonction de normalisation pour recherche intelligente
+  const normalizeText = (text) => {
+    if (!text) return '';
+    return text
+      .toLowerCase()
+      // Normaliser les accents
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      // Enlever les espaces, tirets, underscores
+      .replace(/[\s\-_]+/g, '')
+      // Enlever les caractères spéciaux sauf lettres et chiffres
+      .replace(/[^a-z0-9]/g, '');
+  };
+
+  // Fonction de recherche intelligente
+  const matchesSearch = (product, query) => {
+    if (!query || !query.trim()) return true;
+    
+    const normalizedQuery = normalizeText(query);
+    
+    // Normaliser tous les champs à rechercher
+    const normalizedName = normalizeText(product.name);
+    const normalizedDescription = normalizeText(product.description || '');
+    const normalizedCollection = normalizeText(product.collection || '');
+    
+    // Chercher dans le nom (recherche exacte ou partielle)
+    if (normalizedName.includes(normalizedQuery) || normalizedQuery.includes(normalizedName)) {
+      return true;
+    }
+    
+    // Chercher dans la description
+    if (normalizedDescription && normalizedDescription.includes(normalizedQuery)) {
+      return true;
+    }
+    
+    // Chercher dans la collection
+    if (normalizedCollection && normalizedCollection.includes(normalizedQuery)) {
+      return true;
+    }
+    
+    // Recherche par mots-clés : diviser la requête en mots
+    const queryWords = normalizedQuery.split('').filter(c => c !== '');
+    if (queryWords.length > 0) {
+      const allText = normalizedName + ' ' + normalizedDescription + ' ' + normalizedCollection;
+      // Vérifier si tous les caractères de la requête sont présents dans le texte (ordre relatif)
+      let foundIndex = 0;
+      let allCharsFound = true;
+      
+      for (let i = 0; i < normalizedQuery.length; i++) {
+        const char = normalizedQuery[i];
+        const nextIndex = allText.indexOf(char, foundIndex);
+        if (nextIndex === -1) {
+          allCharsFound = false;
+          break;
+        }
+        foundIndex = nextIndex + 1;
+      }
+      
+      if (allCharsFound) {
+        return true;
+      }
+    }
+    
+    // Recherche inverse : vérifier si le nom du produit est contenu dans la requête
+    // Ex: si on cherche "tshirt" et le produit s'appelle "t-shirt"
+    if (normalizedName.length > 0 && normalizedQuery.includes(normalizedName)) {
+      return true;
+    }
+    
+    return false;
+  };
+
   const applyFilters = () => {
     let filtered = [...allProducts];
 
-    // Filtre de recherche
+    // Filtre de recherche intelligente
     if (searchQuery && searchQuery.trim()) {
-      const query = searchQuery.toLowerCase();
-      filtered = filtered.filter(p => 
-        p.name.toLowerCase().includes(query) || 
-        (p.description && p.description.toLowerCase().includes(query)) ||
-        (p.collection && p.collection.toLowerCase().includes(query))
-      );
+      filtered = filtered.filter(p => matchesSearch(p, searchQuery));
     }
 
     // Filtre stock - vérifier si toutes les tailles sont épuisées
