@@ -9,18 +9,23 @@ const Home = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [autoPlay, setAutoPlay] = useState(true);
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
   useEffect(() => {
     loadHeroImages();
     loadProducts();
   }, []);
 
-  // Auto-play du carrousel
+  // Auto-play du carrousel avec transition smooth
   useEffect(() => {
     if (heroImages.length <= 1 || !autoPlay) return;
 
     const interval = setInterval(() => {
-      setCurrentImageIndex((prev) => (prev + 1) % heroImages.length);
+      setIsTransitioning(true);
+      setTimeout(() => {
+        setCurrentImageIndex((prev) => (prev + 1) % heroImages.length);
+        setIsTransitioning(false);
+      }, 500); // Durée de la transition
     }, 5000); // Change d'image toutes les 5 secondes
 
     return () => clearInterval(interval);
@@ -50,18 +55,32 @@ const Home = () => {
   };
 
   const nextImage = () => {
-    setCurrentImageIndex((prev) => (prev + 1) % heroImages.length);
+    setIsTransitioning(true);
+    setTimeout(() => {
+      setCurrentImageIndex((prev) => (prev + 1) % heroImages.length);
+      setIsTransitioning(false);
+    }, 500);
     setAutoPlay(false); // Arrêter l'auto-play quand l'utilisateur navigue manuellement
   };
 
   const prevImage = () => {
-    setCurrentImageIndex((prev) => (prev - 1 + heroImages.length) % heroImages.length);
+    setIsTransitioning(true);
+    setTimeout(() => {
+      setCurrentImageIndex((prev) => (prev - 1 + heroImages.length) % heroImages.length);
+      setIsTransitioning(false);
+    }, 500);
     setAutoPlay(false); // Arrêter l'auto-play quand l'utilisateur navigue manuellement
   };
 
   const goToImage = (index) => {
-    setCurrentImageIndex(index);
-    setAutoPlay(false); // Arrêter l'auto-play quand l'utilisateur navigue manuellement
+    if (index !== currentImageIndex) {
+      setIsTransitioning(true);
+      setTimeout(() => {
+        setCurrentImageIndex(index);
+        setIsTransitioning(false);
+      }, 500);
+      setAutoPlay(false); // Arrêter l'auto-play quand l'utilisateur navigue manuellement
+    }
   };
 
   // Si une seule image, pas de carrousel
@@ -71,12 +90,22 @@ const Home = () => {
     <div className="animate-fade-in">
       {/* Hero Carousel */}
       {heroImages.length > 0 && (
-        <section className="relative h-[70vh] min-h-[500px] bg-gray-200">
-          <img 
-            src={heroImages[currentImageIndex]?.imageUrl} 
-            alt="Hero" 
-            className="w-full h-full object-cover"
-          />
+        <section className="relative h-[70vh] min-h-[500px] bg-gray-200 overflow-hidden">
+          {/* Toutes les images superposées pour crossfade smooth */}
+          {heroImages.map((heroImage, index) => (
+            <div
+              key={index}
+              className={`absolute inset-0 w-full h-full transition-opacity duration-1000 ease-in-out ${
+                index === currentImageIndex ? 'opacity-100 z-10' : 'opacity-0 z-0'
+              }`}
+            >
+              <img 
+                src={heroImage.imageUrl} 
+                alt={`Hero ${index + 1}`} 
+                className="w-full h-full object-cover"
+              />
+            </div>
+          ))}
             
             {/* Navigation buttons - seulement si plus d'une image */}
             {showCarousel && (
