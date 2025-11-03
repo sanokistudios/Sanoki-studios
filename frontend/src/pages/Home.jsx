@@ -78,7 +78,7 @@ const Home = () => {
           <div 
             className="flex h-full transition-transform duration-700 ease-in-out"
             style={{ 
-              transform: `translateX(-${currentImageIndex * 100}%)`,
+              transform: `translateX(-${currentImageIndex * (100 / heroImages.length)}%)`,
               width: `${heroImages.length * 100}%`
             }}
           >
