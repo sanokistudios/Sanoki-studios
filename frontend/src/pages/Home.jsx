@@ -85,13 +85,13 @@ const Home = () => {
             {heroImages.map((heroImage, index) => (
               <div
                 key={index}
-                className="h-full flex-shrink-0"
+                className="h-full flex-shrink-0 relative"
                 style={{ width: `${100 / heroImages.length}%` }}
               >
                 <img 
                   src={heroImage.imageUrl} 
                   alt={`Hero ${index + 1}`} 
-                  className="w-full h-full object-cover"
+                  className="absolute inset-0 w-full h-full object-cover"
                 />
               </div>
             ))}
