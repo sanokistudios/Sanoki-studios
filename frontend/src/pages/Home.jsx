@@ -9,7 +9,6 @@ const Home = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [autoPlay, setAutoPlay] = useState(true);
-  const [isTransitioning, setIsTransitioning] = useState(false);
 
   useEffect(() => {
     loadHeroImages();
@@ -21,11 +20,7 @@ const Home = () => {
     if (heroImages.length <= 1 || !autoPlay) return;
 
     const interval = setInterval(() => {
-      setIsTransitioning(true);
-      setTimeout(() => {
-        setCurrentImageIndex((prev) => (prev + 1) % heroImages.length);
-        setIsTransitioning(false);
-      }, 500); // Durée de la transition
+      setCurrentImageIndex((prev) => (prev + 1) % heroImages.length);
     }, 5000); // Change d'image toutes les 5 secondes
 
     return () => clearInterval(interval);
@@ -55,30 +50,18 @@ const Home = () => {
   };
 
   const nextImage = () => {
-    setIsTransitioning(true);
-    setTimeout(() => {
-      setCurrentImageIndex((prev) => (prev + 1) % heroImages.length);
-      setIsTransitioning(false);
-    }, 500);
+    setCurrentImageIndex((prev) => (prev + 1) % heroImages.length);
     setAutoPlay(false); // Arrêter l'auto-play quand l'utilisateur navigue manuellement
   };
 
   const prevImage = () => {
-    setIsTransitioning(true);
-    setTimeout(() => {
-      setCurrentImageIndex((prev) => (prev - 1 + heroImages.length) % heroImages.length);
-      setIsTransitioning(false);
-    }, 500);
+    setCurrentImageIndex((prev) => (prev - 1 + heroImages.length) % heroImages.length);
     setAutoPlay(false); // Arrêter l'auto-play quand l'utilisateur navigue manuellement
   };
 
   const goToImage = (index) => {
     if (index !== currentImageIndex) {
-      setIsTransitioning(true);
-      setTimeout(() => {
-        setCurrentImageIndex(index);
-        setIsTransitioning(false);
-      }, 500);
+      setCurrentImageIndex(index);
       setAutoPlay(false); // Arrêter l'auto-play quand l'utilisateur navigue manuellement
     }
   };
