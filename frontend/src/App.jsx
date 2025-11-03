@@ -24,6 +24,7 @@ import AdminHeroImages from './pages/admin/AdminHeroImages'
 import AdminPaintings from './pages/admin/AdminPaintings'
 import Prints from './pages/Prints'
 import PaintingDetail from './pages/PaintingDetail'
+import SearchResults from './pages/SearchResults'
 import ProtectedRoute from './components/ProtectedRoute'
 
 function App() {
@@ -34,6 +35,7 @@ function App() {
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="boutique" element={<Shop />} />
+          <Route path="recherche" element={<SearchResults />} />
           <Route path="produit/:id" element={<ProductDetail />} />
           <Route path="prints" element={<Prints />} />
           <Route path="peinture/:id" element={<PaintingDetail />} />

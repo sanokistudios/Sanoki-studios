@@ -43,9 +43,10 @@ const Header = () => {
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchQuery.trim()) {
+      const query = searchQuery.trim();
       setSearchOpen(false);
       setSearchQuery('');
-      navigate(`/boutique?search=${encodeURIComponent(searchQuery.trim())}`);
+      navigate(`/recherche?search=${encodeURIComponent(query)}`);
     }
   };
 
