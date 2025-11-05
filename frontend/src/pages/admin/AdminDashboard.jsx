@@ -1,6 +1,6 @@
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { Package, MessageSquare, LogOut, Home, ShoppingCart, Layers, Image, Palette } from 'lucide-react';
+import { Package, MessageSquare, LogOut, Home, ShoppingCart, Layers, Image, Palette, BookImage } from 'lucide-react';
 
 const AdminDashboard = () => {
   const location = useLocation();
@@ -12,7 +12,8 @@ const AdminDashboard = () => {
     { name: 'Commandes', path: '/admin/commandes', icon: ShoppingCart },
     { name: 'Messages', path: '/admin/messages', icon: MessageSquare },
     { name: 'Photos d\'accueil', path: '/admin/hero-images', icon: Image },
-    { name: 'Peintures', path: '/admin/peintures', icon: Palette }
+    { name: 'Peintures', path: '/admin/peintures', icon: Palette },
+    { name: 'Lookbook', path: '/admin/lookbook', icon: BookImage }
   ];
 
   const isActive = (path) => location.pathname === path;
@@ -56,19 +57,19 @@ const AdminDashboard = () => {
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Navigation */}
         <nav className="mb-8">
-          <div className="flex gap-2 bg-white rounded-lg p-2 shadow-md">
+          <div className="flex gap-2 bg-white rounded-lg p-2 shadow-md overflow-x-auto">
             {navigation.map((item) => (
               <Link
                 key={item.path}
                 to={item.path}
-                className={`flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all ${
+                className={`flex items-center gap-2 px-4 md:px-6 py-3 rounded-lg font-medium transition-all whitespace-nowrap ${
                   isActive(item.path)
                     ? 'bg-accent text-white'
                     : 'text-gray-600 hover:bg-gray-100'
                 }`}
               >
-                <item.icon className="w-5 h-5" />
-                <span>{item.name}</span>
+                <item.icon className="w-5 h-5 flex-shrink-0" />
+                <span className="text-sm md:text-base">{item.name}</span>
               </Link>
             ))}
           </div>

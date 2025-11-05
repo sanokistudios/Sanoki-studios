@@ -22,9 +22,11 @@ import AdminCollections from './pages/admin/AdminCollections'
 import AdminOrders from './pages/admin/AdminOrders'
 import AdminHeroImages from './pages/admin/AdminHeroImages'
 import AdminPaintings from './pages/admin/AdminPaintings'
+import AdminLookbook from './pages/admin/AdminLookbook'
 import Prints from './pages/Prints'
 import PaintingDetail from './pages/PaintingDetail'
 import SearchResults from './pages/SearchResults'
+import Lookbook from './pages/Lookbook'
 import ProtectedRoute from './components/ProtectedRoute'
 
 function App() {
@@ -39,6 +41,7 @@ function App() {
           <Route path="produit/:id" element={<ProductDetail />} />
           <Route path="prints" element={<Prints />} />
           <Route path="peinture/:id" element={<PaintingDetail />} />
+          <Route path="lookbook" element={<Lookbook />} />
           <Route path="panier" element={<Cart />} />
           <Route path="commande" element={<Checkout />} />
           <Route path="confirmation/:orderId" element={<OrderConfirmation />} />
@@ -69,6 +72,7 @@ function App() {
           <Route path="messages" element={<AdminMessages />} />
           <Route path="hero-images" element={<AdminHeroImages />} />
           <Route path="peintures" element={<AdminPaintings />} />
+          <Route path="lookbook" element={<AdminLookbook />} />
         </Route>
       </Routes>
     </AuthProvider>

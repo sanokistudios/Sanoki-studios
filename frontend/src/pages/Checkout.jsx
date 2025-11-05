@@ -46,6 +46,12 @@ const Checkout = () => {
     });
   };
 
+  const SHIPPING_FEE = 8; // Frais de livraison en TND
+  
+  const getTotalWithShipping = () => {
+    return getCartTotal() + SHIPPING_FEE;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -72,7 +78,7 @@ const Checkout = () => {
           size: item.size,
           color: item.color
         })),
-        totalAmount: getCartTotal(),
+        totalAmount: getTotalWithShipping(),
         notes: formData.notes
       };
 
@@ -234,9 +240,13 @@ const Checkout = () => {
                 <span>Sous-total</span>
                 <span className="font-semibold">{getCartTotal().toFixed(2)} TND</span>
               </div>
-              <div className="flex justify-between text-xl font-bold">
+              <div className="flex justify-between text-accent">
+                <span>Frais de livraison</span>
+                <span className="font-semibold">{SHIPPING_FEE.toFixed(2)} TND</span>
+              </div>
+              <div className="border-t pt-2 flex justify-between text-xl font-bold">
                 <span>Total</span>
-                <span className="text-accent">{getCartTotal().toFixed(2)} TND</span>
+                <span className="text-accent">{getTotalWithShipping().toFixed(2)} TND</span>
               </div>
             </div>
 

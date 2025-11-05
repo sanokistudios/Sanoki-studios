@@ -329,6 +329,13 @@ const Header = () => {
                     <h3 className="text-sm font-semibold text-gray-500 uppercase mb-3">MORE</h3>
                     <nav className="space-y-1">
                       <Link
+                        to="/lookbook"
+                        className="block py-2 px-4 text-base text-gray-dark hover:bg-gray-100 hover:text-accent transition-colors rounded-lg"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        Lookbook
+                      </Link>
+                      <Link
                         to="/a-propos"
                         className="block py-2 px-4 text-base text-gray-dark hover:bg-gray-100 hover:text-accent transition-colors rounded-lg"
                         onClick={() => setMobileMenuOpen(false)}

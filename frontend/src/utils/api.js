@@ -112,5 +112,14 @@ export const paintingsAPI = {
   delete: (id) => api.delete(`/paintings/${id}`)
 };
 
+// Lookbook
+export const lookbookAPI = {
+  getAll: () => api.get('/lookbook'),
+  create: (payload) => api.post('/lookbook', payload),
+  update: (id, payload) => api.put(`/lookbook/${id}`, payload),
+  updateOrder: (images) => api.put('/lookbook/order', { images }),
+  delete: (id) => api.delete(`/lookbook/${id}`)
+};
+
 export default api;
 
