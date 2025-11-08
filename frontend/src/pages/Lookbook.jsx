@@ -93,7 +93,8 @@ const Lookbook = () => {
             {images.map((image, index) => (
               <div
                 key={image._id}
-                className="group relative overflow-hidden cursor-pointer rounded-lg aspect-square bg-gray-100"
+                className="group relative overflow-hidden cursor-pointer rounded-lg bg-gray-100"
+                style={{ aspectRatio: '4 / 3' }}
                 onClick={() => openLightbox(image, index)}
               >
                 <img
