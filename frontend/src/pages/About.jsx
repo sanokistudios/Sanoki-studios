@@ -1,15 +1,12 @@
-import { Heart, Target, Users, Award } from 'lucide-react';
-
 const About = () => {
   return (
     <div className="animate-fade-in">
       {/* Hero */}
       <section className="bg-gradient-to-r from-primary to-gray-800 text-white py-20">
         <div className="max-w-7xl mx-auto px-4 text-center">
-          <h1 className="text-5xl font-bold mb-6">À Propos de Nous</h1>
+          <h1 className="text-5xl font-bold mb-6">About Us</h1>
           <p className="text-xl text-gray-200 max-w-3xl mx-auto">
-            Une marque tunisienne passionnée par la création de vêtements
-            de qualité qui allient style, confort et authenticité.
+            Deux frères, une passion, un projet commun.
           </p>
         </div>
       </section>
@@ -17,110 +14,43 @@ const About = () => {
       {/* Notre histoire */}
       <section className="py-16">
         <div className="max-w-4xl mx-auto px-4">
-          <h2 className="text-4xl font-bold mb-8 text-center">Notre Histoire</h2>
           <div className="prose prose-lg max-w-none">
-            <p className="text-gray-600 leading-relaxed mb-4">
-              Fondée avec passion en Tunisie, notre marque est née d'une vision simple :
-              créer des vêtements qui racontent une histoire et reflètent l'identité
-              de ceux qui les portent.
+            <p className="text-gray-700 leading-relaxed mb-6 text-lg">
+              Derrière <strong>SANOKI STUDIOS</strong>, il y a deux frères qui partagent la même passion pour la création, chacun à notre manière : moi, passionné de dessin et de vêtements, et lui, attiré par tout ce qui touche à la création visuelle en général ainsi que les vêtements.
             </p>
-            <p className="text-gray-600 leading-relaxed mb-4">
-              Chaque t-shirt, chaque pièce de notre collection est pensée avec soin,
-              du choix des matières au design final. Nous croyons que la mode doit être
-              accessible, authentique et durable.
+            <p className="text-gray-700 leading-relaxed mb-6 text-lg">
+              On partageait donc cette même fascination pour les vêtements.
             </p>
-            <p className="text-gray-600 leading-relaxed">
-              Aujourd'hui, nous sommes fiers de proposer des créations qui marient
-              l'esprit tunisien à des tendances modernes, pour un style unique et
-              intemporel.
+            <p className="text-gray-700 leading-relaxed mb-6 text-lg">
+              Alors, <strong>été 2024</strong>, l'idée est née lors d'un soir, à un dîner de famille, en parlant de nos envies, de nos projets et surtout de nos passions.
             </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Nos valeurs */}
-      <section className="py-16 bg-gray-light">
-        <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-4xl font-bold mb-12 text-center">Nos Valeurs</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div className="text-center">
-              <div className="w-20 h-20 bg-accent text-white rounded-full flex items-center justify-center mx-auto mb-4">
-                <Heart className="w-10 h-10" />
-              </div>
-              <h3 className="text-xl font-semibold mb-3">Passion</h3>
-              <p className="text-gray-600">
-                Chaque création est faite avec amour et dévouement
-              </p>
-            </div>
-
-            <div className="text-center">
-              <div className="w-20 h-20 bg-accent text-white rounded-full flex items-center justify-center mx-auto mb-4">
-                <Target className="w-10 h-10" />
-              </div>
-              <h3 className="text-xl font-semibold mb-3">Excellence</h3>
-              <p className="text-gray-600">
-                Nous visons la perfection dans chaque détail
-              </p>
-            </div>
-
-            <div className="text-center">
-              <div className="w-20 h-20 bg-accent text-white rounded-full flex items-center justify-center mx-auto mb-4">
-                <Users className="w-10 h-10" />
-              </div>
-              <h3 className="text-xl font-semibold mb-3">Communauté</h3>
-              <p className="text-gray-600">
-                Nous créons pour et avec notre communauté
-              </p>
-            </div>
-
-            <div className="text-center">
-              <div className="w-20 h-20 bg-accent text-white rounded-full flex items-center justify-center mx-auto mb-4">
-                <Award className="w-10 h-10" />
-              </div>
-              <h3 className="text-xl font-semibold mb-3">Qualité</h3>
-              <p className="text-gray-600">
-                Des produits durables et confortables
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Notre engagement */}
-      <section className="py-16">
-        <div className="max-w-4xl mx-auto px-4">
-          <h2 className="text-4xl font-bold mb-8 text-center">Notre Engagement</h2>
-          <div className="bg-white rounded-lg shadow-md p-8">
-            <ul className="space-y-4">
-              <li className="flex items-start gap-3">
-                <span className="text-accent text-xl">✓</span>
-                <span className="text-gray-600">
-                  <strong>Qualité premium :</strong> Nous sélectionnons rigoureusement
-                  nos matières pour garantir confort et durabilité.
-                </span>
-              </li>
-              <li className="flex items-start gap-3">
-                <span className="text-accent text-xl">✓</span>
-                <span className="text-gray-600">
-                  <strong>Production locale :</strong> Nos produits sont conçus et
-                  fabriqués en Tunisie, soutenant l'économie locale.
-                </span>
-              </li>
-              <li className="flex items-start gap-3">
-                <span className="text-accent text-xl">✓</span>
-                <span className="text-gray-600">
-                  <strong>Design unique :</strong> Chaque collection reflète notre
-                  identité et notre créativité.
-                </span>
-              </li>
-              <li className="flex items-start gap-3">
-                <span className="text-accent text-xl">✓</span>
-                <span className="text-gray-600">
-                  <strong>Service client :</strong> Votre satisfaction est notre
-                  priorité, nous sommes toujours à votre écoute.
-                </span>
-              </li>
-            </ul>
+            <p className="text-gray-700 leading-relaxed mb-6 text-lg">
+              On s'est rendu compte qu'on passait notre temps à créer chacun de notre côté, on a voulu réunir nos univers et les exprimer à l'aide d'un projet en commun.
+            </p>
+            <p className="text-gray-700 leading-relaxed mb-6 text-lg">
+              On est basés en <strong>Tunisie</strong>, un pays où les choses se construisent différemment. Ce n'est pas aussi simple que dans les grands marchés où tout se commande en ligne : ici, il faut aller sur le terrain, visiter les usines, rencontrer les gens, chercher les bons tissus et multiplier les contacts. Mais c'est aussi ce qui rend le processus unique.
+            </p>
+            <p className="text-gray-700 leading-relaxed mb-6 text-lg">
+              La Tunisie a une vraie histoire dans le textile, reconnue à l'international, et on veut s'inscrire dans cette continuité, à notre manière.
+            </p>
+            <p className="text-gray-700 leading-relaxed mb-6 text-lg">
+              À la base, c'était juste une idée, une envie de mélanger ce qu'on aime : <strong>l'art, les vêtements</strong>, et cette curiosité de découvrir un univers qu'on voyait de loin mais qui nous fascinait depuis longtemps.
+            </p>
+            <p className="text-gray-700 leading-relaxed mb-6 text-lg">
+              On n'a pas voulu suivre de règles, simplement apprendre en avançant, expérimenter, créer, parfois se tromper, mais toujours avancer avec passion, car c'est l'objectif premier.
+            </p>
+            <p className="text-gray-700 leading-relaxed mb-6 text-lg">
+              Notre objectif, c'est de concevoir des vêtements qui ont une <strong>intention réelle</strong> derrière eux : des pièces dans lesquelles on injecte notre touche artistique à chaque nouveau drop, tout en garantissant une qualité solide, des coupes bien travaillées et des visuels qui racontent une histoire, au-delà d'un simple design.
+            </p>
+            <p className="text-gray-700 leading-relaxed mb-6 text-lg">
+              Explorer fait partie intégrante du projet : discuter avec les artisans, acheter le tissu nous-mêmes, comprendre comment chaque matière réagit, comment une impression ou une broderie se fait… tout cela est essentiel pour nous.
+            </p>
+            <p className="text-gray-700 leading-relaxed mb-6 text-lg">
+              On voulait maîtriser chaque étape afin d'avoir la main sur tout le procesus créatif du début à la fin.
+            </p>
+            <p className="text-gray-700 leading-relaxed text-lg font-semibold">
+              On découvre, on apprend, et on partage ce qu'on crée, sans prise de tête, juste avec passion.
+            </p>
           </div>
         </div>
       </section>
