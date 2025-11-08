@@ -6,7 +6,7 @@ const About = () => {
         <div className="max-w-7xl mx-auto px-4 text-center">
           <h1 className="text-5xl font-bold mb-6">About Us</h1>
           <p className="text-xl text-gray-200 max-w-3xl mx-auto">
-            Deux frères, une passion, un projet commun.
+            Deux frères, une passion, un projet.
           </p>
         </div>
       </section>
