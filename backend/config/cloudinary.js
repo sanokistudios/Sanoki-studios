@@ -40,11 +40,11 @@ const upload = multer({
   },
   fileFilter: (req, file, cb) => {
     console.log('📋 Fichier à uploader:', file.originalname, 'Type:', file.mimetype);
-    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'application/pdf'];
     if (allowedTypes.includes(file.mimetype)) {
       cb(null, true);
     } else {
-      cb(new Error('Type de fichier non autorisé. Formats acceptés: JPG, PNG, WEBP'));
+      cb(new Error('Type de fichier non autorisé. Formats acceptés: JPG, PNG, WEBP, PDF'));
     }
   }
 });
@@ -56,6 +56,9 @@ const uploadToCloudinary = (buffer, options = {}) => {
     const sizeInMB = buffer.length / (1024 * 1024);
     console.log(`📊 Taille fichier: ${sizeInMB.toFixed(2)} MB`);
     
+    // Détecter le type de ressource (auto pour supporter images et PDFs)
+    const defaultResourceType = options.resource_type || 'auto';
+    
     // Pour les fichiers > 20 MB, utiliser chunked upload
     if (buffer.length > 20 * 1024 * 1024) {
       console.log('📦 Utilisation de upload_large (chunked) pour fichier volumineux');
@@ -63,7 +66,7 @@ const uploadToCloudinary = (buffer, options = {}) => {
       const uploadStream = cloudinary.uploader.upload_large_stream(
         {
           folder: options.folder || 'ecommerce-vetements',
-          resource_type: 'image',
+          resource_type: defaultResourceType,
           chunk_size: 6000000, // 6 MB par chunk
           ...options
         },
@@ -85,7 +88,7 @@ const uploadToCloudinary = (buffer, options = {}) => {
       const uploadStream = cloudinary.uploader.upload_stream(
         {
           folder: options.folder || 'ecommerce-vetements',
-          resource_type: 'image',
+          resource_type: defaultResourceType,
           ...options
         },
         (error, result) => {
