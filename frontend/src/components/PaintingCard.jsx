@@ -14,9 +14,10 @@ const PaintingCard = ({ painting }) => {
   return (
     <Link to={`/peinture/${painting._id}`} className="group block">
       <div className="animate-fade-in">
-        {/* Image - Sans bordure avec effet hover */}
+        {/* Image - Format 3:4 (portrait) avec effet hover */}
         <div 
-          className="relative overflow-hidden aspect-square bg-gray-100 mb-3"
+          className="relative overflow-hidden bg-gray-100 mb-3"
+          style={{ aspectRatio: '3 / 4' }}
           onMouseEnter={() => setHovered(true)}
           onMouseLeave={() => setHovered(false)}
         >
