@@ -61,10 +61,26 @@ router.post('/', protect, admin, (req, res, next) => {
     console.log('✅ Upload Cloudinary réussi:', result.secure_url);
     console.log('🔗 URL:', result.secure_url);
     console.log('🆔 Public ID:', result.public_id);
+    console.log('📦 Resource Type:', result.resource_type);
+    console.log('🔐 Access Mode:', result.access_mode);
+    console.log('📋 Type:', result.type);
+    
+    // Pour les PDFs, s'assurer que l'URL utilise le bon format
+    let finalUrl = result.secure_url;
+    
+    // Si c'est un PDF et que l'URL contient 'authenticated', la convertir en URL publique
+    if (result.resource_type === 'raw' || result.format === 'pdf') {
+      console.log('📄 PDF détecté - Vérification de l\'URL...');
+      if (finalUrl.includes('/authenticated/')) {
+        // Remplacer 'authenticated' par 'upload' dans l'URL
+        finalUrl = finalUrl.replace('/authenticated/', '/upload/');
+        console.log('🔄 URL convertie en mode public:', finalUrl);
+      }
+    }
     
     res.json({
       success: true,
-      url: result.secure_url,
+      url: finalUrl,
       publicId: result.public_id
     });
   } catch (error) {
@@ -141,10 +157,20 @@ router.post('/multiple', protect, admin, (req, res, next) => {
 
     const results = await Promise.all(uploadPromises);
 
-    const urls = results.map(result => ({
-      url: result.secure_url,
-      publicId: result.public_id
-    }));
+    const urls = results.map(result => {
+      let finalUrl = result.secure_url;
+      
+      // Si c'est un PDF et que l'URL contient 'authenticated', la convertir en URL publique
+      if ((result.resource_type === 'raw' || result.format === 'pdf') && finalUrl.includes('/authenticated/')) {
+        finalUrl = finalUrl.replace('/authenticated/', '/upload/');
+        console.log('🔄 URL PDF convertie en mode public:', finalUrl);
+      }
+      
+      return {
+        url: finalUrl,
+        publicId: result.public_id
+      };
+    });
 
     console.log('✅', results.length, 'fichiers uploadés avec succès');
 

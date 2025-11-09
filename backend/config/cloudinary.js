@@ -64,7 +64,9 @@ const uploadToCloudinary = (buffer, options = {}) => {
       folder: options.folder || 'ecommerce-vetements',
       resource_type: defaultResourceType,
       access_mode: 'public', // IMPORTANT: Rendre le fichier public
+      delivery_type: 'upload', // Forcer le type de delivery public
       type: 'upload', // Type d'upload standard
+      flags: 'attachment', // Permettre le téléchargement direct
       ...options
     };
     
