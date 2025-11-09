@@ -11,16 +11,12 @@ const PaintingCard = ({ painting }) => {
   const hoverImage = painting.images?.[1] || painting.images?.[0] || 'https://via.placeholder.com/400';
   const defaultImage = painting.images?.[0] || 'https://via.placeholder.com/400';
 
-  // Déterminer le ratio selon l'orientation
-  const aspectRatio = painting.orientation === 'landscape' ? '4 / 3' : '3 / 4';
-
   return (
     <Link to={`/peinture/${painting._id}`} className="group block">
       <div className="animate-fade-in">
-        {/* Image - Format dynamique selon orientation */}
+        {/* Image - Format carré */}
         <div 
-          className="relative overflow-hidden bg-gray-100 mb-3"
-          style={{ aspectRatio }}
+          className="relative overflow-hidden aspect-square bg-gray-100 mb-3"
           onMouseEnter={() => setHovered(true)}
           onMouseLeave={() => setHovered(false)}
         >
