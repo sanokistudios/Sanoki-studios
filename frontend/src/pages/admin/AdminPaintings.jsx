@@ -3,6 +3,7 @@ import { Plus, Edit, Trash2 } from 'lucide-react';
 import { paintingsAPI } from '../../utils/api';
 import toast from 'react-hot-toast';
 import ImageUpload from '../../components/ImageUpload';
+import FilePreview from '../../components/FilePreview';
 
 const AdminPaintings = () => {
   const [paintings, setPaintings] = useState([]);
@@ -152,7 +153,7 @@ const AdminPaintings = () => {
               {paintings.map((painting) => (
                 <tr key={painting._id} className="border-b hover:bg-gray-50">
                   <td className="px-6 py-4">
-                    <img
+                    <FilePreview
                       src={painting.images?.[0] || 'https://via.placeholder.com/60'}
                       alt={painting.name}
                       className="w-16 h-16 object-cover rounded"
@@ -301,7 +302,7 @@ const AdminPaintings = () => {
                     <div className="flex flex-wrap gap-2">
                       {formData.images.map((img, idx) => (
                         <div key={idx} className="relative group">
-                          <img
+                          <FilePreview
                             src={img}
                             alt={`Painting ${idx + 1}`}
                             className="w-20 h-20 object-cover rounded border"
