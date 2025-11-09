@@ -94,7 +94,7 @@ const Lookbook = () => {
               <div
                 key={image._id}
                 className="group relative overflow-hidden cursor-pointer rounded-lg bg-gray-100"
-                style={{ aspectRatio: '4 / 3' }}
+                style={{ aspectRatio: '3 / 4' }}
                 onClick={() => openLightbox(image, index)}
               >
                 <img
