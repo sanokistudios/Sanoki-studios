@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
-import { Instagram, Mail, Phone } from 'lucide-react';
+import { Instagram, Mail } from 'lucide-react';
+import { FaTiktok } from 'react-icons/fa';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -26,13 +27,9 @@ const Footer = () => {
           <div>
             <h3 className="text-base font-bold mb-4 text-black">CONTACT</h3>
             <div className="bg-gray-50 p-6 rounded-lg space-y-3">
-              <a href="tel:+21600000000" className="flex items-center gap-3 text-sm text-gray-700 hover:text-black transition-colors">
-                <Phone className="w-4 h-4" />
-                <span>+216 00 000 000</span>
-              </a>
-              <a href="mailto:contact@marque.tn" className="flex items-center gap-3 text-sm text-gray-700 hover:text-black transition-colors">
+              <a href="mailto:sanokistudios@gmail.com" className="flex items-center gap-3 text-sm text-gray-700 hover:text-black transition-colors">
                 <Mail className="w-4 h-4" />
-                <span>contact@marque.tn</span>
+                <span>sanokistudios@gmail.com</span>
               </a>
             </div>
           </div>
@@ -41,14 +38,24 @@ const Footer = () => {
         {/* Réseaux sociaux - Icônes noires sur fond gris très clair */}
         <div className="mb-8">
           <h3 className="text-lg font-semibold mb-4 text-black">Suivez-nous</h3>
-          <div className="flex justify-start">
+          <div className="flex justify-start gap-3">
             <a
               href="https://www.instagram.com/sanoki.studios/?igsh=MXJqZ2Nsc2FibGJycw%3D%3D&fbclid=IwY2xjawNw0YdleHRuA2FlbQIxMABicmlkETF4UXNtUkZKaWZSSHBubURBAR4qk7h9BPAUj_8su46QH7ODbOCRUDGScN_y0YZZno20JdOrIBsmjAYHtFNU2Q_aem_jQWyWVJ1tCjZptpt1RrMyQ#"
               target="_blank"
               rel="noopener noreferrer"
               className="w-10 h-10 bg-gray-50 text-black rounded-full flex items-center justify-center hover:bg-gray-200 transition-all border border-gray-200"
+              aria-label="Instagram"
             >
               <Instagram className="w-5 h-5" />
+            </a>
+            <a
+              href="https://www.tiktok.com/@sanoki.studios?_t=ZM-8vmQwRbBb5a&_r=1"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-10 h-10 bg-gray-50 text-black rounded-full flex items-center justify-center hover:bg-gray-200 transition-all border border-gray-200"
+              aria-label="TikTok"
+            >
+              <FaTiktok className="w-5 h-5" />
             </a>
           </div>
         </div>

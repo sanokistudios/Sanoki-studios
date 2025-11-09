@@ -93,7 +93,7 @@ const ImageUpload = ({ onUploadSuccess, multiple = false }) => {
           <input
             type="file"
             onChange={handleFileChange}
-            accept="image/*"
+            accept="image/*,.pdf"
             multiple={multiple}
             className="hidden"
             disabled={uploading}
@@ -118,7 +118,7 @@ const ImageUpload = ({ onUploadSuccess, multiple = false }) => {
       )}
 
       <p className="text-xs text-gray-500">
-        Formats acceptés : JPG, PNG, WEBP (max 10MB)
+        Formats acceptés : JPG, PNG, WEBP, PDF (max 10MB)
       </p>
     </div>
   );
