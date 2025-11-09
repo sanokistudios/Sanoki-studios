@@ -59,16 +59,23 @@ const uploadToCloudinary = (buffer, options = {}) => {
     // Détecter le type de ressource (auto pour supporter images et PDFs)
     const defaultResourceType = options.resource_type || 'auto';
     
+    // Configuration de base avec accès public
+    const uploadOptions = {
+      folder: options.folder || 'ecommerce-vetements',
+      resource_type: defaultResourceType,
+      access_mode: 'public', // IMPORTANT: Rendre le fichier public
+      type: 'upload', // Type d'upload standard
+      ...options
+    };
+    
     // Pour les fichiers > 20 MB, utiliser chunked upload
     if (buffer.length > 20 * 1024 * 1024) {
       console.log('📦 Utilisation de upload_large (chunked) pour fichier volumineux');
       
       const uploadStream = cloudinary.uploader.upload_large_stream(
         {
-          folder: options.folder || 'ecommerce-vetements',
-          resource_type: defaultResourceType,
+          ...uploadOptions,
           chunk_size: 6000000, // 6 MB par chunk
-          ...options
         },
         (error, result) => {
           if (error) {
@@ -76,6 +83,7 @@ const uploadToCloudinary = (buffer, options = {}) => {
             reject(error);
           } else {
             console.log('✅ Upload chunked réussi');
+            console.log('🔗 URL publique:', result.secure_url);
             resolve(result);
           }
         }
@@ -86,11 +94,7 @@ const uploadToCloudinary = (buffer, options = {}) => {
       console.log('📦 Utilisation de upload_stream standard');
       
       const uploadStream = cloudinary.uploader.upload_stream(
-        {
-          folder: options.folder || 'ecommerce-vetements',
-          resource_type: defaultResourceType,
-          ...options
-        },
+        uploadOptions,
         (error, result) => {
           if (error) {
             console.error('❌ Erreur upload_stream:', error);
@@ -99,6 +103,7 @@ const uploadToCloudinary = (buffer, options = {}) => {
             reject(error);
           } else {
             console.log('✅ Upload standard réussi');
+            console.log('🔗 URL publique:', result.secure_url);
             resolve(result);
           }
         }
