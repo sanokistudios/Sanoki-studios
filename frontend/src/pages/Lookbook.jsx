@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { lookbookAPI } from '../utils/api';
 import { X } from 'lucide-react';
+import FilePreview from '../components/FilePreview';
 
 const Lookbook = () => {
   const [images, setImages] = useState([]);
@@ -24,6 +25,11 @@ const Lookbook = () => {
   };
 
   const openLightbox = (image, index) => {
+    // Si c'est un PDF, ouvrir dans un nouvel onglet au lieu du lightbox
+    if (image.imageUrl.toLowerCase().endsWith('.pdf')) {
+      window.open(image.imageUrl, '_blank');
+      return;
+    }
     setSelectedImage(image);
     setSelectedIndex(index);
   };
@@ -97,7 +103,7 @@ const Lookbook = () => {
                 style={{ aspectRatio: '3 / 4' }}
                 onClick={() => openLightbox(image, index)}
               >
-                <img
+                <FilePreview
                   src={image.imageUrl}
                   alt={image.title || `Lookbook ${index + 1}`}
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"

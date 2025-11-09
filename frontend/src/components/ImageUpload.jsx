@@ -1,11 +1,12 @@
 import { useState } from 'react';
-import { Upload, X, Loader } from 'lucide-react';
+import { Upload, X, Loader, FileText } from 'lucide-react';
 import api from '../utils/api';
 import toast from 'react-hot-toast';
 
 const ImageUpload = ({ onUploadSuccess, multiple = false }) => {
   const [uploading, setUploading] = useState(false);
   const [preview, setPreview] = useState(null);
+  const [isPDFPreview, setIsPDFPreview] = useState(false);
 
   const handleFileChange = async (e) => {
     const files = e.target.files;
@@ -34,17 +35,25 @@ const ImageUpload = ({ onUploadSuccess, multiple = false }) => {
 
         const urls = response.data.images.map(img => img.url);
         onUploadSuccess(urls);
-        toast.success(`${urls.length} image(s) uploadée(s) !`);
+        toast.success(`${urls.length} fichier(s) uploadé(s) !`);
       } else {
         // Upload single
         formData.append('image', files[0]);
 
         // Preview
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          setPreview(reader.result);
-        };
-        reader.readAsDataURL(files[0]);
+        const file = files[0];
+        const isPDF = file.type === 'application/pdf';
+        setIsPDFPreview(isPDF);
+
+        if (!isPDF) {
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            setPreview(reader.result);
+          };
+          reader.readAsDataURL(file);
+        } else {
+          setPreview(file.name);
+        }
 
         const response = await api.post(
           '/upload',
@@ -57,7 +66,7 @@ const ImageUpload = ({ onUploadSuccess, multiple = false }) => {
         );
 
         onUploadSuccess(response.data.url);
-        toast.success('Image uploadée !');
+        toast.success('Fichier uploadé !');
       }
     } catch (error) {
       console.error('Erreur upload:', error);
@@ -69,6 +78,7 @@ const ImageUpload = ({ onUploadSuccess, multiple = false }) => {
 
   const clearPreview = () => {
     setPreview(null);
+    setIsPDFPreview(false);
   };
 
   return (
@@ -85,7 +95,7 @@ const ImageUpload = ({ onUploadSuccess, multiple = false }) => {
               <>
                 <Upload className="w-5 h-5" />
                 <span className="text-sm font-medium">
-                  {multiple ? 'Choisir des images' : 'Choisir une image'}
+                  {multiple ? 'Choisir des fichiers' : 'Choisir un fichier'}
                 </span>
               </>
             )}
@@ -103,11 +113,20 @@ const ImageUpload = ({ onUploadSuccess, multiple = false }) => {
 
       {preview && !multiple && (
         <div className="relative inline-block">
-          <img
-            src={preview}
-            alt="Preview"
-            className="w-32 h-32 object-cover rounded-lg border-2 border-gray-300"
-          />
+          {isPDFPreview ? (
+            <div className="w-32 h-32 bg-gray-100 border-2 border-gray-300 rounded-lg flex flex-col items-center justify-center gap-2">
+              <FileText className="w-12 h-12 text-red-600" />
+              <span className="text-xs text-gray-600 font-medium text-center px-2">
+                {preview}
+              </span>
+            </div>
+          ) : (
+            <img
+              src={preview}
+              alt="Preview"
+              className="w-32 h-32 object-cover rounded-lg border-2 border-gray-300"
+            />
+          )}
           <button
             onClick={clearPreview}
             className="absolute -top-2 -right-2 p-1 bg-red-500 text-white rounded-full hover:bg-red-600"

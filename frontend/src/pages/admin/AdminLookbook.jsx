@@ -3,6 +3,7 @@ import { Plus, Edit, Trash2, ArrowUp, ArrowDown } from 'lucide-react';
 import { lookbookAPI } from '../../utils/api';
 import toast from 'react-hot-toast';
 import ImageUpload from '../../components/ImageUpload';
+import FilePreview from '../../components/FilePreview';
 
 const AdminLookbook = () => {
   const [lookbookImages, setLookbookImages] = useState([]);
@@ -187,10 +188,15 @@ const AdminLookbook = () => {
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      <img
+                      <FilePreview
                         src={image.imageUrl}
                         alt={image.title || `Lookbook ${image.order + 1}`}
                         className="w-24 h-24 object-cover rounded"
+                        onClick={() => {
+                          if (image.imageUrl.toLowerCase().endsWith('.pdf')) {
+                            window.open(image.imageUrl, '_blank');
+                          }
+                        }}
                       />
                     </td>
                     <td className="px-6 py-4">
@@ -243,18 +249,23 @@ const AdminLookbook = () => {
                 />
                 {formData.imageUrl && (
                   <div className="mt-3">
-                    <p className="text-sm font-medium mb-2">Image actuelle :</p>
-                    <img
+                    <p className="text-sm font-medium mb-2">Fichier actuel :</p>
+                    <FilePreview
                       src={formData.imageUrl}
                       alt="Preview"
                       className="w-full max-w-md h-64 object-cover rounded border"
+                      onClick={() => {
+                        if (formData.imageUrl.toLowerCase().endsWith('.pdf')) {
+                          window.open(formData.imageUrl, '_blank');
+                        }
+                      }}
                     />
                     <input
                       type="text"
                       value={formData.imageUrl}
                       onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
                       className="input-field mt-2"
-                      placeholder="Ou saisissez une URL d'image"
+                      placeholder="Ou saisissez une URL de fichier"
                     />
                   </div>
                 )}
