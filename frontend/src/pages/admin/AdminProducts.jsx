@@ -3,6 +3,7 @@ import { Plus, Edit, Trash2, Search } from 'lucide-react';
 import { productsAPI, collectionsAPI } from '../../utils/api';
 import toast from 'react-hot-toast';
 import ImageUpload from '../../components/ImageUpload';
+import FilePreview from '../../components/FilePreview';
 import { productDefaults } from '../../config/productDefaults';
 
 const AdminProducts = () => {
@@ -262,7 +263,7 @@ const AdminProducts = () => {
               {products.map((product) => (
                 <tr key={product._id} className="border-b hover:bg-gray-50">
                   <td className="px-6 py-4">
-                    <img
+                    <FilePreview
                       src={product.images?.[0] || 'https://via.placeholder.com/60'}
                       alt={product.name}
                       className="w-16 h-16 object-cover rounded"
@@ -535,7 +536,7 @@ const AdminProducts = () => {
                     <div className="flex flex-wrap gap-2">
                       {formData.images.map((img, idx) => (
                         <div key={idx} className="relative group">
-                          <img
+                          <FilePreview
                             src={img}
                             alt={`Product ${idx + 1}`}
                             className="w-20 h-20 object-cover rounded border"

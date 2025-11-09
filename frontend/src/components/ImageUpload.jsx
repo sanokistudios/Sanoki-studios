@@ -12,6 +12,27 @@ const ImageUpload = ({ onUploadSuccess, multiple = false }) => {
     const files = e.target.files;
     if (!files || files.length === 0) return;
 
+    // Vérifier la taille totale avant l'upload (pour uploads multiples)
+    if (multiple && files.length > 1) {
+      const totalSize = Array.from(files).reduce((sum, file) => sum + file.size, 0);
+      const totalSizeMB = totalSize / 1024 / 1024;
+      
+      console.log(`📊 ${files.length} fichiers sélectionnés, taille totale: ${totalSizeMB.toFixed(2)} MB`);
+      
+      if (totalSize > 30 * 1024 * 1024) {
+        toast.error(`Taille totale trop importante (${totalSizeMB.toFixed(2)} MB). Maximum: 30 MB pour tous les fichiers combinés.`);
+        e.target.value = ''; // Reset l'input
+        return;
+      }
+      
+      if (totalSizeMB > 20) {
+        toast(`⚠️ Taille importante (${totalSizeMB.toFixed(2)} MB). L'upload peut prendre du temps...`, {
+          icon: '⏳',
+          duration: 4000
+        });
+      }
+    }
+
     setUploading(true);
 
     try {
@@ -137,7 +158,10 @@ const ImageUpload = ({ onUploadSuccess, multiple = false }) => {
       )}
 
       <p className="text-xs text-gray-500">
-        Formats acceptés : JPG, PNG, WEBP, PDF (max 10MB)
+        {multiple 
+          ? 'Formats acceptés : JPG, PNG, WEBP, PDF. Max 10MB par fichier, 30MB au total (5 fichiers max)'
+          : 'Formats acceptés : JPG, PNG, WEBP, PDF (max 10MB)'
+        }
       </p>
     </div>
   );

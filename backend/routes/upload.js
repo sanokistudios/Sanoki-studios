@@ -80,13 +80,57 @@ router.post('/', protect, admin, (req, res, next) => {
 // @desc    Upload plusieurs images
 // @route   POST /api/upload/multiple
 // @access  Private/Admin
-router.post('/multiple', protect, admin, upload.array('images', 5), async (req, res) => {
+router.post('/multiple', protect, admin, (req, res, next) => {
+  console.log('📤 Upload multiple demandé - Content-Type:', req.headers['content-type']);
+  console.log('📤 Content-Length:', req.headers['content-length']);
+  
+  upload.array('images', 5)(req, res, (err) => {
+    if (err) {
+      console.error('❌ Erreur Multer (multiple):', err.message);
+      
+      if (err.code === 'LIMIT_FILE_SIZE') {
+        return res.status(413).json({ 
+          message: 'Un ou plusieurs fichiers sont trop volumineux (max 10 MB par fichier)',
+          code: 'LIMIT_FILE_SIZE'
+        });
+      }
+      return res.status(500).json({ 
+        message: 'Erreur lors de l\'upload',
+        error: err.message,
+        code: err.code || 'UNKNOWN'
+      });
+    }
+    
+    // Vérifier la taille totale (limite à 30 MB pour 5 fichiers max)
+    if (req.files && req.files.length > 0) {
+      const totalSize = req.files.reduce((sum, file) => sum + file.size, 0);
+      const totalSizeMB = totalSize / 1024 / 1024;
+      
+      console.log('📊 Nombre de fichiers:', req.files.length);
+      console.log('📊 Taille totale:', totalSizeMB.toFixed(2), 'MB');
+      
+      // Limite totale: 30 MB (pour éviter les timeouts et problèmes de mémoire)
+      if (totalSize > 30 * 1024 * 1024) {
+        return res.status(413).json({ 
+          message: `Taille totale trop importante (${totalSizeMB.toFixed(2)} MB). Maximum: 30 MB pour tous les fichiers combinés.`,
+          code: 'LIMIT_TOTAL_SIZE'
+        });
+      }
+      
+      req.files.forEach((file, idx) => {
+        console.log(`  ${idx + 1}. ${file.originalname} - ${(file.size / 1024 / 1024).toFixed(2)} MB`);
+      });
+    }
+    
+    next();
+  });
+}, async (req, res) => {
   try {
     if (!req.files || req.files.length === 0) {
       return res.status(400).json({ message: 'Aucune image fournie' });
     }
 
-    console.log('📤 Upload de', req.files.length, 'images vers Cloudinary...');
+    console.log('📤 Upload de', req.files.length, 'fichiers vers Cloudinary...');
 
     // Upload chaque fichier vers Cloudinary
     const uploadPromises = req.files.map(file => 
@@ -102,7 +146,7 @@ router.post('/multiple', protect, admin, upload.array('images', 5), async (req, 
       publicId: result.public_id
     }));
 
-    console.log('✅', results.length, 'images uploadées avec succès');
+    console.log('✅', results.length, 'fichiers uploadés avec succès');
 
     res.json({
       success: true,
@@ -110,7 +154,7 @@ router.post('/multiple', protect, admin, upload.array('images', 5), async (req, 
     });
   } catch (error) {
     console.error('❌ Erreur lors de l\'upload:', error);
-    res.status(500).json({ message: 'Erreur lors de l\'upload des images' });
+    res.status(500).json({ message: 'Erreur lors de l\'upload des fichiers' });
   }
 });
 
