@@ -523,6 +523,7 @@ const AdminProducts = () => {
               </p>
                 <ImageUpload
                   multiple={true}
+                  currentImages={formData.images}
                   onUploadSuccess={(urls) => {
                     setFormData({
                       ...formData,

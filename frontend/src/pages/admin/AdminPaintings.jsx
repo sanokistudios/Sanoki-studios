@@ -289,6 +289,7 @@ const AdminPaintings = () => {
               </p>
                 <ImageUpload
                   multiple={true}
+                  currentImages={formData.images}
                   onUploadSuccess={(urls) => {
                     setFormData({
                       ...formData,

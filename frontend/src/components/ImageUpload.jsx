@@ -3,7 +3,7 @@ import { Upload, X, Loader, FileText } from 'lucide-react';
 import api from '../utils/api';
 import toast from 'react-hot-toast';
 
-const ImageUpload = ({ onUploadSuccess, multiple = false }) => {
+const ImageUpload = ({ onUploadSuccess, multiple = false, currentImages = [] }) => {
   const [uploading, setUploading] = useState(false);
   const [preview, setPreview] = useState(null);
   const [isPDFPreview, setIsPDFPreview] = useState(false);
@@ -39,7 +39,7 @@ const ImageUpload = ({ onUploadSuccess, multiple = false }) => {
       const formData = new FormData();
       
       if (multiple) {
-        // Upload multiple
+        // Upload multiple - ajouter aux images existantes
         Array.from(files).forEach(file => {
           formData.append('images', file);
         });
@@ -54,9 +54,11 @@ const ImageUpload = ({ onUploadSuccess, multiple = false }) => {
           }
         );
 
-        const urls = response.data.images.map(img => img.url);
-        onUploadSuccess(urls);
-        toast.success(`${urls.length} fichier(s) uploadé(s) !`);
+        const newUrls = response.data.images.map(img => img.url);
+        // Combiner les images existantes avec les nouvelles
+        const allUrls = [...currentImages, ...newUrls];
+        onUploadSuccess(allUrls);
+        toast.success(`${newUrls.length} fichier(s) ajouté(s) ! Total: ${allUrls.length}`);
       } else {
         // Upload single
         formData.append('image', files[0]);
@@ -157,12 +159,16 @@ const ImageUpload = ({ onUploadSuccess, multiple = false }) => {
         </div>
       )}
 
-      <p className="text-xs text-gray-500">
-        {multiple 
-          ? 'Formats acceptés : JPG, PNG, WEBP, PDF. Max 10MB par fichier, 50MB au total (10 fichiers max)'
-          : 'Formats acceptés : JPG, PNG, WEBP, PDF (max 10MB)'
-        }
-      </p>
+      <div className="text-xs text-gray-500">
+        {multiple ? (
+          <>
+            <p>Formats acceptés : JPG, PNG, WEBP, PDF. Max 10MB par fichier, 50MB au total (10 fichiers max)</p>
+            <p className="text-blue-600 mt-1">💡 Astuce : Vous pouvez uploader plusieurs fois pour ajouter des images progressivement</p>
+          </>
+        ) : (
+          <p>Formats acceptés : JPG, PNG, WEBP, PDF (max 10MB)</p>
+        )}
+      </div>
     </div>
   );
 };
