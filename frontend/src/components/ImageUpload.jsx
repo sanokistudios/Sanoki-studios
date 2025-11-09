@@ -19,13 +19,13 @@ const ImageUpload = ({ onUploadSuccess, multiple = false }) => {
       
       console.log(`📊 ${files.length} fichiers sélectionnés, taille totale: ${totalSizeMB.toFixed(2)} MB`);
       
-      if (totalSize > 30 * 1024 * 1024) {
-        toast.error(`Taille totale trop importante (${totalSizeMB.toFixed(2)} MB). Maximum: 30 MB pour tous les fichiers combinés.`);
+      if (totalSize > 50 * 1024 * 1024) {
+        toast.error(`Taille totale trop importante (${totalSizeMB.toFixed(2)} MB). Maximum: 50 MB pour tous les fichiers combinés.`);
         e.target.value = ''; // Reset l'input
         return;
       }
       
-      if (totalSizeMB > 20) {
+      if (totalSizeMB > 30) {
         toast(`⚠️ Taille importante (${totalSizeMB.toFixed(2)} MB). L'upload peut prendre du temps...`, {
           icon: '⏳',
           duration: 4000
@@ -159,7 +159,7 @@ const ImageUpload = ({ onUploadSuccess, multiple = false }) => {
 
       <p className="text-xs text-gray-500">
         {multiple 
-          ? 'Formats acceptés : JPG, PNG, WEBP, PDF. Max 10MB par fichier, 30MB au total (5 fichiers max)'
+          ? 'Formats acceptés : JPG, PNG, WEBP, PDF. Max 10MB par fichier, 50MB au total (10 fichiers max)'
           : 'Formats acceptés : JPG, PNG, WEBP, PDF (max 10MB)'
         }
       </p>

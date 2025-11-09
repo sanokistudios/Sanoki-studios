@@ -100,7 +100,7 @@ router.post('/multiple', protect, admin, (req, res, next) => {
   console.log('📤 Upload multiple demandé - Content-Type:', req.headers['content-type']);
   console.log('📤 Content-Length:', req.headers['content-length']);
   
-  upload.array('images', 5)(req, res, (err) => {
+  upload.array('images', 10)(req, res, (err) => {
     if (err) {
       console.error('❌ Erreur Multer (multiple):', err.message);
       
@@ -117,7 +117,7 @@ router.post('/multiple', protect, admin, (req, res, next) => {
       });
     }
     
-    // Vérifier la taille totale (limite à 30 MB pour 5 fichiers max)
+    // Vérifier la taille totale (limite à 50 MB pour 10 fichiers max)
     if (req.files && req.files.length > 0) {
       const totalSize = req.files.reduce((sum, file) => sum + file.size, 0);
       const totalSizeMB = totalSize / 1024 / 1024;
@@ -125,10 +125,10 @@ router.post('/multiple', protect, admin, (req, res, next) => {
       console.log('📊 Nombre de fichiers:', req.files.length);
       console.log('📊 Taille totale:', totalSizeMB.toFixed(2), 'MB');
       
-      // Limite totale: 30 MB (pour éviter les timeouts et problèmes de mémoire)
-      if (totalSize > 30 * 1024 * 1024) {
+      // Limite totale: 50 MB (pour 10 fichiers max)
+      if (totalSize > 50 * 1024 * 1024) {
         return res.status(413).json({ 
-          message: `Taille totale trop importante (${totalSizeMB.toFixed(2)} MB). Maximum: 30 MB pour tous les fichiers combinés.`,
+          message: `Taille totale trop importante (${totalSizeMB.toFixed(2)} MB). Maximum: 50 MB pour tous les fichiers combinés.`,
           code: 'LIMIT_TOTAL_SIZE'
         });
       }
