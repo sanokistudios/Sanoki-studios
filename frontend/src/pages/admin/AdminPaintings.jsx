@@ -16,7 +16,8 @@ const AdminPaintings = () => {
     price: '',
     images: [],
     stock: '',
-    featured: false
+    featured: false,
+    orientation: 'portrait'
   });
 
   useEffect(() => {
@@ -44,7 +45,8 @@ const AdminPaintings = () => {
         price: painting.price,
         images: painting.images || [],
         stock: painting.stock || '',
-        featured: painting.featured || false
+        featured: painting.featured || false,
+        orientation: painting.orientation || 'portrait'
       });
     } else {
       setEditingPainting(null);
@@ -54,7 +56,8 @@ const AdminPaintings = () => {
         price: '',
         images: [],
         stock: '',
-        featured: false
+        featured: false,
+        orientation: 'portrait'
       });
     }
     setShowModal(true);
@@ -255,29 +258,45 @@ const AdminPaintings = () => {
                 </div>
               </div>
 
-              <div>
-                <label className="block text-sm font-medium mb-2">Affichage page d'accueil</label>
-                <div className="flex items-center gap-3 mt-2">
-                  <button
-                    type="button"
-                    onClick={() => setFormData({ ...formData, featured: !formData.featured })}
-                    className={`relative inline-flex h-8 w-14 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 ${
-                      formData.featured ? 'bg-primary' : 'bg-gray-300'
-                    }`}
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium mb-2">Format d'affichage *</label>
+                  <select
+                    name="orientation"
+                    value={formData.orientation}
+                    onChange={handleChange}
+                    className="input-field"
+                    required
                   >
-                    <span
-                      className={`inline-block h-6 w-6 transform rounded-full bg-white transition-transform ${
-                        formData.featured ? 'translate-x-7' : 'translate-x-1'
-                      }`}
-                    />
-                  </button>
-                  <span className={`text-sm font-medium ${formData.featured ? 'text-primary' : 'text-gray-600'}`}>
-                    {formData.featured ? 'Affiché sur la page d\'accueil' : 'Masqué de la page d\'accueil'}
-                  </span>
+                    <option value="portrait">Portrait (Vertical 3:4)</option>
+                    <option value="landscape">Paysage (Horizontal 4:3)</option>
+                  </select>
+                  <p className="text-xs text-gray-500 mt-1">
+                    Choisissez selon l'orientation de votre image
+                  </p>
                 </div>
-                <p className="text-xs text-gray-500 mt-1">
-                  Activez cette option pour afficher cette peinture sur la page d'accueil
-                </p>
+
+                <div>
+                  <label className="block text-sm font-medium mb-2">Affichage page d'accueil</label>
+                  <div className="flex items-center gap-3 mt-2">
+                    <button
+                      type="button"
+                      onClick={() => setFormData({ ...formData, featured: !formData.featured })}
+                      className={`relative inline-flex h-8 w-14 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 ${
+                        formData.featured ? 'bg-primary' : 'bg-gray-300'
+                      }`}
+                    >
+                      <span
+                        className={`inline-block h-6 w-6 transform rounded-full bg-white transition-transform ${
+                          formData.featured ? 'translate-x-7' : 'translate-x-1'
+                        }`}
+                      />
+                    </button>
+                    <span className={`text-sm font-medium ${formData.featured ? 'text-primary' : 'text-gray-600'}`}>
+                      {formData.featured ? 'Affiché' : 'Masqué'}
+                    </span>
+                  </div>
+                </div>
               </div>
 
               <div>

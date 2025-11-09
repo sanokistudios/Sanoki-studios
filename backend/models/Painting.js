@@ -18,6 +18,11 @@ const paintingSchema = new mongoose.Schema({
   images: [{
     type: String
   }],
+  orientation: {
+    type: String,
+    enum: ['portrait', 'landscape'],
+    default: 'portrait'
+  },
   featured: {
     type: Boolean,
     default: false
