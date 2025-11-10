@@ -178,8 +178,23 @@ app.use((err, req, res, next) => {
 
 // Démarrer le serveur
 const PORT = process.env.PORT || 5000;
-httpServer.listen(PORT, () => {
+
+// Configurer keepAlive pour éviter que Railway tue les connexions
+httpServer.keepAliveTimeout = 65000; // 65 secondes
+httpServer.headersTimeout = 66000; // 66 secondes
+
+httpServer.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 Serveur démarré sur le port ${PORT}`);
   console.log(`📡 Socket.io activé`);
+  console.log(`🔒 KeepAlive configuré`);
+});
+
+// Graceful shutdown
+process.on('SIGTERM', () => {
+  console.log('⚠️ SIGTERM reçu, arrêt gracieux...');
+  httpServer.close(() => {
+    console.log('✅ Serveur fermé proprement');
+    process.exit(0);
+  });
 });
 
