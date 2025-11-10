@@ -12,11 +12,18 @@ dotenv.config();
 const app = express();
 const httpServer = createServer(app);
 
-// Configurer Socket.io
+// Configurer Socket.io avec tous les domaines autorisés
 const io = new Server(httpServer, {
   cors: {
-    origin: process.env.FRONTEND_URL || 'http://localhost:5173',
-    methods: ['GET', 'POST']
+    origin: [
+      'http://localhost:5173',
+      'https://sanokistudios.com',
+      'https://www.sanokistudios.com',
+      'https://bjxvbl06.up.railway.app',
+      process.env.FRONTEND_URL || 'http://localhost:5173'
+    ],
+    methods: ['GET', 'POST'],
+    credentials: true
   }
 });
 
@@ -24,20 +31,30 @@ const io = new Server(httpServer, {
 const allowedOrigins = [
   process.env.FRONTEND_URL || 'http://localhost:5173',
   (process.env.FRONTEND_URL || 'http://localhost:5173').replace(/\/$/, ''),
-  (process.env.FRONTEND_URL || 'http://localhost:5173') + '/',
   'http://localhost:5173',
   'https://ecommerce-vetements-production.up.railway.app',
-  'https://ecommerce-vetements-production.up.railway.app/'
+  'https://sanokistudios.com',
+  'https://www.sanokistudios.com',
+  // Ajouter les URLs Railway frontend
+  'https://bjxvbl06.up.railway.app'
 ];
+
+// Nettoyer et normaliser les origins
+const normalizedOrigins = allowedOrigins.map(origin => origin.replace(/\/$/, ''));
 
 app.use(cors({
   origin: function (origin, callback) {
     // Allow requests with no origin (mobile apps, curl, etc.)
     if (!origin) return callback(null, true);
     
-    if (allowedOrigins.includes(origin)) {
+    // Normaliser l'origin pour comparaison
+    const normalizedOrigin = origin.replace(/\/$/, '');
+    
+    if (normalizedOrigins.includes(normalizedOrigin)) {
       callback(null, true);
     } else {
+      console.log('❌ CORS blocked origin:', origin);
+      console.log('✅ Allowed origins:', normalizedOrigins);
       callback(new Error('Not allowed by CORS'));
     }
   },
