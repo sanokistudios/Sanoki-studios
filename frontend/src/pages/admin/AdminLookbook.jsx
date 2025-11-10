@@ -3,7 +3,6 @@ import { Plus, Edit, Trash2, ArrowUp, ArrowDown } from 'lucide-react';
 import { lookbookAPI } from '../../utils/api';
 import toast from 'react-hot-toast';
 import ImageUpload from '../../components/ImageUpload';
-import FilePreview from '../../components/FilePreview';
 
 const AdminLookbook = () => {
   const [lookbookImages, setLookbookImages] = useState([]);
@@ -188,16 +187,28 @@ const AdminLookbook = () => {
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      <FilePreview
-                        src={image.imageUrl}
-                        alt={image.title || `Lookbook ${image.order + 1}`}
-                        className="w-24 h-24 object-cover rounded"
-                        onClick={() => {
-                          if (image.imageUrl.toLowerCase().endsWith('.pdf')) {
-                            window.open(image.imageUrl, '_blank');
-                          }
-                        }}
-                      />
+                      {image.imageUrl.toLowerCase().endsWith('.pdf') ? (
+                        <a 
+                          href={image.imageUrl} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="flex items-center justify-center w-24 h-24 bg-red-100 text-red-600 rounded border-2 border-red-300 hover:bg-red-200 transition-colors"
+                        >
+                          <div className="text-center">
+                            <svg className="w-8 h-8 mx-auto mb-1" fill="currentColor" viewBox="0 0 20 20">
+                              <path d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" />
+                            </svg>
+                            <span className="text-xs font-medium">PDF</span>
+                          </div>
+                        </a>
+                      ) : (
+                        <img 
+                          src={image.imageUrl} 
+                          alt={image.title || `Lookbook ${image.order + 1}`}
+                          className="w-24 h-24 object-cover rounded cursor-pointer hover:opacity-80 transition-opacity"
+                          onClick={() => window.open(image.imageUrl, '_blank')}
+                        />
+                      )}
                     </td>
                     <td className="px-6 py-4">
                       <div className="text-sm">
@@ -250,16 +261,28 @@ const AdminLookbook = () => {
                 {formData.imageUrl && (
                   <div className="mt-3">
                     <p className="text-sm font-medium mb-2">Fichier actuel :</p>
-                    <FilePreview
-                      src={formData.imageUrl}
-                      alt="Preview"
-                      className="w-full max-w-md h-64 object-cover rounded border"
-                      onClick={() => {
-                        if (formData.imageUrl.toLowerCase().endsWith('.pdf')) {
-                          window.open(formData.imageUrl, '_blank');
-                        }
-                      }}
-                    />
+                    {formData.imageUrl.toLowerCase().endsWith('.pdf') ? (
+                      <a 
+                        href={formData.imageUrl} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-center w-full max-w-md h-64 bg-red-100 text-red-600 rounded border-2 border-red-300 hover:bg-red-200 transition-colors"
+                      >
+                        <div className="text-center">
+                          <svg className="w-16 h-16 mx-auto mb-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" />
+                          </svg>
+                          <span className="text-lg font-medium">Cliquez pour ouvrir le PDF</span>
+                        </div>
+                      </a>
+                    ) : (
+                      <img 
+                        src={formData.imageUrl} 
+                        alt="Preview"
+                        className="w-full max-w-md h-64 object-cover rounded border cursor-pointer hover:opacity-80 transition-opacity"
+                        onClick={() => window.open(formData.imageUrl, '_blank')}
+                      />
+                    )}
                     <input
                       type="text"
                       value={formData.imageUrl}
