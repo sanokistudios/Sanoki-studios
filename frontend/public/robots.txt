@@ -1,0 +1,16 @@
+# Robots.txt for Sanoki Studios
+# https://sanokistudios.com
+
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /cart
+Disallow: /checkout
+Disallow: /login
+Disallow: /register
+Disallow: /profile
+
+# Sitemap
+Sitemap: https://sanokistudios.com/sitemap.xml
+

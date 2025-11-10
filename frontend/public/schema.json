@@ -1,0 +1,29 @@
+{
+  "@context": "https://schema.org",
+  "@type": "ClothingStore",
+  "name": "Sanoki Studios",
+  "description": "Marque tunisienne de vêtements streetwear authentiques et créations artistiques uniques",
+  "url": "https://sanokistudios.com",
+  "logo": "https://sanokistudios.com/logo.png",
+  "image": "https://sanokistudios.com/logo.png",
+  "telephone": "+216-XX-XXX-XXX",
+  "email": "sanokistudios@gmail.com",
+  "address": {
+    "@type": "PostalAddress",
+    "addressCountry": "TN",
+    "addressLocality": "Tunisie"
+  },
+  "priceRange": "$$",
+  "currenciesAccepted": "TND",
+  "paymentAccepted": "Cash, Credit Card, Bank Transfer",
+  "sameAs": [
+    "https://www.instagram.com/sanoki.studios",
+    "https://www.tiktok.com/@sanoki.studios"
+  ],
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://sanokistudios.com/products?search={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+
