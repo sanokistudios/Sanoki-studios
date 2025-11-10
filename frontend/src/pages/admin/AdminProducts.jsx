@@ -3,7 +3,6 @@ import { Plus, Edit, Trash2, Search } from 'lucide-react';
 import { productsAPI, collectionsAPI } from '../../utils/api';
 import toast from 'react-hot-toast';
 import ImageUpload from '../../components/ImageUpload';
-import FilePreview from '../../components/FilePreview';
 import { productDefaults } from '../../config/productDefaults';
 
 const AdminProducts = () => {
@@ -263,11 +262,24 @@ const AdminProducts = () => {
               {products.map((product) => (
                 <tr key={product._id} className="border-b hover:bg-gray-50">
                   <td className="px-6 py-4">
-                    <FilePreview
-                      src={product.images?.[0] || 'https://via.placeholder.com/60'}
-                      alt={product.name}
-                      className="w-16 h-16 object-cover rounded"
-                    />
+                    {product.images?.[0]?.toLowerCase().endsWith('.pdf') ? (
+                      <a 
+                        href={product.images[0]} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-center w-16 h-16 bg-red-100 text-red-600 rounded border border-red-300"
+                      >
+                        <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
+                          <path d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" />
+                        </svg>
+                      </a>
+                    ) : (
+                      <img 
+                        src={product.images?.[0] || 'https://via.placeholder.com/60'}
+                        alt={product.name}
+                        className="w-16 h-16 object-cover rounded"
+                      />
+                    )}
                   </td>
                   <td className="px-6 py-4 font-medium">{product.name}</td>
                   <td className="px-6 py-4">{product.price} TND</td>
@@ -537,11 +549,24 @@ const AdminProducts = () => {
                     <div className="flex flex-wrap gap-2">
                       {formData.images.map((img, idx) => (
                         <div key={idx} className="relative group">
-                          <FilePreview
-                            src={img}
-                            alt={`Product ${idx + 1}`}
-                            className="w-20 h-20 object-cover rounded border"
-                          />
+                          {img.toLowerCase().endsWith('.pdf') ? (
+                            <a 
+                              href={img} 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              className="flex items-center justify-center w-20 h-20 bg-red-100 text-red-600 rounded border border-red-300"
+                            >
+                              <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" />
+                              </svg>
+                            </a>
+                          ) : (
+                            <img 
+                              src={img}
+                              alt={`Product ${idx + 1}`}
+                              className="w-20 h-20 object-cover rounded border"
+                            />
+                          )}
                           <button
                             type="button"
                             onClick={() => {

@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { lookbookAPI } from '../utils/api';
 import { X } from 'lucide-react';
-import FilePreview from '../components/FilePreview';
 
 const Lookbook = () => {
   const [images, setImages] = useState([]);
@@ -103,12 +102,23 @@ const Lookbook = () => {
                 style={{ aspectRatio: '3 / 4' }}
                 onClick={() => openLightbox(image, index)}
               >
-                <FilePreview
-                  src={image.imageUrl}
-                  alt={image.title || `Lookbook ${index + 1}`}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                  loading="lazy"
-                />
+                {image.imageUrl.toLowerCase().endsWith('.pdf') ? (
+                  <div className="w-full h-full flex items-center justify-center bg-red-100">
+                    <div className="text-center text-red-600">
+                      <svg className="w-16 h-16 mx-auto mb-2" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" />
+                      </svg>
+                      <span className="text-sm font-medium">PDF</span>
+                    </div>
+                  </div>
+                ) : (
+                  <img 
+                    src={image.imageUrl}
+                    alt={image.title || `Lookbook ${index + 1}`}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    loading="lazy"
+                  />
+                )}
                 
                 {/* Overlay avec info */}
                 {(image.title || image.description) && (

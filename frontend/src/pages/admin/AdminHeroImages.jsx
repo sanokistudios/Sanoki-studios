@@ -3,7 +3,6 @@ import { Plus, Edit, Trash2, ArrowUp, ArrowDown } from 'lucide-react';
 import { heroImagesAPI } from '../../utils/api';
 import toast from 'react-hot-toast';
 import ImageUpload from '../../components/ImageUpload';
-import FilePreview from '../../components/FilePreview';
 
 const AdminHeroImages = () => {
   const [heroImages, setHeroImages] = useState([]);
@@ -182,11 +181,27 @@ const AdminHeroImages = () => {
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      <FilePreview
-                        src={image.imageUrl}
-                        alt={`Hero ${image.order + 1}`}
-                        className="w-24 h-16 object-cover rounded"
-                      />
+                      {image.imageUrl.toLowerCase().endsWith('.pdf') ? (
+                        <a 
+                          href={image.imageUrl} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="flex items-center justify-center w-24 h-16 bg-red-100 text-red-600 rounded border border-red-300"
+                        >
+                          <div className="text-center">
+                            <svg className="w-6 h-6 mx-auto" fill="currentColor" viewBox="0 0 20 20">
+                              <path d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" />
+                            </svg>
+                            <span className="text-xs">PDF</span>
+                          </div>
+                        </a>
+                      ) : (
+                        <img 
+                          src={image.imageUrl}
+                          alt={`Hero ${image.order + 1}`}
+                          className="w-24 h-16 object-cover rounded"
+                        />
+                      )}
                     </td>
                     <td className="px-6 py-4">
                       <div className="max-w-md truncate text-sm text-gray-600">
@@ -238,11 +253,27 @@ const AdminHeroImages = () => {
                 {formData.imageUrl && (
                   <div className="mt-3">
                     <p className="text-sm font-medium mb-2">Fichier actuel :</p>
-                    <FilePreview
-                      src={formData.imageUrl}
-                      alt="Preview"
-                      className="w-full max-w-md h-48 object-cover rounded border"
-                    />
+                    {formData.imageUrl.toLowerCase().endsWith('.pdf') ? (
+                      <a 
+                        href={formData.imageUrl} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-center w-full max-w-md h-48 bg-red-100 text-red-600 rounded border-2 border-red-300 hover:bg-red-200"
+                      >
+                        <div className="text-center">
+                          <svg className="w-12 h-12 mx-auto mb-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" />
+                          </svg>
+                          <span className="font-medium">Cliquez pour ouvrir le PDF</span>
+                        </div>
+                      </a>
+                    ) : (
+                      <img 
+                        src={formData.imageUrl}
+                        alt="Preview"
+                        className="w-full max-w-md h-48 object-cover rounded border"
+                      />
+                    )}
                     <input
                       type="text"
                       value={formData.imageUrl}
